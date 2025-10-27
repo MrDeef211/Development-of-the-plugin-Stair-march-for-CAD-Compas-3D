@@ -356,10 +356,10 @@
             // 
             // button1
             // 
-            button1.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            button1.Location = new Point(192, 334);
+            button1.Font = new Font("Segoe UI Semibold", 10.25F, FontStyle.Bold);
+            button1.Location = new Point(261, 297);
             button1.Name = "button1";
-            button1.Size = new Size(169, 38);
+            button1.Size = new Size(100, 25);
             button1.TabIndex = 30;
             button1.Text = "Построить";
             button1.UseVisualStyleBackColor = true;
@@ -367,9 +367,9 @@
             // panel1
             // 
             panel1.Controls.Add(textBox11);
-            panel1.Location = new Point(508, 274);
+            panel1.Location = new Point(6, 325);
             panel1.Name = "panel1";
-            panel1.Size = new Size(763, 98);
+            panel1.Size = new Size(496, 128);
             panel1.TabIndex = 32;
             panel1.Tag = "";
             panel1.Paint += panel1_Paint;
@@ -381,14 +381,15 @@
             textBox11.Location = new Point(3, 3);
             textBox11.Multiline = true;
             textBox11.Name = "textBox11";
-            textBox11.Size = new Size(757, 92);
+            textBox11.ScrollBars = ScrollBars.Vertical;
+            textBox11.Size = new Size(490, 122);
             textBox11.TabIndex = 0;
             // 
             // label21
             // 
             label21.AutoSize = true;
             label21.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            label21.Location = new Point(511, 261);
+            label21.Location = new Point(6, 309);
             label21.Name = "label21";
             label21.Size = new Size(98, 13);
             label21.TabIndex = 34;
@@ -397,9 +398,9 @@
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(942, 30);
+            pictureBox1.Location = new Point(508, 240);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(329, 228);
+            pictureBox1.Size = new Size(391, 213);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 35;
             pictureBox1.TabStop = false;
@@ -407,9 +408,9 @@
             // pictureBox2
             // 
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-            pictureBox2.Location = new Point(511, 30);
+            pictureBox2.Location = new Point(508, 12);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(425, 228);
+            pictureBox2.Size = new Size(398, 222);
             pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox2.TabIndex = 36;
             pictureBox2.TabStop = false;
@@ -419,12 +420,12 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(1283, 380);
-            Controls.Add(pictureBox2);
+            ClientSize = new Size(911, 457);
             Controls.Add(pictureBox1);
+            Controls.Add(pictureBox2);
+            Controls.Add(button1);
             Controls.Add(label21);
             Controls.Add(panel1);
-            Controls.Add(button1);
             Controls.Add(label20);
             Controls.Add(label19);
             Controls.Add(label18);
