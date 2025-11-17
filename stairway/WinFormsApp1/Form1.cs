@@ -1,25 +1,24 @@
+using stairway;
+
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
+
+        private Parameters parameters = new Parameters();
+
         public Form1()
         {
             InitializeComponent();
-        }
+            parameters.ErrorMessageEvent += IsErrorAppered;
+        }     
 
-        private void Form1_Load(object sender, EventArgs e)
+    private void IsErrorAppered(object sender, ErrorArgs e)
         {
 
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
+
+
 }
