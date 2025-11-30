@@ -6,15 +6,44 @@ using System.Threading.Tasks;
 
 namespace stairway
 {
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
     internal class ErrorArgs : EventArgs
     {
-        public string Message { get; }
-        public List<StairSizes> Sizes { get; }
+        /// <summary>
+        /// Переменные связанные с ошибкой
+        /// </summary>
+        private readonly List<ParametersTypes> _parametersList;
+        /// <summary>
+        /// Сообщение ошибки
+        /// </summary>
+        private readonly string _message;
 
-        public ErrorArgs(string message, List<StairSizes> sizes)
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
+        /// <param name="message">Сообщение ошибки</param>
+        /// <param name="sizes">Переменные связанные с ошибкой</param>
+        public ErrorArgs(string message, List<ParametersTypes> parametersList)
         {
-            Message = message;
-            Sizes = sizes;
+            _message = message;
+            _parametersList = parametersList;
+        }
+
+        /// <summary>
+        /// Сообщение ошибки
+        /// </summary>
+        public string Message
+        {
+            get { return _message; }
+        }
+        /// <summary>
+        /// Переменные связанные с ошибкой
+        /// </summary>
+        public List<ParametersTypes> ParametersList
+        {
+            get { return _parametersList; }
         }
     }
 }
