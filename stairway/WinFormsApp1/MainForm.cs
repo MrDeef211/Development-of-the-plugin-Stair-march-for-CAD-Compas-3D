@@ -21,6 +21,7 @@ namespace WinFormsApp1
             _parameters = new Parameters();
 
             _parameters.ErrorMessageEvent += IsErrorAppered;
+            _parameters.UpdateParametersEvent += ParameterChanged;
         }     
 
         /// <summary>
@@ -33,10 +34,22 @@ namespace WinFormsApp1
 
         }
 
+        /// <summary>
+        /// Обработчик события изменения параметров вне класса
+        /// </summary>
+        /// <param name="sender">Место изменения</param>
+        /// <param name="e">Список изменённых параметров</param>
+        private void ParameterChanged(object sender, List<ParametersTypes> e)
+        {
+
+        }
+
         private void ParameterEntered(object sender, EventArgs e)
         {
 
         }
+
+
 
         /// <summary>
         /// Начать построение модели

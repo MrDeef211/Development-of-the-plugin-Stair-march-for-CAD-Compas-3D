@@ -26,16 +26,23 @@ namespace stairway
         /// </summary>
         private double _stepsTread;
 
-
+        /// <summary>
+        /// Обработчик параметров
+        /// </summary>
         public Parameters()
         {
-            
+            InitializeParameters();
         }
 
         /// <summary>
         /// Делегат события возникновения ошибки
         /// </summary>
         public event EventHandler<ErrorArgs> ErrorMessageEvent;
+
+        /// <summary>
+        /// Делегат события возникновения ошибки
+        /// </summary>
+        public event EventHandler<List<ParametersTypes>> UpdateParametersEvent;
 
         /// <summary>
         /// Событие отправки ошибки в MainForm
@@ -45,6 +52,15 @@ namespace stairway
         protected virtual void ErrorMessage(string message, List<ParametersTypes> parametersList)
         {
             ErrorMessageEvent?.Invoke(this, new ErrorArgs(message, parametersList));
+        }
+
+        /// <summary>
+        /// Событие изменения параметра в результате внутренних процессов
+        /// </summary>
+        /// <param name="parametersList">Список изменённых параметров</param>
+        protected virtual void UpdateParameters(List<ParametersTypes> parametersList)
+        {
+            UpdateParametersEvent?.Invoke(this, parametersList);
         }
 
         /// <summary>
@@ -93,6 +109,28 @@ namespace stairway
         }
 
         /// <summary>
+        /// Инициализирует параметры модели
+        /// </summary>
+        private void InitializeParameters()
+        {
+            _parameters = new Dictionary<ParametersTypes, Parameter>();
+
+            _parameters.Add(ParametersTypes.Height, new Parameter(ParametersTypes.Height, 8000, 500, 2000));
+            _parameters.Add(ParametersTypes.Length, new Parameter(ParametersTypes.Length, 8000, 500, 3000));
+            _parameters.Add(ParametersTypes.PlatformLengthUp, new Parameter(ParametersTypes.PlatformLengthUp, 5000, 1000, 2000));
+            _parameters.Add(ParametersTypes.PlatformLengthDown, new Parameter(ParametersTypes.PlatformLengthDown, 5000, 1000, 2000));
+            _parameters.Add(ParametersTypes.PlatformHeight, new Parameter(ParametersTypes.PlatformHeight, 500, 100, 200));
+            _parameters.Add(ParametersTypes.StepAmount, new Parameter(ParametersTypes.StepAmount, 60, 1, 10));
+            _parameters.Add(ParametersTypes.StepHeight, new Parameter(ParametersTypes.StepHeight, 200, 120, 200));
+            _parameters.Add(ParametersTypes.StepProjectionHeight, new Parameter(ParametersTypes.StepProjectionHeight, 100, 0, 10));
+            _parameters.Add(ParametersTypes.StepProjectionLength, new Parameter(ParametersTypes.StepProjectionLength, 100, 0, 5));
+            _parameters.Add(ParametersTypes.Width, new Parameter(ParametersTypes.Width, 500, 100, 200));
+
+            // Обновляем все переменные разом
+            UpdateParameters(new List<ParametersTypes> ( _parameters.Keys.ToList() ));
+        }
+
+        /// <summary>
         /// Валидация параметра в рамках границ
         /// </summary>
         /// <param name="parameter">Параметр</param>
@@ -136,6 +174,7 @@ namespace stairway
                     /* Сначала ставим новое значение, чтобы его можно было вывести на экран
                     Пользователь должен понимать откуда появилась ошибка */
                     _parameters[ParametersTypes.StepHeight].Value = newValue;
+                    UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepHeight });
                     //Проверяем полученное значение
                     Validate(_parameters[ParametersTypes.StepHeight], newValue);
                     break;
@@ -144,7 +183,8 @@ namespace stairway
                         _parameters[ParametersTypes.StepAmount].Value;
 
                     _parameters[ParametersTypes.Height].Value = newValue;
-                    Validate(_parameters[ParametersTypes.StepHeight], newValue);
+                    UpdateParameters(new List<ParametersTypes> { ParametersTypes.Height });
+                    Validate(_parameters[ParametersTypes.Height], newValue);
                     break;
             }
 
