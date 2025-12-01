@@ -41,13 +41,13 @@
             StepProjectionLengthTextBox = new TextBox();
             StepProtjectionHeightTextBox = new TextBox();
             PlatformLengthDownTextBox = new TextBox();
-            PalatformLengthUpTextBox = new TextBox();
+            PlatformLengthUpTextBox = new TextBox();
             PlatformHeightTextBox = new TextBox();
             WidthLabel = new Label();
             StepProjectionLengthLabel = new Label();
             StepProtjectionHeightLabel = new Label();
             PlatformLengthDownLabel = new Label();
-            PalatformLengthUpLabel = new Label();
+            PlatformLengthUpLabel = new Label();
             PlatformHeightLabel = new Label();
             HeightLimitsLabel = new Label();
             LengthLimitsLabel = new Label();
@@ -57,7 +57,7 @@
             StepProjectionLengthLimitsLabel = new Label();
             StepProtjectionHeightLimitsLabel = new Label();
             PlatformLengthDownLimitsLabel = new Label();
-            PalatformLengthUpLimitsLabel = new Label();
+            PlatformLengthUpLimitsLabel = new Label();
             PlatformHeightLimitsLabel = new Label();
             BuildButton = new Button();
             ErrorPanel = new Panel();
@@ -118,6 +118,7 @@
             HeightTextBox.Size = new Size(100, 23);
             HeightTextBox.TabIndex = 4;
             HeightTextBox.Text = "2";
+            HeightTextBox.TextChanged += ParameterEntered;
             // 
             // LengthTextBox
             // 
@@ -127,6 +128,7 @@
             LengthTextBox.Size = new Size(100, 23);
             LengthTextBox.TabIndex = 5;
             LengthTextBox.Text = "3";
+            LengthTextBox.TextChanged += ParameterEntered;
             // 
             // StepAmountTextBox
             // 
@@ -136,6 +138,7 @@
             StepAmountTextBox.Size = new Size(100, 23);
             StepAmountTextBox.TabIndex = 6;
             StepAmountTextBox.Text = "10";
+            StepAmountTextBox.TextChanged += ParameterEntered;
             // 
             // StepHeightTextBox
             // 
@@ -144,6 +147,7 @@
             StepHeightTextBox.Size = new Size(100, 23);
             StepHeightTextBox.TabIndex = 7;
             StepHeightTextBox.Text = "200";
+            StepHeightTextBox.TextChanged += ParameterEntered;
             // 
             // WidthTextBox
             // 
@@ -153,6 +157,7 @@
             WidthTextBox.Size = new Size(100, 23);
             WidthTextBox.TabIndex = 8;
             WidthTextBox.Text = "2";
+            WidthTextBox.TextChanged += ParameterEntered;
             // 
             // StepProjectionLengthTextBox
             // 
@@ -161,6 +166,7 @@
             StepProjectionLengthTextBox.Size = new Size(100, 23);
             StepProjectionLengthTextBox.TabIndex = 9;
             StepProjectionLengthTextBox.Text = "10";
+            StepProjectionLengthTextBox.TextChanged += ParameterEntered;
             // 
             // StepProtjectionHeightTextBox
             // 
@@ -169,6 +175,7 @@
             StepProtjectionHeightTextBox.Size = new Size(100, 23);
             StepProtjectionHeightTextBox.TabIndex = 10;
             StepProtjectionHeightTextBox.Text = "5";
+            StepProtjectionHeightTextBox.TextChanged += ParameterEntered;
             // 
             // PlatformLengthDownTextBox
             // 
@@ -177,14 +184,16 @@
             PlatformLengthDownTextBox.Size = new Size(100, 23);
             PlatformLengthDownTextBox.TabIndex = 11;
             PlatformLengthDownTextBox.Text = "2";
+            PlatformLengthDownTextBox.TextChanged += ParameterEntered;
             // 
-            // PalatformLengthUpTextBox
+            // PlatformLengthUpTextBox
             // 
-            PalatformLengthUpTextBox.Location = new Point(261, 240);
-            PalatformLengthUpTextBox.Name = "PalatformLengthUpTextBox";
-            PalatformLengthUpTextBox.Size = new Size(100, 23);
-            PalatformLengthUpTextBox.TabIndex = 12;
-            PalatformLengthUpTextBox.Text = "2";
+            PlatformLengthUpTextBox.Location = new Point(261, 240);
+            PlatformLengthUpTextBox.Name = "PlatformLengthUpTextBox";
+            PlatformLengthUpTextBox.Size = new Size(100, 23);
+            PlatformLengthUpTextBox.TabIndex = 12;
+            PlatformLengthUpTextBox.Text = "2";
+            PlatformLengthUpTextBox.TextChanged += ParameterEntered;
             // 
             // PlatformHeightTextBox
             // 
@@ -193,6 +202,7 @@
             PlatformHeightTextBox.Size = new Size(100, 23);
             PlatformHeightTextBox.TabIndex = 13;
             PlatformHeightTextBox.Text = "200";
+            PlatformHeightTextBox.TextChanged += ParameterEntered;
             // 
             // WidthLabel
             // 
@@ -234,15 +244,15 @@
             PlatformLengthDownLabel.TabIndex = 17;
             PlatformLengthDownLabel.Text = "Длина нижней платформы l1";
             // 
-            // PalatformLengthUpLabel
+            // PlatformLengthUpLabel
             // 
-            PalatformLengthUpLabel.AutoSize = true;
-            PalatformLengthUpLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PalatformLengthUpLabel.Location = new Point(6, 240);
-            PalatformLengthUpLabel.Name = "PalatformLengthUpLabel";
-            PalatformLengthUpLabel.Size = new Size(255, 18);
-            PalatformLengthUpLabel.TabIndex = 18;
-            PalatformLengthUpLabel.Text = "Длина верхней платформы l2";
+            PlatformLengthUpLabel.AutoSize = true;
+            PlatformLengthUpLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            PlatformLengthUpLabel.Location = new Point(6, 240);
+            PlatformLengthUpLabel.Name = "PlatformLengthUpLabel";
+            PlatformLengthUpLabel.Size = new Size(255, 18);
+            PlatformLengthUpLabel.TabIndex = 18;
+            PlatformLengthUpLabel.Text = "Длина верхней платформы l2";
             // 
             // PlatformHeightLabel
             // 
@@ -334,15 +344,15 @@
             PlatformLengthDownLimitsLabel.TabIndex = 27;
             PlatformLengthDownLimitsLabel.Text = "1000 - 5000 мм";
             // 
-            // PalatformLengthUpLimitsLabel
+            // PlatformLengthUpLimitsLabel
             // 
-            PalatformLengthUpLimitsLabel.AutoSize = true;
-            PalatformLengthUpLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PalatformLengthUpLimitsLabel.Location = new Point(367, 245);
-            PalatformLengthUpLimitsLabel.Name = "PalatformLengthUpLimitsLabel";
-            PalatformLengthUpLimitsLabel.Size = new Size(135, 18);
-            PalatformLengthUpLimitsLabel.TabIndex = 28;
-            PalatformLengthUpLimitsLabel.Text = "1000 - 5000 мм";
+            PlatformLengthUpLimitsLabel.AutoSize = true;
+            PlatformLengthUpLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            PlatformLengthUpLimitsLabel.Location = new Point(367, 245);
+            PlatformLengthUpLimitsLabel.Name = "PlatformLengthUpLimitsLabel";
+            PlatformLengthUpLimitsLabel.Size = new Size(135, 18);
+            PlatformLengthUpLimitsLabel.TabIndex = 28;
+            PlatformLengthUpLimitsLabel.Text = "1000 - 5000 мм";
             // 
             // PlatformHeightLimitsLabel
             // 
@@ -426,7 +436,7 @@
             Controls.Add(ErrorLabel);
             Controls.Add(ErrorPanel);
             Controls.Add(PlatformHeightLimitsLabel);
-            Controls.Add(PalatformLengthUpLimitsLabel);
+            Controls.Add(PlatformLengthUpLimitsLabel);
             Controls.Add(PlatformLengthDownLimitsLabel);
             Controls.Add(StepProtjectionHeightLimitsLabel);
             Controls.Add(StepProjectionLengthLimitsLabel);
@@ -436,13 +446,13 @@
             Controls.Add(LengthLimitsLabel);
             Controls.Add(HeightLimitsLabel);
             Controls.Add(PlatformHeightLabel);
-            Controls.Add(PalatformLengthUpLabel);
+            Controls.Add(PlatformLengthUpLabel);
             Controls.Add(PlatformLengthDownLabel);
             Controls.Add(StepProtjectionHeightLabel);
             Controls.Add(StepProjectionLengthLabel);
             Controls.Add(WidthLabel);
             Controls.Add(PlatformHeightTextBox);
-            Controls.Add(PalatformLengthUpTextBox);
+            Controls.Add(PlatformLengthUpTextBox);
             Controls.Add(PlatformLengthDownTextBox);
             Controls.Add(StepProtjectionHeightTextBox);
             Controls.Add(StepProjectionLengthTextBox);
@@ -479,13 +489,13 @@
         private TextBox StepProjectionLengthTextBox;
         private TextBox StepProtjectionHeightTextBox;
         private TextBox PlatformLengthDownTextBox;
-        private TextBox PalatformLengthUpTextBox;
+        private TextBox PlatformLengthUpTextBox;
         private TextBox PlatformHeightTextBox;
         private Label WidthLabel;
         private Label StepProjectionLengthLabel;
         private Label StepProtjectionHeightLabel;
         private Label PlatformLengthDownLabel;
-        private Label PalatformLengthUpLabel;
+        private Label PlatformLengthUpLabel;
         private Label PlatformHeightLabel;
         private Label HeightLimitsLabel;
         private Label LengthLimitsLabel;
@@ -495,7 +505,7 @@
         private Label StepProjectionLengthLimitsLabel;
         private Label StepProtjectionHeightLimitsLabel;
         private Label PlatformLengthDownLimitsLabel;
-        private Label PalatformLengthUpLimitsLabel;
+        private Label PlatformLengthUpLimitsLabel;
         private Label PlatformHeightLimitsLabel;
         private Button BuildButton;
         private Panel ErrorPanel;

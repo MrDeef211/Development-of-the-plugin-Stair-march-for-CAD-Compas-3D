@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,12 +56,15 @@ namespace stairway
         }
 
         /// <summary>
-        /// Событие изменения параметра в результате внутренних процессов
+        /// Событие обновления параметра в результате внутренних процессов
         /// </summary>
         /// <param name="parametersList">Список изменённых параметров</param>
         protected virtual void UpdateParameters(List<ParametersTypes> parametersList)
         {
             UpdateParametersEvent?.Invoke(this, parametersList);
+            //Внешняя валидация на границы происходит в самом конце, после отправки значений на форму
+            foreach (var parameter in parametersList)
+                Validate(_parameters[parameter]);
         }
 
         /// <summary>
@@ -80,13 +84,18 @@ namespace stairway
         /// <param name="value">Новое значение параметра</param>
         public void SetParameter(ParametersTypes parameter, double value)
         {
-            Validate(_parameters[parameter], value);
+            //Сначала фиксируем изменение
             _parameters[parameter].Value = value;
 
-            //Запуск внутренних валидаций по необходимости
+            /* Внешняя валидация на границы происходит в самом конце, после отправки значений на форму
+             * Фиксация -> внутренние вычисления -> обновление параметров и сброс ошибок ->
+             * -> обычная валидация -> кросс валидация */
+
+            //Запуск валидаций по необходимости
             switch (parameter)
             {
                 case ParametersTypes.Length:
+                case ParametersTypes.StepProjectionLength:
                     InternalValidation(parameter);
                     break;
                 case ParametersTypes.StepAmount:
@@ -94,6 +103,9 @@ namespace stairway
                 case ParametersTypes.StepHeight:
                     CalculateDependent(parameter);
                     InternalValidation(parameter);
+                    break;
+                default:
+                    UpdateParameters(new List<ParametersTypes> { parameter });
                     break;
             }
 
@@ -109,25 +121,35 @@ namespace stairway
         }
 
         /// <summary>
+        /// Передаёт все параметры по событию
+        /// </summary>
+        public void FullUpdateParameters()
+        {
+            UpdateParameters(_parameters.Keys.ToList());
+        }
+
+        /// <summary>
         /// Инициализирует параметры модели
         /// </summary>
         private void InitializeParameters()
         {
-            _parameters = new Dictionary<ParametersTypes, Parameter>();
+            _parameters = new Dictionary<ParametersTypes, Parameter>
 
-            _parameters.Add(ParametersTypes.Height, new Parameter(ParametersTypes.Height, 8000, 500, 2000));
-            _parameters.Add(ParametersTypes.Length, new Parameter(ParametersTypes.Length, 8000, 500, 3000));
-            _parameters.Add(ParametersTypes.PlatformLengthUp, new Parameter(ParametersTypes.PlatformLengthUp, 5000, 1000, 2000));
-            _parameters.Add(ParametersTypes.PlatformLengthDown, new Parameter(ParametersTypes.PlatformLengthDown, 5000, 1000, 2000));
-            _parameters.Add(ParametersTypes.PlatformHeight, new Parameter(ParametersTypes.PlatformHeight, 500, 100, 200));
-            _parameters.Add(ParametersTypes.StepAmount, new Parameter(ParametersTypes.StepAmount, 60, 1, 10));
-            _parameters.Add(ParametersTypes.StepHeight, new Parameter(ParametersTypes.StepHeight, 200, 120, 200));
-            _parameters.Add(ParametersTypes.StepProjectionHeight, new Parameter(ParametersTypes.StepProjectionHeight, 100, 0, 10));
-            _parameters.Add(ParametersTypes.StepProjectionLength, new Parameter(ParametersTypes.StepProjectionLength, 100, 0, 5));
-            _parameters.Add(ParametersTypes.Width, new Parameter(ParametersTypes.Width, 500, 100, 200));
+            {
 
-            // Обновляем все переменные разом
-            UpdateParameters(new List<ParametersTypes> ( _parameters.Keys.ToList() ));
+            {ParametersTypes.Height, new Parameter(ParametersTypes.Height, 8000, 500, 3200) },
+            {ParametersTypes.Length, new Parameter(ParametersTypes.Length, 8000, 500, 5000) },
+            {ParametersTypes.PlatformLengthUp, new Parameter(ParametersTypes.PlatformLengthUp, 5000, 1000, 1500) },
+            {ParametersTypes.PlatformLengthDown, new Parameter(ParametersTypes.PlatformLengthDown, 5000, 1000, 1500) },
+            {ParametersTypes.PlatformHeight, new Parameter(ParametersTypes.PlatformHeight, 500, 100, 200) },
+            {ParametersTypes.StepAmount, new Parameter(ParametersTypes.StepAmount, 60, 1, 20) },
+            {ParametersTypes.StepHeight, new Parameter(ParametersTypes.StepHeight, 250, 120, 160) },
+            {ParametersTypes.StepProjectionHeight, new Parameter(ParametersTypes.StepProjectionHeight, 100, 0, 25) },
+            {ParametersTypes.StepProjectionLength, new Parameter(ParametersTypes.StepProjectionLength, 100, 0, 20) },
+            {ParametersTypes.Width, new Parameter(ParametersTypes.Width, 2500, 800, 1000)}
+
+            };
+
         }
 
         /// <summary>
@@ -136,24 +158,44 @@ namespace stairway
         /// <param name="parameter">Параметр</param>
         /// <param name="value">Значение параметра</param>
         /// <exception cref="Exception">Ошибка валидации</exception>
-        private void Validate(Parameter parameter, double value)
+        private void Validate(Parameter parameter)
         {
+            double value = parameter.Value;
+
             //Проверка целочисленного параметра
             if (parameter.Name == ParametersTypes.StepAmount && Math.Truncate(value) != value)
             {
-                ErrorMessage("Количество ступеней: параметр должен быть целочисленным",
+                ErrorMessage(" параметр должен быть целочисленным",
                     new List<ParametersTypes> { ParametersTypes.StepAmount });
-                throw new Exception("Количество ступеней: параметр должен быть целочисленным");
+
+                //throw new Exception("Количество ступеней: параметр должен быть целочисленным");
 
             }
+            else 
             //Проверка границ
             if (value < parameter.Min || value > parameter.Max)
             {
-                ErrorMessage("параметр не должен выходить за диапазон от" +
-                    parameter.Min.ToString() + "до" + parameter.Max.ToString() + "мм",
-                    new List<ParametersTypes> { parameter.Name });
-                throw new Exception(parameter + ": параметр не должен выходить за диапазон от" +
-                    parameter.Min.ToString() + "до" + parameter.Max.ToString() + "мм");
+                //Для случаев параметров с плавающей границей и целочисленного
+                switch (parameter.Name)
+                {
+                    case ParametersTypes.StepProjectionHeight:
+                    case ParametersTypes.StepProjectionLength:
+                        ErrorMessage(": параметр не должен быть больше половины высоты ступени",
+                            new List<ParametersTypes> { parameter.Name });
+                        break;
+                    case ParametersTypes.StepAmount:
+                        ErrorMessage(": параметр не должен выходить за диапазон от " +
+                            parameter.Min.ToString() + " до " + parameter.Max.ToString(),
+                            new List<ParametersTypes> { parameter.Name });
+                        break;
+                    default:
+                        ErrorMessage(": параметр не должен выходить за диапазон от " +
+                            parameter.Min.ToString() + " до " + parameter.Max.ToString() + " мм",
+                            new List<ParametersTypes> { parameter.Name });
+                        //throw new Exception(parameter + ": параметр не должен выходить за диапазон от" +
+                        //    parameter.Min.ToString() + "до" + parameter.Max.ToString() + "мм");
+                        break;
+                }
             }
 
         }
@@ -171,12 +213,9 @@ namespace stairway
                 case ParametersTypes.Height:
                     newValue = _parameters[ParametersTypes.Height].Value /
                         _parameters[ParametersTypes.StepAmount].Value;
-                    /* Сначала ставим новое значение, чтобы его можно было вывести на экран
-                    Пользователь должен понимать откуда появилась ошибка */
+                    //Меняем значение на экране
                     _parameters[ParametersTypes.StepHeight].Value = newValue;
                     UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepHeight });
-                    //Проверяем полученное значение
-                    Validate(_parameters[ParametersTypes.StepHeight], newValue);
                     break;
                 case ParametersTypes.StepHeight:
                     newValue = _parameters[ParametersTypes.StepHeight].Value *
@@ -184,7 +223,7 @@ namespace stairway
 
                     _parameters[ParametersTypes.Height].Value = newValue;
                     UpdateParameters(new List<ParametersTypes> { ParametersTypes.Height });
-                    Validate(_parameters[ParametersTypes.Height], newValue);
+                    Validate(_parameters[ParametersTypes.Height]);
                     break;
             }
 
@@ -200,16 +239,11 @@ namespace stairway
             {
                 // Глубина
                 _parameters[ParametersTypes.StepProjectionLength].Max = _parameters[ParametersTypes.StepHeight].Value / 2;
-                if (_parameters[ParametersTypes.StepProjectionLength].Value > 
-                    _parameters[ParametersTypes.StepProjectionLength].Max)
-                    ErrorMessage("Высота ступени должна быть не меньше чем две длины выступа", 
-                        new List<ParametersTypes> { ParametersTypes.StepProjectionLength, ParametersTypes.StepHeight });
+                UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepProjectionLength });
+
                 // Толщина
                 _parameters[ParametersTypes.StepProjectionHeight].Max = _parameters[ParametersTypes.StepHeight].Value / 2;
-                if (_parameters[ParametersTypes.StepProjectionHeight].Value > 
-                    _parameters[ParametersTypes.StepProjectionHeight].Max)
-                    ErrorMessage("Высота ступени должна быть не меньше чем две высоты выступа", 
-                        new List<ParametersTypes> { ParametersTypes.StepProjectionHeight, ParametersTypes.StepHeight });
+                UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepProjectionHeight });
             }
 
             // 2 Проверка угла наклона
@@ -217,8 +251,10 @@ namespace stairway
             {
                 _stairCorner = Math.Atan(_parameters[ParametersTypes.Height].Value / 
                     _parameters[ParametersTypes.Length].Value) * 180 / Math.PI;
+                UpdateParameters(new List<ParametersTypes> { ParametersTypes.Height, ParametersTypes.Length});
                 if (_stairCorner < 30 || _stairCorner > 50)
-                    ErrorMessage("Угол лестницы: arctan(H / L) не должен выходить за диапазон от 30 до 50 градусов",
+                    ErrorMessage("Угол лестницы: arctan(H / L) не должен выходить " +
+                        "за диапазон от 30 до 50 градусов (сейчас " + _stairCorner + ")",
                         new List<ParametersTypes> { ParametersTypes.Height, ParametersTypes.Length});
             }
 
@@ -228,8 +264,11 @@ namespace stairway
             {
                 _stepsTread = _parameters[ParametersTypes.Length].Value /
                     _parameters[ParametersTypes.StepAmount].Value + _parameters[ParametersTypes.StepProjectionLength].Value;
-                if (_stairCorner < 250 || _stairCorner > 400)
-                    ErrorMessage("Глубина проступи: L / N + t  не должен выходить за диапазон от 250 до 400 мм",
+                UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepAmount, 
+                    ParametersTypes.StepProjectionLength, ParametersTypes.Length });
+                if (_stepsTread < 250 || _stepsTread > 400)
+                    ErrorMessage("Глубина проступи: L / N + t  не должен выходить " +
+                        "за диапазон от 250 до 400 мм (сейчас " + _stepsTread + ")",
                         new List<ParametersTypes> { ParametersTypes.StepAmount, 
                             ParametersTypes.Length, ParametersTypes.StepProjectionLength });
             }

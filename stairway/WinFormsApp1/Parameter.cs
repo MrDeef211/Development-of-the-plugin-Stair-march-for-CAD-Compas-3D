@@ -27,6 +27,10 @@ namespace stairway
         /// Значение параметра
         /// </summary>
         private double _value;
+        ///// <summary>
+        ///// Параметр успешно прошёл валидацию
+        ///// </summary>
+        //private bool _isValid;
 
         /// <summary>
         /// Параметр модели
@@ -35,7 +39,7 @@ namespace stairway
         /// <param name="max">Максимальное значение параметра</param>
         /// <param name="min">Минимальное значение параметра</param>
         /// <param name="value">Значение параметра</param>
-        public Parameter (ParametersTypes name, double max, double min, double value)
+        public Parameter(ParametersTypes name, double max, double min, double value)
         {
             _name = name;
             _max = max;
@@ -43,7 +47,8 @@ namespace stairway
             if (value >= min && value <= max)
                 _value = value;
             else
-                throw new Exception("Значение параметра не совпадает с выбранными границами");
+                throw new Exception(name + " Значение параметра не совпадает с выбранными границами");
+            //_isValid = true;
         }
 
         /// <summary>
@@ -77,6 +82,14 @@ namespace stairway
             get { return _value; }
             set { _value = value; }
         }
+        ///// <summary>
+        ///// Параметр успешно прошёл валидацию
+        ///// </summary>
+        //public bool IsValid
+        //{
+        //    get { return _isValid; }
+        //    set { _isValid = value; }
+        //}
 
     }
 }
