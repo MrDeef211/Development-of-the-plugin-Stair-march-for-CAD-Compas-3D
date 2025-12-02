@@ -62,9 +62,6 @@ namespace stairway
         protected virtual void UpdateParameters(List<ParametersTypes> parametersList)
         {
             UpdateParametersEvent?.Invoke(this, parametersList);
-            //Внешняя валидация на границы происходит в самом конце, после отправки значений на форму
-            foreach (var parameter in parametersList)
-                Validate(_parameters[parameter]);
         }
 
         /// <summary>
@@ -86,13 +83,15 @@ namespace stairway
         {
             //Сначала фиксируем изменение
             _parameters[parameter].Value = value;
+			UpdateParameters(new List<ParametersTypes> { parameter });
+            Validate(_parameters[parameter]);
 
-            /* Внешняя валидация на границы происходит в самом конце, после отправки значений на форму
+			/* Внешняя валидация на границы происходит в самом конце, после отправки значений на форму
              * Фиксация -> внутренние вычисления -> обновление параметров и сброс ошибок ->
              * -> обычная валидация -> кросс валидация */
 
-            //Запуск валидаций по необходимости
-            switch (parameter)
+			//Запуск внутренних валидаций по необходимости
+			switch (parameter)
             {
                 case ParametersTypes.Length:
                 case ParametersTypes.StepProjectionLength:
@@ -103,9 +102,6 @@ namespace stairway
                 case ParametersTypes.StepHeight:
                     CalculateDependent(parameter);
                     InternalValidation(parameter);
-                    break;
-                default:
-                    UpdateParameters(new List<ParametersTypes> { parameter });
                     break;
             }
 
@@ -216,7 +212,8 @@ namespace stairway
                     //Меняем значение на экране
                     _parameters[ParametersTypes.StepHeight].Value = newValue;
                     UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepHeight });
-                    break;
+					Validate(_parameters[ParametersTypes.StepHeight]);
+					break;
                 case ParametersTypes.StepHeight:
                     newValue = _parameters[ParametersTypes.StepHeight].Value *
                         _parameters[ParametersTypes.StepAmount].Value;
@@ -240,10 +237,12 @@ namespace stairway
                 // Глубина
                 _parameters[ParametersTypes.StepProjectionLength].Max = _parameters[ParametersTypes.StepHeight].Value / 2;
                 UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepProjectionLength });
+                Validate(_parameters[ParametersTypes.StepProjectionLength]);
 
                 // Толщина
                 _parameters[ParametersTypes.StepProjectionHeight].Max = _parameters[ParametersTypes.StepHeight].Value / 2;
                 UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepProjectionHeight });
+                Validate(_parameters[ParametersTypes.StepProjectionHeight]);
             }
 
             // 2 Проверка угла наклона
@@ -251,7 +250,6 @@ namespace stairway
             {
                 _stairCorner = Math.Atan(_parameters[ParametersTypes.Height].Value / 
                     _parameters[ParametersTypes.Length].Value) * 180 / Math.PI;
-                UpdateParameters(new List<ParametersTypes> { ParametersTypes.Height, ParametersTypes.Length});
                 if (_stairCorner < 30 || _stairCorner > 50)
                     ErrorMessage("Угол лестницы: arctan(H / L) не должен выходить " +
                         "за диапазон от 30 до 50 градусов (сейчас " + _stairCorner + ")",
@@ -264,8 +262,6 @@ namespace stairway
             {
                 _stepsTread = _parameters[ParametersTypes.Length].Value /
                     _parameters[ParametersTypes.StepAmount].Value + _parameters[ParametersTypes.StepProjectionLength].Value;
-                UpdateParameters(new List<ParametersTypes> { ParametersTypes.StepAmount, 
-                    ParametersTypes.StepProjectionLength, ParametersTypes.Length });
                 if (_stepsTread < 250 || _stepsTread > 400)
                     ErrorMessage("Глубина проступи: L / N + t  не должен выходить " +
                         "за диапазон от 250 до 400 мм (сейчас " + _stepsTread + ")",
