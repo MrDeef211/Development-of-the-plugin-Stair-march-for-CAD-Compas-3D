@@ -11,23 +11,52 @@ namespace stairway
     /// </summary>
     internal class Builder
     {
-        //private Wrapper _wrapper;
+        private Wrapper _wrapper;
 
         /// <summary>
         /// Строитель модели
         /// </summary>
         public Builder() 
         {
-            
+            _wrapper = new Wrapper();
         }
 
         /// <summary>
         /// Построить модель
         /// </summary>
         /// <param name="parameters">Параметры модели</param>
-        public void Build(Dictionary<ParametersTypes, Parameter> parameters)
+        public void Build(Dictionary<ParametersTypes, double> parameters)
         {
+            if (!_wrapper.KompasIsDefined())
+            {
+                _wrapper.CreateCADWindow();
+                _wrapper.CreateFile();
+            }
 
+            _wrapper.CreateSketch();
+
+            _wrapper.Createline(
+                0 - parameters[ParametersTypes.Length], 
+                parameters[ParametersTypes.Height],
+                parameters[ParametersTypes.Length], 
+                parameters[ParametersTypes.Height]);
+            _wrapper.Createline(
+                parameters[ParametersTypes.Length],
+                parameters[ParametersTypes.Height],
+                parameters[ParametersTypes.Length],
+                0 - parameters[ParametersTypes.Height]);
+            _wrapper.Createline(
+                parameters[ParametersTypes.Length],
+                0 - parameters[ParametersTypes.Height],
+                0 - parameters[ParametersTypes.Length],
+                0 - parameters[ParametersTypes.Height]);
+            _wrapper.Createline(
+                0 - parameters[ParametersTypes.Length],
+                0 - parameters[ParametersTypes.Height],
+                0 - parameters[ParametersTypes.Length],
+                parameters[ParametersTypes.Height]);
+
+            _wrapper.Extrusion(true, 1, parameters[ParametersTypes.Width], false);
         }
 
         /// <summary>

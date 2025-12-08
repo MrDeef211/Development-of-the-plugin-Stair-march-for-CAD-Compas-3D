@@ -9,6 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="Kompas6API5">
+      <HintPath>..\..\..\..\..\..\..\Programs\Kompas-3D\SDK\Kompas6API5.dll</HintPath>
+    </Reference>
+    <Reference Include="Kompas6Constants">
+      <HintPath>..\..\..\..\..\..\..\Programs\Kompas-3D\SDK\Kompas6Constants.dll</HintPath>
+    </Reference>
+    <Reference Include="Kompas6Constants3D">
+      <HintPath>..\..\..\..\..\..\..\Programs\Kompas-3D\SDK\Kompas6Constants3D.dll</HintPath>
+    </Reference>
+    <Reference Include="KompasAPI7">
+      <HintPath>..\..\..\..\..\..\..\Programs\Kompas-3D\SDK\KompasAPI7.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
