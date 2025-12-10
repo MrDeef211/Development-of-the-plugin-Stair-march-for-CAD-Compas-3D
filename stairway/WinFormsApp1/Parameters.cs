@@ -41,7 +41,7 @@ namespace stairway
         public event EventHandler<ErrorArgs> ErrorMessageEvent;
 
         /// <summary>
-        /// Делегат события возникновения ошибки
+        /// Делегат события обновления параметра
         /// </summary>
         public event EventHandler<List<ParametersTypes>> UpdateParametersEvent;
 
@@ -117,7 +117,7 @@ namespace stairway
         }
 
         /// <summary>
-        /// Передаёт все параметры по событию
+        /// Передаёт все параметры по событию обновления
         /// </summary>
         public void FullUpdateParameters()
         {
