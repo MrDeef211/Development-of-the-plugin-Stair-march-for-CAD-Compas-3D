@@ -10,16 +10,16 @@
 
   <ItemGroup>
     <Reference Include="Kompas6API5">
-      <HintPath>..\..\..\..\..\..\..\Programs\Kompas-3D\SDK\Kompas6API5.dll</HintPath>
+      <HintPath>Kompas6API5.dll</HintPath>
     </Reference>
     <Reference Include="Kompas6Constants">
-      <HintPath>..\..\..\..\..\..\..\Programs\Kompas-3D\SDK\Kompas6Constants.dll</HintPath>
+      <HintPath>Kompas6Constants.dll</HintPath>
     </Reference>
     <Reference Include="Kompas6Constants3D">
-      <HintPath>..\..\..\..\..\..\..\Programs\Kompas-3D\SDK\Kompas6Constants3D.dll</HintPath>
+      <HintPath>Kompas6Constants3D.dll</HintPath>
     </Reference>
     <Reference Include="KompasAPI7">
-      <HintPath>..\..\..\..\..\..\..\Programs\Kompas-3D\SDK\KompasAPI7.dll</HintPath>
+      <HintPath>KompasAPI7.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -111,7 +111,9 @@ namespace WinFormsApp1
             UpdateErrorBox();
         }
 
-
+        /// <summary>
+        /// Событие введения параметра в поле
+        /// </summary>
         private void ParameterEntered(object sender, KeyEventArgs e)
         {
             var textBox = (TextBox)sender;
@@ -141,8 +143,8 @@ namespace WinFormsApp1
         /// <summary>
         /// Начать построение модели
         /// </summary>
-        private void BuildModel()
-        {
+        private void BuildModel(object sender, EventArgs e)
+		{
             if (_activeErrors.Count != 0)
             {
                 MessageBox.Show("Сначала исправьте все ошибки");
@@ -188,14 +190,14 @@ namespace WinFormsApp1
             {
                 { ParametersTypes.Height, "Высота марша" },
                 { ParametersTypes.Length, "Длина пролёта" },
-                { ParametersTypes.PlatformLengthUp, "Число ступеней" },
-                { ParametersTypes.PlatformLengthDown, "Высота ступени" },
-                { ParametersTypes.PlatformHeight, "Ширина марша" },
-                { ParametersTypes.StepAmount, "Глубина выступа" },
-                { ParametersTypes.StepHeight, "Толщина выступа" },
-                { ParametersTypes.StepProjectionHeight, "Длина нижней платформы" },
-                { ParametersTypes.StepProjectionLength, "Длина верхней платформы" },
-                { ParametersTypes.Width, "Толщина марша" }
+                { ParametersTypes.PlatformLengthUp, "Длина верхней платформы" },
+                { ParametersTypes.PlatformLengthDown, "Длина нижней платформы" },
+                { ParametersTypes.PlatformHeight, "Толщина платформы" },
+                { ParametersTypes.StepAmount, "Количество ступеней" },
+                { ParametersTypes.StepHeight, "Высота ступени" },
+                { ParametersTypes.StepProjectionHeight, "Ширина выступа" },
+                { ParametersTypes.StepProjectionLength, "Глубина выступа" },
+                { ParametersTypes.Width, "Ширина марша" }
             };
         }
 
@@ -232,11 +234,6 @@ namespace WinFormsApp1
             var Errors = _activeErrors.Keys;
 
             ErrorTextBox.Text = string.Join(Environment.NewLine, Errors);
-        }
-
-        private void BuildButton_Click(object sender, EventArgs e)
-        {
-            BuildModel();
         }
     }
 
