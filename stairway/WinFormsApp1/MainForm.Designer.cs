@@ -280,9 +280,9 @@
             LengthLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             LengthLimitsLabel.Location = new Point(367, 42);
             LengthLimitsLabel.Name = "LengthLimitsLabel";
-            LengthLimitsLabel.Size = new Size(125, 18);
+            LengthLimitsLabel.Size = new Size(135, 18);
             LengthLimitsLabel.TabIndex = 21;
-            LengthLimitsLabel.Text = "500 - 8000 мм";
+            LengthLimitsLabel.Text = "500 - 12000 мм";
             // 
             // StepAmountLimitsLabel
             // 
@@ -320,9 +320,9 @@
             StepProjectionLengthLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             StepProjectionLengthLimitsLabel.Location = new Point(367, 158);
             StepProjectionLengthLimitsLabel.Name = "StepProjectionLengthLimitsLabel";
-            StepProjectionLengthLimitsLabel.Size = new Size(95, 18);
+            StepProjectionLengthLimitsLabel.Size = new Size(86, 18);
             StepProjectionLengthLimitsLabel.TabIndex = 25;
-            StepProjectionLengthLimitsLabel.Text = "0 - 100 мм";
+            StepProjectionLengthLimitsLabel.Text = "0 - h1 / 2";
             // 
             // StepProtjectionHeightLimitsLabel
             // 
@@ -330,9 +330,9 @@
             StepProtjectionHeightLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             StepProtjectionHeightLimitsLabel.Location = new Point(367, 187);
             StepProtjectionHeightLimitsLabel.Name = "StepProtjectionHeightLimitsLabel";
-            StepProtjectionHeightLimitsLabel.Size = new Size(95, 18);
+            StepProtjectionHeightLimitsLabel.Size = new Size(86, 18);
             StepProtjectionHeightLimitsLabel.TabIndex = 26;
-            StepProtjectionHeightLimitsLabel.Text = "0 - 100 мм";
+            StepProtjectionHeightLimitsLabel.Text = "0 - h1 / 2";
             // 
             // PlatformLengthDownLimitsLabel
             // 

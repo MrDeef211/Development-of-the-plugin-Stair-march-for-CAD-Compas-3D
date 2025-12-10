@@ -134,7 +134,7 @@ namespace stairway
             {
 
             {ParametersTypes.Height, new Parameter(ParametersTypes.Height, 8000, 500, 3200) },
-            {ParametersTypes.Length, new Parameter(ParametersTypes.Length, 8000, 500, 5000) },
+            {ParametersTypes.Length, new Parameter(ParametersTypes.Length, 12000, 500, 5000) },
             {ParametersTypes.PlatformLengthUp, new Parameter(ParametersTypes.PlatformLengthUp, 5000, 1000, 1500) },
             {ParametersTypes.PlatformLengthDown, new Parameter(ParametersTypes.PlatformLengthDown, 5000, 1000, 1500) },
             {ParametersTypes.PlatformHeight, new Parameter(ParametersTypes.PlatformHeight, 500, 100, 200) },

@@ -16,7 +16,7 @@ namespace stairway
     internal class Wrapper
     {
         /// <summary>
-        /// Текущий обЪект компаса API5
+        /// Текущий объект компаса API5
         /// </summary>
         private KompasObject _kompas;
         /// <summary>
@@ -143,9 +143,9 @@ namespace stairway
         public void CreateSketch()
         {
             _activeSketch = (ksEntity)_part.NewEntity((short)Obj3dType.o3d_sketch);
-            _activeSketch.Create();
             _sketchDefinition = (ksSketchDefinition)_activeSketch.GetDefinition();
-            _sketchDefinition.SetPlane((ksEntity)_part.GetDefaultEntity((short)Obj3dType.o3d_planeXOY));
+            _sketchDefinition.SetPlane((ksEntity)_part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ));
+            _activeSketch.Create();
             _sketchEdit = (ksDocument2D)_sketchDefinition.BeginEdit();
         }
 
@@ -214,6 +214,8 @@ namespace stairway
 
             // Создаём операцию
             extr.Create();
+
+            extr.Update();
         }
 
 
