@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
-using stairway;
+using Model;
+using Builders;
 
-namespace WinFormsApp1
+namespace UI
 {
     public partial class MainForm : Form
     {

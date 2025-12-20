@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace stairway
+namespace Model
 {
     /// <summary>
     /// Имена параметров
     /// </summary>
-    internal enum ParametersTypes
+    public enum ParametersTypes
     {
         Height,
         Length,

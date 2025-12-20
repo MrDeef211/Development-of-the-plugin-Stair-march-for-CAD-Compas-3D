@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace stairway
+namespace Model
 {
     /// <summary>
     /// Параметр модели
     /// </summary>
-    internal class Parameter
+    public class Parameter
     {
         /// <summary>
         /// Имя параметра

@@ -11,7 +11,7 @@ using Kompas6Constants3D;
 using KompasAPI7;
 
 
-namespace stairway
+namespace Builders
 {
     internal class Wrapper
     {

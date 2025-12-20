@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace stairway
+namespace Model
 {
     /// <summary>
     /// Сообщение об ошибке
     /// </summary>
-    internal class ErrorArgs : EventArgs
+    public class ErrorArgs : EventArgs
     {
         /// <summary>
         /// Переменные связанные с ошибкой

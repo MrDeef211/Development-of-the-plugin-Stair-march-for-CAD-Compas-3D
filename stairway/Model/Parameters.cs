@@ -7,12 +7,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace stairway
+namespace Model
 {
     /// <summary>
     /// Обработчик параметров
     /// </summary>
-    internal class Parameters
+    public class Parameters
     {
         /// <summary>
         /// Список вводимых параметров

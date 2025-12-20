@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Model;
 
-namespace stairway
+namespace Builders
 {
     /// <summary>
     /// Строитель модели
     /// </summary>
-    internal class Builder
+    public class Builder
     {
         private Wrapper _wrapper;
 
