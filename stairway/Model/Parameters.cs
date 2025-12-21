@@ -56,7 +56,7 @@ namespace Model
         }
 
         /// <summary>
-        /// Событие обновления параметра в результате внутренних процессов
+        /// Событие обновления параметра на ошибки и значения
         /// </summary>
         /// <param name="parametersList">Список изменённых параметров</param>
         protected virtual void UpdateParameters(List<ParametersTypes> parametersList)
@@ -85,10 +85,6 @@ namespace Model
             _parameters[parameter].Value = value;
 			UpdateParameters(new List<ParametersTypes> { parameter });
             Validate(_parameters[parameter]);
-
-			/* Внешняя валидация на границы происходит в самом конце, после отправки значений на форму
-             * Фиксация -> внутренние вычисления -> обновление параметров и сброс ошибок ->
-             * -> обычная валидация -> кросс валидация */
 
 			//Запуск внутренних валидаций по необходимости
 			switch (parameter)
@@ -140,8 +136,8 @@ namespace Model
             {ParametersTypes.PlatformHeight, new Parameter(ParametersTypes.PlatformHeight, 500, 100, 200) },
             {ParametersTypes.StepAmount, new Parameter(ParametersTypes.StepAmount, 60, 1, 20) },
             {ParametersTypes.StepHeight, new Parameter(ParametersTypes.StepHeight, 250, 120, 160) },
-            {ParametersTypes.StepProjectionHeight, new Parameter(ParametersTypes.StepProjectionHeight, 100, 0, 25) },
-            {ParametersTypes.StepProjectionLength, new Parameter(ParametersTypes.StepProjectionLength, 100, 0, 20) },
+            {ParametersTypes.StepProjectionHeight, new Parameter(ParametersTypes.StepProjectionHeight, 80, 0, 25) },
+            {ParametersTypes.StepProjectionLength, new Parameter(ParametersTypes.StepProjectionLength, 80, 0, 20) },
             {ParametersTypes.Width, new Parameter(ParametersTypes.Width, 2500, 800, 1000)}
 
             };
