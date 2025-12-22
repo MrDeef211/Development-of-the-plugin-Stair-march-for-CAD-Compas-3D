@@ -225,6 +225,7 @@ namespace Model
         /// <summary>
         /// Внутренняя валидация между параметрами
         /// </summary>
+        /// <param name="entered">Введённый параметр</param>
         private void InternalValidation(ParametersTypes entered)
         {
             // 1 Изменение границ глубины и толщины выступа
