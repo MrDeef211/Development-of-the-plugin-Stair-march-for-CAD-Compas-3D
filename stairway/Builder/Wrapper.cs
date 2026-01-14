@@ -218,6 +218,14 @@ namespace Builders
             extr.Update();
         }
 
+        /// <summary>
+        /// Масштабирование окна для вида всей модели
+        /// </summary>
+        public void DocumentZoomOut()
+        {
+            _doc3D.ZoomPrevNextOrAll(1);
+        }
+
 
     }
 }

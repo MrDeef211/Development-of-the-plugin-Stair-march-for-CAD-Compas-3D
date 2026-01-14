@@ -50,6 +50,7 @@ namespace Builders
 
 
             _wrapper.Extrusion(true, 0, parameters[ParametersTypes.Width], false);
+            _wrapper.DocumentZoomOut();
         }
 
         /// <summary>
