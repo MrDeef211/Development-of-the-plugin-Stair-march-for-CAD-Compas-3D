@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "WinFormsApp1\UI.csproj", "{0582F7E6-3D4B-4615-960A-7FFE53A14208}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builders", "Builder\Builder
 		{AC77E9A1-B9FA-4496-942D-00E442921748} = {AC77E9A1-B9FA-4496-942D-00E442921748}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Packages", "Packages\Packages.csproj", "{20556FD8-A612-480F-9F21-919B28408E68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Package", "Packages\Package.csproj", "{20556FD8-A612-480F-9F21-919B28408E68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{AB762FF5-F753-4FF2-ABAE-95732ACB999D}"
 	ProjectSection(ProjectDependencies) = postProject

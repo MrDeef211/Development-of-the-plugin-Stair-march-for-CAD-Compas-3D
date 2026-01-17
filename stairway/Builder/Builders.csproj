@@ -8,33 +8,18 @@
 	  	<RootNamespace>Builder</RootNamespace>	  
   </PropertyGroup>
 	
-		<ItemGroup>
-		<Reference Include="Kompas6API5">
-			<HintPath>Kompas6API5.dll</HintPath>
-		</Reference>
-		<Reference Include="Kompas6Constants">
-			<HintPath>Kompas6Constants.dll</HintPath>
-		</Reference>
-		<Reference Include="Kompas6Constants3D">
-			<HintPath>Kompas6Constants3D.dll</HintPath>
-		</Reference>
-		<Reference Include="KompasAPI7">
-			<HintPath>KompasAPI7.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	
   <ItemGroup>
     <Reference Include="Kompas6API5">
-      <HintPath>..\Packages\Kompas6API5.dll</HintPath>
+      <HintPath>..\Package\Kompas6API5.dll</HintPath>
     </Reference>
     <Reference Include="Kompas6Constants">
-      <HintPath>..\Packages\Kompas6Constants.dll</HintPath>
+      <HintPath>..\Package\Kompas6Constants.dll</HintPath>
     </Reference>
     <Reference Include="Kompas6Constants3D">
-      <HintPath>..\Packages\Kompas6Constants3D.dll</HintPath>
+      <HintPath>..\Package\Kompas6Constants3D.dll</HintPath>
     </Reference>
     <Reference Include="KompasAPI7">
-      <HintPath>..\Packages\KompasAPI7.dll</HintPath>
+      <HintPath>..\Package\KompasAPI7.dll</HintPath>
     </Reference>
   </ItemGroup>
 
