@@ -49,7 +49,12 @@ namespace Builders
                 parameters[ParametersTypes.Length]);
 
 
-            _wrapper.Extrusion(true, 0, parameters[ParametersTypes.Width], false);
+            _wrapper.Extrusion(
+                true, 
+                0, 
+                parameters[ParametersTypes.Width], 
+                false);
+
             _wrapper.DocumentZoomOut();
         }
 
@@ -150,7 +155,8 @@ namespace Builders
                     length / 2 - (i + 1) * stepLength,
                     height / 2 - (i + 1) * stepHeight);
             }
-            //Последнюю ступеньку рисуем вручную, чтобы устранить накопительные погрешности
+            //Последнюю ступеньку рисуем вручную,
+            //чтобы устранить накопительные погрешности
 
             _wrapper.Createline(
                 length / 2 - (stepAmount - 1) * stepLength,

@@ -12,7 +12,8 @@ namespace Tests
 		}
 
 		[Test]
-		[Description("Проверка инициализации параметра вне допустимого диапазона")]
+		[Description("Проверка инициализации параметра " +
+            "вне допустимого диапазона")]
 		public void CreateOutOfRangeParameter()
 		{
 			Assert.Throws<Exception>(() =>
@@ -41,7 +42,9 @@ namespace Tests
 		[TestCase(ParametersTypes.StepHeight, 160)]
 		[TestCase(ParametersTypes.Width, 1000)]
 		[Description("Проверка передачи параметра")]
-		public void SetParameterChangesValue(ParametersTypes parameter, double value)
+		public void SetParameterChangesValue(
+            ParametersTypes parameter, 
+            double value)
 		{
 			var parameters = Create();
 
@@ -65,7 +68,9 @@ namespace Tests
 			parameters.SetParameter(ParametersTypes.Height, 400);
 
 			Assert.That(error, Is.Not.Null);
-			Assert.That(error.ParametersList, Does.Contain(ParametersTypes.Height));
+			Assert.That(
+                error.ParametersList, 
+                Does.Contain(ParametersTypes.Height));
 		}
 
 		[Test]
@@ -80,7 +85,9 @@ namespace Tests
 			parameters.SetParameter(ParametersTypes.StepAmount, 100);
 
 			Assert.That(error, Is.Not.Null);
-			Assert.That(error.ParametersList, Does.Contain(ParametersTypes.StepAmount));
+			Assert.That(
+                error.ParametersList, 
+                Does.Contain(ParametersTypes.StepAmount));
 		}
 
 		[Test]
@@ -92,14 +99,19 @@ namespace Tests
 
 			parameters.ErrorMessageEvent += (s, e) => error = e;
 
-			parameters.SetParameter(ParametersTypes.StepProjectionHeight, 90);
+			parameters.SetParameter(
+                ParametersTypes.StepProjectionHeight, 
+                90);
 
 			Assert.That(error, Is.Not.Null);
-			Assert.That(error.ParametersList, Does.Contain(ParametersTypes.StepProjectionHeight));
+			Assert.That(
+                error.ParametersList, 
+                Does.Contain(ParametersTypes.StepProjectionHeight));
 		}
 
 		[Test]
-		[Description("Проверка передачи нецелочисленного количества ступеней")]
+		[Description("Проверка передачи " +
+            "не целочисленного количества ступеней")]
 		public void StepAmountNotIntegerRaisesError()
 		{
 			var parameters = Create();
@@ -110,11 +122,14 @@ namespace Tests
 			parameters.SetParameter(ParametersTypes.StepAmount, 5.5);
 
 			Assert.That(error, Is.Not.Null);
-			Assert.That(error.ParametersList, Does.Contain(ParametersTypes.StepAmount));
+			Assert.That(
+                error.ParametersList, 
+                Does.Contain(ParametersTypes.StepAmount));
 		}
 
 		[Test]
-		[Description("Проверка пересчета высоты ступени при изменении высоты")]
+		[Description("Проверка пересчета высоты ступени " +
+            "при изменении высоты")]
 		public void ChangingHeightRecalculatesStepHeight()
 		{
 			var parameters = Create();
@@ -122,13 +137,15 @@ namespace Tests
 			parameters.SetParameter(ParametersTypes.StepAmount, 10);
 			parameters.SetParameter(ParametersTypes.Height, 2000);
 
-			double stepHeight = parameters.GetParameter(ParametersTypes.StepHeight);
+			double stepHeight = parameters.GetParameter(
+                ParametersTypes.StepHeight);
 
 			Assert.That(stepHeight, Is.EqualTo(200));
 		}
 
 		[Test]
-		[Description("Проверка пересчета высоты марша при изменении высоты ступени")]
+		[Description("Проверка пересчета высоты марша " +
+            "при изменении высоты ступени")]
 		public void ChangingStepHeightRecalculatesHeight()
 		{
 			var parameters = Create();
@@ -170,7 +187,9 @@ namespace Tests
 			parameters.FullUpdateParameters();
 
 			Assert.That(updated, Is.Not.Null);
-			Assert.That(updated.Count, Is.EqualTo(parameters.GetParameters().Count));
+			Assert.That(
+                updated.Count, 
+                Is.EqualTo(parameters.GetParameters().Count));
 		}
 	}
 }

@@ -49,7 +49,9 @@ namespace UI
         /// Обработчик события появления ошибки
         /// </summary>
         /// <param name="sender">Источник ошибки</param>
-        /// <param name="e">Сообщение ошибки со списком переменных с ошибкой</param>
+        /// <param name="e">
+        /// Сообщение ошибки со списком переменных с ошибкой
+        /// </param>
         private void IsErrorAppered(object sender, ErrorArgs e)
         {
             string newError;
@@ -58,10 +60,8 @@ namespace UI
             else
                 newError = e.Message;
             if (!_activeErrors.ContainsKey(newError))
-                _activeErrors[newError] = new List<ParametersTypes>(e.ParametersList);
-
-            //if (!_activeErrors[e.Message].Contains(e.ParametersList))
-            //    _activeErrors[parameter].Add(e.Message);
+                _activeErrors[newError] = 
+                    new List<ParametersTypes>(e.ParametersList);
 
             foreach (var parameter in e.ParametersList)
             {
@@ -92,9 +92,11 @@ namespace UI
 
                         if (thisParameter == parameter)
                         {
-                            foreach (var deletingParameter in _activeErrors[messege])
+                            foreach (var deletingParameter in 
+                                _activeErrors[messege])
                             {
-                                ClearTextboxError(_textboxByParameter[deletingParameter]);
+                                ClearTextboxError(
+                                    _textboxByParameter[deletingParameter]);
                             }
 
                             _activeErrors.Remove(messege);
@@ -119,11 +121,13 @@ namespace UI
         {
             var textBox = (TextBox)sender;
 
-            var parameter = _textboxByParameter.First(x => x.Value == textBox).Key;
+            var parameter = 
+                _textboxByParameter.First(x => x.Value == textBox).Key;
 
             if (!_textboxByParameter.ContainsValue(textBox))
             {
-                IsErrorAppered(this, new ErrorArgs("Параметр не должен быть пустым",
+                IsErrorAppered(this, new ErrorArgs(
+                    "Параметр не должен быть пустым",
                     new List<ParametersTypes> { parameter }));
                 return;
             }
@@ -134,7 +138,8 @@ namespace UI
             }
             else
             {
-                IsErrorAppered(this, new ErrorArgs("Некорректный формат числа",
+                IsErrorAppered(this, new ErrorArgs(
+                    "Некорректный формат числа",
                     new List<ParametersTypes> { parameter }));
             }
         }
@@ -152,32 +157,47 @@ namespace UI
                 return;
             }
             var inputParameters = _parameters.GetParameters();
-            var outputParameters = new Dictionary<ParametersTypes, double>();
+
+            var outputParameters = 
+                new Dictionary<ParametersTypes, double>();
 
             foreach (var parameter in inputParameters.Keys)
-                outputParameters.Add(parameter, inputParameters[parameter].Value);
+                outputParameters.Add(
+                    parameter, 
+                    inputParameters[parameter].Value);
 
             _builder.Build(outputParameters);
         }
 
         /// <summary>
-        /// Инициализирует привязку TextBox и соответствующие им ParametersTypes
+        /// Инициализирует привязку TextBox и 
+        /// соответствующие им ParametersTypes
         /// </summary>
         private void InitializeUIBindings()
         {
             _textboxByParameter = new Dictionary<ParametersTypes, TextBox>
             {
 
-            { ParametersTypes.Height,  HeightTextBox},
-            { ParametersTypes.Length,  LengthTextBox},
-            { ParametersTypes.PlatformLengthUp,  PlatformLengthUpTextBox},
-            { ParametersTypes.PlatformLengthDown,  PlatformLengthDownTextBox},
-            { ParametersTypes.PlatformHeight,  PlatformHeightTextBox},
-            { ParametersTypes.StepAmount,  StepAmountTextBox},
-            { ParametersTypes.StepHeight,  StepHeightTextBox},
-            { ParametersTypes.StepProjectionHeight,  StepProtjectionHeightTextBox},
-            { ParametersTypes.StepProjectionLength,  StepProjectionLengthTextBox},
-            { ParametersTypes.Width,  WidthTextBox}
+            { ParametersTypes.Height,  
+                    HeightTextBox},
+            { ParametersTypes.Length,  
+                    LengthTextBox},
+            { ParametersTypes.PlatformLengthUp,  
+                    PlatformLengthUpTextBox},
+            { ParametersTypes.PlatformLengthDown,  
+                    PlatformLengthDownTextBox},
+            { ParametersTypes.PlatformHeight,  
+                    PlatformHeightTextBox},
+            { ParametersTypes.StepAmount,  
+                    StepAmountTextBox},
+            { ParametersTypes.StepHeight,  
+                    StepHeightTextBox},
+            { ParametersTypes.StepProjectionHeight,  
+                    StepProtjectionHeightTextBox},
+            { ParametersTypes.StepProjectionLength,  
+                    StepProjectionLengthTextBox},
+            { ParametersTypes.Width,  
+                    WidthTextBox}
 
             };
         }
@@ -189,16 +209,26 @@ namespace UI
         {
             _localization = new Dictionary<ParametersTypes, string>
             {
-                { ParametersTypes.Height, "Высота марша" },
-                { ParametersTypes.Length, "Длина пролёта" },
-                { ParametersTypes.PlatformLengthUp, "Длина верхней платформы" },
-                { ParametersTypes.PlatformLengthDown, "Длина нижней платформы" },
-                { ParametersTypes.PlatformHeight, "Толщина платформы" },
-                { ParametersTypes.StepAmount, "Количество ступеней" },
-                { ParametersTypes.StepHeight, "Высота ступени" },
-                { ParametersTypes.StepProjectionHeight, "Ширина выступа" },
-                { ParametersTypes.StepProjectionLength, "Глубина выступа" },
-                { ParametersTypes.Width, "Ширина марша" }
+                { ParametersTypes.Height, 
+                    "Высота марша" },
+                { ParametersTypes.Length, 
+                    "Длина пролёта" },
+                { ParametersTypes.PlatformLengthUp, 
+                    "Длина верхней платформы" },
+                { ParametersTypes.PlatformLengthDown, 
+                    "Длина нижней платформы" },
+                { ParametersTypes.PlatformHeight, 
+                    "Толщина платформы" },
+                { ParametersTypes.StepAmount, 
+                    "Количество ступеней" },
+                { ParametersTypes.StepHeight, 
+                    "Высота ступени" },
+                { ParametersTypes.StepProjectionHeight, 
+                    "Ширина выступа" },
+                { ParametersTypes.StepProjectionLength, 
+                    "Глубина выступа" },
+                { ParametersTypes.Width, 
+                    "Ширина марша" }
             };
         }
 

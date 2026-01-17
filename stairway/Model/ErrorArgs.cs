@@ -25,7 +25,9 @@ namespace Model
         /// </summary>
         /// <param name="message">Сообщение ошибки</param>
         /// <param name="sizes">Переменные связанные с ошибкой</param>
-        public ErrorArgs(string message, List<ParametersTypes> parametersList)
+        public ErrorArgs(
+            string message, 
+            List<ParametersTypes> parametersList)
         {
             _message = message;
             _parametersList = parametersList;

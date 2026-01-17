@@ -39,7 +39,11 @@ namespace Model
         /// <param name="max">Максимальное значение параметра</param>
         /// <param name="min">Минимальное значение параметра</param>
         /// <param name="value">Значение параметра</param>
-        public Parameter(ParametersTypes name, double max, double min, double value)
+        public Parameter(
+            ParametersTypes name, 
+            double max, 
+            double min, 
+            double value)
         {
             _name = name;
             _max = max;
@@ -47,7 +51,9 @@ namespace Model
             if (value >= min && value <= max)
                 _value = value;
             else
-                throw new Exception(name + " Значение параметра не совпадает с выбранными границами");
+                throw new Exception(name + 
+                    " Значение параметра не совпадает " +
+                    "с выбранными границами");
             //_isValid = true;
         }
 

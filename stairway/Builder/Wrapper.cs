@@ -48,7 +48,8 @@ namespace Builders
         public void OpenCAD(KompasObject kompas)
         {
             if (kompas == null)
-                throw new Exception("Компас не запущен. Вызови CreateCADWindow().");
+                throw new Exception("Компас не запущен. " +
+                    "Вызови CreateCADWindow().");
 
             _kompas = kompas;
 
@@ -134,7 +135,8 @@ namespace Builders
             _part = (ksPart)_doc3D.GetPart((short)Part_Type.pTop_Part);
 
             if (_part == null)
-                throw new Exception("Не удалось получить ksPart для нового документа.");
+                throw new Exception("Не удалось получить " +
+                    "ksPart для нового документа.");
         }
 
         /// <summary>
@@ -142,11 +144,18 @@ namespace Builders
         /// </summary>
         public void CreateSketch()
         {
-            _activeSketch = (ksEntity)_part.NewEntity((short)Obj3dType.o3d_sketch);
-            _sketchDefinition = (ksSketchDefinition)_activeSketch.GetDefinition();
-            _sketchDefinition.SetPlane((ksEntity)_part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ));
+            _activeSketch = 
+                (ksEntity)_part.NewEntity((short)Obj3dType.o3d_sketch);
+            _sketchDefinition = 
+                (ksSketchDefinition)_activeSketch.GetDefinition();
+
+            _sketchDefinition.SetPlane((ksEntity)_part.
+                GetDefaultEntity((short)Obj3dType.o3d_planeXOZ));
+
             _activeSketch.Create();
-            _sketchEdit = (ksDocument2D)_sketchDefinition.BeginEdit();
+
+            _sketchEdit = 
+                (ksDocument2D)_sketchDefinition.BeginEdit();
         }
 
         /// <summary>
@@ -185,16 +194,21 @@ namespace Builders
             _sketchDefinition.EndEdit();
 
             // Создаем сущность выдавливания
-            ksEntity extr = (ksEntity)_part.NewEntity((short)Obj3dType.o3d_bossExtrusion);
+            ksEntity extr = 
+                (ksEntity)_part.NewEntity(
+                    (short)Obj3dType.o3d_bossExtrusion);
+
             if (extr == null)
-                throw new Exception("Не удалось создать сущность выдавливания.");
+                throw new Exception("Не удалось создать " +
+                    "сущность выдавливания.");
 
             // Получаем определение
             ksBossExtrusionDefinition extrDef =
                 (ksBossExtrusionDefinition)extr.GetDefinition();
 
             if (extrDef == null)
-                throw new Exception("Не удалось получить ksBossExtrusionDefinition.");
+                throw new Exception("Не удалось получить " +
+                    "ksBossExtrusionDefinition.");
 
             // Привязываем эскиз
             extrDef.SetSketch(_activeSketch);
