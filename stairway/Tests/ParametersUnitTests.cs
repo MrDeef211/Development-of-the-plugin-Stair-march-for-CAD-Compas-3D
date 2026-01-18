@@ -191,5 +191,51 @@ namespace Tests
                 updated.Count, 
                 Is.EqualTo(parameters.GetParameters().Count));
 		}
-	}
+
+        [TestCase (1000, 500, 1200)]
+        [TestCase (1000, 500, 400)]
+        [Description("Проверка создания значения параметра, " +
+    "вне доступного диапазона")]
+        public void CreateParameterValueOutOfRangeRaisesErrorEvent(
+            double min, 
+            double max, 
+            double value)
+        {
+            Assert.Throws<Exception>(() =>
+                new Parameter(
+                    ParametersTypes.Width, 
+                    min, 
+                    max, 
+                    value));
+        }
+
+
+        [Test]
+        [Description("Проверка создания максимального значения параметра, " +
+    "меньше минимального")]
+        public void CreateParameterMaxLessThanMinRaisesErrorEvent()
+        {
+            Assert.Throws<Exception>(() =>
+                new Parameter(
+                    ParametersTypes.Width, 
+                    500, 
+                    1000, 
+                    600));
+        }
+
+        [Test]
+        [Description("Проверка передачи максимального значения параметра, " +
+            "меньше минимального")]
+        public void SetParameterMaxLessThanMinRaisesErrorEvent()
+        {
+            var parameter = new Parameter(
+                ParametersTypes.Width, 
+                1000, 
+                500, 
+                750);
+            parameter.Max = 400;
+            Assert.That(parameter.Max, Is.EqualTo(500));
+        }
+
+    }
 }

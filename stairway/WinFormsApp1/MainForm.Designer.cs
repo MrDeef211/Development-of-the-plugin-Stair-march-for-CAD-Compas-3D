@@ -454,8 +454,8 @@
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.Silver;
             ClientSize = new Size(1284, 461);
             Controls.Add(PicturesSplitContainer);
@@ -492,6 +492,7 @@
             Controls.Add(StepAmountLabel);
             Controls.Add(LengthLabel);
             Controls.Add(HeightLabel);
+            MaximizeBox = false;
             MinimumSize = new Size(600, 450);
             Name = "MainForm";
             Text = "Лестничный марш";

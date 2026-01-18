@@ -257,12 +257,24 @@ namespace Model
         /// <param name="entered">Введённый параметр</param>
         private void InternalValidation(ParametersTypes entered)
         {
+            // Часть ступени, которую не должен превышать выступ
+            double stepBorder = 2;
+
+            // Граница угла лестницы
+            double maxStairCorner = 50;
+            double minStairCorner = 30;
+
+            // Граница глубины проступи
+            double maxStepsTread = 400;
+            double minStepsTread = 250;
+
             // 1 Изменение границ глубины и толщины выступа
             if (entered == ParametersTypes.StepHeight)
             {
                 // Глубина не больше половины высоты ступени
                 _parameters[ParametersTypes.StepProjectionLength].Max = 
-                    _parameters[ParametersTypes.StepHeight].Value / 2;
+                    _parameters[ParametersTypes.StepHeight].Value / 
+                    stepBorder;
 
                 UpdateParameters(
                     new List<ParametersTypes> { 
@@ -272,7 +284,8 @@ namespace Model
 
                 // Толщина не больше половины высоты ступени
                 _parameters[ParametersTypes.StepProjectionHeight].Max = 
-                    _parameters[ParametersTypes.StepHeight].Value / 2;
+                    _parameters[ParametersTypes.StepHeight].Value / 
+                    stepBorder;
 
                 UpdateParameters(
                     new List<ParametersTypes> { 
@@ -289,11 +302,13 @@ namespace Model
                     Math.Atan(_parameters[ParametersTypes.Height].Value / 
                     _parameters[ParametersTypes.Length].Value) * 180 / Math.PI;
 
-                if (_stairCorner < 30 || _stairCorner > 50)
-                    ErrorMessage("Угол лестницы: arctan(H / L) " +
-                        "не должен выходить " +
-                        "за диапазон от 30 до 50 градусов (сейчас " + 
-                        _stairCorner + ")",
+                if (_stairCorner < minStairCorner || 
+                    _stairCorner > maxStairCorner)
+                    ErrorMessage(
+                        "Угол лестницы: arctan(H / L) " +
+                        "не должен выходить за диапазон от " +
+                        minStairCorner + " до " + maxStairCorner +  
+                        " градусов (сейчас " + _stairCorner + ")",
                         new List<ParametersTypes> { 
                             ParametersTypes.Height, 
                             ParametersTypes.Length});
@@ -307,11 +322,14 @@ namespace Model
                 _stepsTread = _parameters[ParametersTypes.Length].Value /
                     _parameters[ParametersTypes.StepAmount].Value + 
                     _parameters[ParametersTypes.StepProjectionLength].Value;
-                if (_stepsTread < 250 || _stepsTread > 400)
-                    ErrorMessage("Глубина проступи: L / N + t  " +
-                        "не должен выходить " +
-                        "за диапазон от 250 до 400 мм (сейчас " + 
-                        _stepsTread + ")",
+
+                if (_stepsTread < minStepsTread || 
+                    _stepsTread > maxStepsTread)
+                    ErrorMessage(
+                        "Глубина проступи: L / N + t  " +
+                        "не должен выходить за диапазон от " +
+                        minStepsTread + " до " + maxStepsTread + 
+                        " мм (сейчас " + _stepsTread + ")",
                         new List<ParametersTypes> { 
                             ParametersTypes.StepAmount, 
                             ParametersTypes.Length, 

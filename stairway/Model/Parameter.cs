@@ -48,13 +48,17 @@ namespace Model
             _name = name;
             _max = max;
             _min = min;
-            if (value >= min && value <= max)
-                _value = value;
-            else
+
+            if (min >= max)
+                throw new Exception(name +
+                    " Минимальное значение параметра " +
+                    "должно быть меньше максимального");
+            if (value <= min || value >= max)
                 throw new Exception(name + 
                     " Значение параметра не совпадает " +
                     "с выбранными границами");
-            //_isValid = true;
+
+            _value = value;
         }
 
         /// <summary>

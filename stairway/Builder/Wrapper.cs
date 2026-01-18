@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Kompas6API5;
+using Kompas6Constants;
+using Kompas6Constants3D;
+using KompasAPI7;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Kompas6API5;
-using Kompas6Constants;
-using Kompas6Constants3D;
-using KompasAPI7;
+
 
 
 namespace Builders
@@ -44,11 +45,11 @@ namespace Builders
         /// Открыть существующий объект компаса
         /// </summary>
         /// <param name="kompas">Объект компаса</param>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="BuildException">Компас не запущен</exception>
         public void OpenCAD(KompasObject kompas)
         {
             if (kompas == null)
-                throw new Exception("Компас не запущен. " +
+                throw new BuildException("Компас не запущен. " +
                     "Вызови CreateCADWindow().");
 
             _kompas = kompas;
@@ -56,11 +57,6 @@ namespace Builders
             // создаём 3D документ
             if (_doc3D  == null)
             {
-                // Потом сделать проверку лучше
-                // Потом сделать проверку лучше
-                // Потом сделать проверку лучше
-                // Потом сделать проверку лучше
-                // Потом сделать проверку лучше
                 _doc3D = (ksDocument3D)_kompas.Document3D();
                 _doc3D.Create();
             }
@@ -77,7 +73,7 @@ namespace Builders
         /// <summary>
         /// Создание нового окна компаса
         /// </summary>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="BuildException">Не удалось создать объект KompasObject</exception>
         public void CreateCADWindow()
         {
             if (_kompas != null)
@@ -87,7 +83,7 @@ namespace Builders
                 Type.GetTypeFromProgID("KOMPAS.Application.5"));
 
             if (_kompas == null)
-                throw new Exception("Не удалось создать объект KompasObject");
+                throw new BuildException("Не удалось создать объект KompasObject");
 
             _kompas.Visible = true;
             _kompas.ActivateControllerAPI();
@@ -100,11 +96,14 @@ namespace Builders
         /// <param name="path">Путь к файлу</param>
         /// <param name="readOnly">Файл только для чтения</param>
         /// <param name="visible">Видимый</param>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="BuildException">
+        /// Компас не запущен или не удалось открыть файл
+        /// </exception>
         public void OpenFile(string path, bool readOnly, bool visible)
         {
             if (_kompas == null)
-                throw new Exception("Компас не запущен. Вызови OpenCAD().");
+                throw new BuildException(
+                    "Компас не запущен. Вызови OpenCAD().");
 
             _kompas.Visible = visible;
 
@@ -112,7 +111,8 @@ namespace Builders
             bool ok = doc.Open(path, readOnly);
 
             if (!ok)
-                throw new Exception($"Не удалось открыть файл: {path}");
+                throw new BuildException(
+                    $"Не удалось открыть файл: {path}");
 
             _doc3D = doc;
             _doc3D.SetActive();
@@ -121,11 +121,14 @@ namespace Builders
         /// <summary>
         /// Создать новый файл
         /// </summary>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="BuildException">
+        /// Компас не запущен или не удалось получить ksPart
+        /// </exception>
         public void CreateFile()
         {
             if (_kompas == null)
-                throw new Exception("Компас не запущен. Вызови OpenCAD().");
+                throw new BuildException(
+                    "Компас не запущен. Вызови OpenCAD().");
 
             _doc3D = (ksDocument3D)_kompas.Document3D();
             _doc3D.Create();
@@ -135,7 +138,7 @@ namespace Builders
             _part = (ksPart)_doc3D.GetPart((short)Part_Type.pTop_Part);
 
             if (_part == null)
-                throw new Exception("Не удалось получить " +
+                throw new BuildException("Не удалось получить " +
                     "ksPart для нового документа.");
         }
 
@@ -166,12 +169,14 @@ namespace Builders
         /// <param name="x2"></param>
         /// <param name="y2"></param>
         /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="BuildException">
+        /// Активный эскиз не установлен
+        /// </exception>
         public long Createline( double x1, double y1,
             double x2, double y2)
         {
             if (_sketchEdit == null)
-                throw new Exception("Активный эскиз не установлен");
+                throw new BuildException("Активный эскиз не установлен");
 
             return _sketchEdit.ksLineSeg(x1, y1, x2, y2, 1);
         }
@@ -183,12 +188,15 @@ namespace Builders
         /// <param name="type">Тип</param>
         /// <param name="depth">Глубина</param>
         /// <param name="bothDirections">Симметрично</param>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="BuildException">
+        /// Эскиз еще не создан, не удалось создать сущность выдавливания
+        /// или не удалось получить ksBossExtrusionDefinition
+        /// </exception>
         public void Extrusion(bool directionNormal, short type,
             double depth, bool bothDirections)
         {
             if (_activeSketch == null)
-                throw new Exception("Эскиз еще не создан.");
+                throw new BuildException("Эскиз еще не создан.");
 
             // Завершаем редактирование эскиза
             _sketchDefinition.EndEdit();
@@ -199,7 +207,7 @@ namespace Builders
                     (short)Obj3dType.o3d_bossExtrusion);
 
             if (extr == null)
-                throw new Exception("Не удалось создать " +
+                throw new BuildException("Не удалось создать " +
                     "сущность выдавливания.");
 
             // Получаем определение
@@ -207,7 +215,7 @@ namespace Builders
                 (ksBossExtrusionDefinition)extr.GetDefinition();
 
             if (extrDef == null)
-                throw new Exception("Не удалось получить " +
+                throw new BuildException("Не удалось получить " +
                     "ksBossExtrusionDefinition.");
 
             // Привязываем эскиз

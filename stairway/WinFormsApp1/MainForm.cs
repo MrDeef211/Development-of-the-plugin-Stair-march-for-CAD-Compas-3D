@@ -165,8 +165,14 @@ namespace UI
                 outputParameters.Add(
                     parameter, 
                     inputParameters[parameter].Value);
-
-            _builder.Build(outputParameters);
+            try 
+            {
+                _builder.Build(outputParameters);
+            }
+            catch (BuildException ex)
+            {
+                MessageBox.Show($"Ошибка при построении модели: {ex.Message}");
+            }
         }
 
         /// <summary>
