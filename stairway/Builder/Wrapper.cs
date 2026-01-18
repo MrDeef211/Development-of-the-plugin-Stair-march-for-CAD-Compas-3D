@@ -73,7 +73,9 @@ namespace Builders
         /// <summary>
         /// Создание нового окна компаса
         /// </summary>
-        /// <exception cref="BuildException">Не удалось создать объект KompasObject</exception>
+        /// <exception cref="BuildException">
+        /// Не удалось создать объект KompasObject
+        /// </exception>
         public void CreateCADWindow()
         {
             if (_kompas != null)
@@ -83,7 +85,8 @@ namespace Builders
                 Type.GetTypeFromProgID("KOMPAS.Application.5"));
 
             if (_kompas == null)
-                throw new BuildException("Не удалось создать объект KompasObject");
+                throw new BuildException("Не удалось создать " +
+                    "объект KompasObject");
 
             _kompas.Visible = true;
             _kompas.ActivateControllerAPI();

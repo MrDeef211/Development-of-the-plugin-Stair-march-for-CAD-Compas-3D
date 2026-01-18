@@ -74,7 +74,12 @@ namespace Model
         public double Max
         { 
             get { return _max; } 
-            set {  _max = value; }
+            set {
+                if (value < _min)
+                    _max = _min;
+                else
+                    _max = value; 
+            }
 
         }
         /// <summary>

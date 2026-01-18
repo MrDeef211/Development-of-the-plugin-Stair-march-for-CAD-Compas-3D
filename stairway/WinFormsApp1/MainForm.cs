@@ -74,41 +74,33 @@ namespace UI
         }
 
         /// <summary>
-        /// Обработчик события обновления параметра
+        /// Обработчик события обновления параметра 
+        /// для очистки связанных ошибок
         /// </summary>
         /// <param name="sender">Место изменения</param>
-        /// <param name="e">Список изменённых параметров</param>
+        /// <param name="e">Список обновлённых параметров</param>
         private void ParameterUpdated(object sender, List<ParametersTypes> e)
         {
             foreach (var parameter in e)
             {
-                var textBox = _textboxByParameter[parameter];
-                textBox.Text = _parameters.GetParameter(parameter).ToString();
+                _textboxByParameter[parameter].Text =
+                    _parameters.GetParameter(parameter).ToString();
 
-                foreach (var messege in _activeErrors.Keys)
+                // Находим сообщения, связанные с этим параметром
+                var messagesToRemove = _activeErrors
+                    .Where(kvp => kvp.Value.Contains(parameter))
+                    .Select(kvp => kvp.Key)
+                    .ToList();
+
+                foreach (var message in messagesToRemove)
                 {
-                    foreach (var thisParameter in _activeErrors[messege])
+                    foreach (var p in _activeErrors[message])
                     {
-
-                        if (thisParameter == parameter)
-                        {
-                            foreach (var deletingParameter in 
-                                _activeErrors[messege])
-                            {
-                                ClearTextboxError(
-                                    _textboxByParameter[deletingParameter]);
-                            }
-
-                            _activeErrors.Remove(messege);
-
-
-                        }
-
+                        ClearTextboxError(_textboxByParameter[p]);
                     }
 
+                    _activeErrors.Remove(message);
                 }
-
-
             }
 
             UpdateErrorBox();

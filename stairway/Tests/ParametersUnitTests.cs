@@ -23,7 +23,34 @@ namespace Tests
 				new Parameter(ParametersTypes.Height, 8000, 500, 0));
 		}
 
-		[Test]
+        [Test]
+        [Description("ѕроверка создани€ максимального значени€ параметра, " +
+            "меньше минимального")]
+        public void CreateParameterMaxLessThanMinRaisesErrorEvent()
+        {
+            Assert.Throws<Exception>(() =>
+                new Parameter(
+                    ParametersTypes.Width,
+                    500,
+                    1000,
+                    600));
+        }
+
+        [Test]
+        [Description("ѕроверка передачи максимального значени€ параметра, " +
+            "меньше минимального")]
+        public void SetParameterMaxLessThanMinRaisesErrorEvent()
+        {
+            var parameter = new Parameter(
+                ParametersTypes.Width,
+                1000,
+                500,
+                750);
+            parameter.Max = 400;
+            Assert.That(parameter.Max, Is.EqualTo(500));
+        }
+
+        [Test]
 		[Description("ѕроверка инициализации словар€ параметров")]
 		public void ConstructorInitializesAllParameters()
 		{
@@ -73,7 +100,57 @@ namespace Tests
                 Does.Contain(ParametersTypes.Height));
 		}
 
-		[Test]
+        [Test]
+        [Description("ѕроверка генерации нескольких ошибок подр€д")]
+        public void MultipleInvalidParametersRaiseMultipleErrors()
+        {
+            var parameters = Create();
+            var errors = new List<ErrorArgs>();
+
+            parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
+
+            parameters.SetParameter(ParametersTypes.StepAmount, 100);
+            parameters.SetParameter(ParametersTypes.Length, 100);
+
+            Assert.That(errors.Count, Is.GreaterThan(1));
+        }
+
+        [Test]
+        [Description("ѕроверка отправки событи€ обновлени€ " +
+            "при изменении параметра")]
+        public void SetParameterRaisesUpdateEvent()
+        {
+            var parameters = Create();
+            List<ParametersTypes>? updated = null;
+
+            parameters.UpdateParametersEvent += (s, list) => updated = list;
+
+            parameters.SetParameter(ParametersTypes.Width, 900);
+
+            Assert.That(updated, Is.Not.Null);
+            Assert.That(updated, Does.Contain(ParametersTypes.Width));
+        }
+
+        [Test]
+        [Description("ѕроверка изменени€ максимального выступа " +
+            "при изменении высоты ступени")]
+        public void ChangingStepHeightUpdatesProjectionLimits()
+        {
+            var parameters = Create();
+
+            parameters.SetParameter(ParametersTypes.StepHeight, 200);
+
+            var projectionLength =
+                parameters.GetParameters()[ParametersTypes.StepProjectionLength];
+
+            var projectionHeight =
+                parameters.GetParameters()[ParametersTypes.StepProjectionHeight];
+
+            Assert.That(projectionLength.Max, Is.EqualTo(100));
+            Assert.That(projectionHeight.Max, Is.EqualTo(100));
+        }
+
+        [Test]
 		[Description("ѕроверка передачи неправильного количества ступеней")]
 		public void SetStepAmountOutOfRangeRaisesErrorEvent()
 		{
@@ -158,7 +235,28 @@ namespace Tests
 			Assert.That(height, Is.EqualTo(1800));
 		}
 
-		[Test]
+        [Test]
+        [Description("ѕроверка валидации глубины проступи")]
+        public void StepTreadOutOfRangeRaisesError()
+        {
+            var parameters = Create();
+            ErrorArgs? error = null;
+
+            parameters.ErrorMessageEvent += (s, e) => error = e;
+
+            parameters.SetParameter(ParametersTypes.Length, 1000);
+            parameters.SetParameter(ParametersTypes.StepAmount, 2);
+            parameters.SetParameter(ParametersTypes.StepProjectionLength, 10);
+
+            Assert.That(error, Is.Not.Null);
+            Assert.That(
+                error.ParametersList,
+                Does.Contain(ParametersTypes.StepAmount)
+                    .And.Contain(ParametersTypes.Length)
+                    .And.Contain(ParametersTypes.StepProjectionLength));
+        }
+
+        [Test]
 		[Description("ѕроверка валидации угла марша")]
 		public void StairAngleOutOfRangeRaisesError()
 		{
@@ -175,7 +273,37 @@ namespace Tests
 				e.ParametersList.Contains(ParametersTypes.Length)));
 		}
 
-		[Test]
+        [Test]
+        [Description("ѕроверка допустимого угла марша")]
+        public void StairAngleInRangeDoesNotRaiseError()
+        {
+            var parameters = Create();
+            bool errorRaised = false;
+
+            parameters.ErrorMessageEvent += (s, e) => errorRaised = true;
+
+            parameters.SetParameter(ParametersTypes.Height, 3200);
+            parameters.SetParameter(ParametersTypes.Length, 5000);
+
+            Assert.That(errorRaised, Is.False);
+        }
+
+        [Test]
+        [Description("ѕроверка пересчЄтов зависимых параметров")]
+        public void StepAmountChangeRecalculatesStepHeight()
+        {
+            var parameters = Create();
+
+            parameters.SetParameter(ParametersTypes.Height, 2000);
+            parameters.SetParameter(ParametersTypes.StepAmount, 8);
+
+            double stepHeight =
+                parameters.GetParameter(ParametersTypes.StepHeight);
+
+            Assert.That(stepHeight, Is.EqualTo(250));
+        }
+
+        [Test]
 		[Description("ѕроверка обновлени€ всех параметров")]
 		public void FullUpdateParametersSendsAllParameters()
 		{
@@ -191,51 +319,6 @@ namespace Tests
                 updated.Count, 
                 Is.EqualTo(parameters.GetParameters().Count));
 		}
-
-        [TestCase (1000, 500, 1200)]
-        [TestCase (1000, 500, 400)]
-        [Description("ѕроверка создани€ значени€ параметра, " +
-    "вне доступного диапазона")]
-        public void CreateParameterValueOutOfRangeRaisesErrorEvent(
-            double min, 
-            double max, 
-            double value)
-        {
-            Assert.Throws<Exception>(() =>
-                new Parameter(
-                    ParametersTypes.Width, 
-                    min, 
-                    max, 
-                    value));
-        }
-
-
-        [Test]
-        [Description("ѕроверка создани€ максимального значени€ параметра, " +
-    "меньше минимального")]
-        public void CreateParameterMaxLessThanMinRaisesErrorEvent()
-        {
-            Assert.Throws<Exception>(() =>
-                new Parameter(
-                    ParametersTypes.Width, 
-                    500, 
-                    1000, 
-                    600));
-        }
-
-        [Test]
-        [Description("ѕроверка передачи максимального значени€ параметра, " +
-            "меньше минимального")]
-        public void SetParameterMaxLessThanMinRaisesErrorEvent()
-        {
-            var parameter = new Parameter(
-                ParametersTypes.Width, 
-                1000, 
-                500, 
-                750);
-            parameter.Max = 400;
-            Assert.That(parameter.Max, Is.EqualTo(500));
-        }
 
     }
 }
