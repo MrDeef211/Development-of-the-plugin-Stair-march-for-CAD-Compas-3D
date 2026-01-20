@@ -501,5 +501,96 @@ namespace Tests
                 Is.EqualTo(parameters.GetParameters().Count));
         }
 
+        [Test]
+        [Description("Проверка сохранения всех параметров в снимке")]
+        public void CreateSnapshotStoresAllParameterValues()
+        {
+            var parameters = Create();
+
+            parameters.SetParameter(ParametersTypes.Height, 2500);
+            parameters.SetParameter(ParametersTypes.Width, 900);
+
+            var snapshot = parameters.CreateSnapshot();
+
+            Assert.That(snapshot, Is.Not.Null);
+            Assert.That(snapshot.Values, Is.Not.Null);
+            Assert.That(snapshot.Values.Count,
+                Is.EqualTo(parameters.GetParameters().Count));
+
+            Assert.That(snapshot.Values[ParametersTypes.Height], Is.EqualTo(2500));
+            Assert.That(snapshot.Values[ParametersTypes.Width], Is.EqualTo(900));
+        }
+
+        [Test]
+        [Description("Проверка сохранения флага IsMultiFlight в снимке")]
+        public void CreateSnapshotStoresIsMultiFlight()
+        {
+            var parameters = Create();
+
+            parameters.IsMultiFlight = true;
+
+            var snapshot = parameters.CreateSnapshot();
+
+            Assert.That(snapshot.IsMultiFlight, Is.True);
+        }
+
+        [Test]
+        [Description("Проверка восстановления параметров из снимка")]
+        public void RestoreFromSnapshotRestoresParameterValues()
+        {
+            var parameters = Create();
+
+            parameters.SetParameter(ParametersTypes.Height, 2800);
+            parameters.SetParameter(ParametersTypes.StepAmount, 14);
+
+            var snapshot = parameters.CreateSnapshot();
+
+            // Изменяем значения
+            parameters.SetParameter(ParametersTypes.Height, 1500);
+            parameters.SetParameter(ParametersTypes.StepAmount, 5);
+
+            // Восстановление
+            parameters.RestoreFromSnapshot(snapshot);
+
+            Assert.That(
+                parameters.GetParameter(ParametersTypes.Height),
+                Is.EqualTo(2800));
+
+            Assert.That(
+                parameters.GetParameter(ParametersTypes.StepAmount),
+                Is.EqualTo(14));
+        }
+
+        [Test]
+        [Description("Проверка восстановления флага IsMultiFlight из снимка")]
+        public void RestoreFromSnapshotRestoresIsMultiFlight()
+        {
+            var parameters = Create();
+
+            parameters.IsMultiFlight = true;
+            var snapshot = parameters.CreateSnapshot();
+
+            parameters.IsMultiFlight = false;
+
+            parameters.RestoreFromSnapshot(snapshot);
+
+            Assert.That(parameters.IsMultiFlight, Is.True);
+        }
+
+        [Test]
+        [Description("Снимок не изменяется при последующих изменениях параметров")]
+        public void SnapshotIsImmutableRelativeToParameters()
+        {
+            var parameters = Create();
+
+            parameters.SetParameter(ParametersTypes.Height, 3000);
+            var snapshot = parameters.CreateSnapshot();
+
+            parameters.SetParameter(ParametersTypes.Height, 1500);
+
+            Assert.That(
+                snapshot.Values[ParametersTypes.Height],
+                Is.EqualTo(3000));
+        }
     }
 }
