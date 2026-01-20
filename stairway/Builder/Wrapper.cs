@@ -187,7 +187,7 @@ namespace Builders
         /// <summary>
         /// Выдавливание эскиза
         /// </summary>
-        /// <param name="directionNormal">Направление</param>
+        /// <param name="direction">Направление</param>
         /// <param name="type">Тип</param>
         /// <param name="depth">Глубина</param>
         /// <param name="bothDirections">Симметрично</param>
@@ -195,7 +195,7 @@ namespace Builders
         /// Эскиз еще не создан, не удалось создать сущность выдавливания
         /// или не удалось получить ksBossExtrusionDefinition
         /// </exception>
-        public void Extrusion(bool directionNormal, short type,
+        public void Extrusion(bool direction, short type,
             double depth, bool bothDirections)
         {
             if (_activeSketch == null)
@@ -224,20 +224,30 @@ namespace Builders
             // Привязываем эскиз
             extrDef.SetSketch(_activeSketch);
 
-            // Выставляем параметры стороны выдавливания
-            // directionNormal = true  → по нормали
-            // type = тип выдавливания (0..4)
-            // depth = глубина
 
-            extrDef.SetSideParam(
-                side1: directionNormal,
-                type: type,
-                depth: depth,
-                draftValue: 0,
-                draftOutward: false
-            );
+            if (bothDirections)
+            {
+                extrDef.directionType = (short)Direction_Type.dtBoth;
 
-            // Создаём операцию
+                extrDef.SetSideParam(true, type, depth / 2, 0, false);
+                extrDef.SetSideParam(false, type, depth / 2, 0, false);
+            }
+            else
+            {
+                extrDef.directionType = direction
+                    ? (short)Direction_Type.dtNormal
+                    : (short)Direction_Type.dtReverse;
+
+                // ВАЖНО: side зависит от directionType
+                extrDef.SetSideParam(
+                    direction,   // true → side1, false → side2
+                    type,
+                    depth,
+                    0,
+                    false
+                );
+            }
+
             extr.Create();
 
             extr.Update();

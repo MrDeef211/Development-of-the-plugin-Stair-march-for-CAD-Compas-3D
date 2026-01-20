@@ -206,7 +206,7 @@ namespace UI
                     inputParameters[parameter].Value);
             try
             {
-                _builder.Build(outputParameters);
+                _builder.Build(outputParameters, _parameters.IsMultiFlight);
             }
             catch (BuildException ex)
             {
