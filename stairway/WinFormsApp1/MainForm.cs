@@ -1,8 +1,9 @@
+using Builders;
+using Model;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection.Metadata;
-using Model;
-using Builders;
 
 namespace UI
 {
@@ -40,7 +41,8 @@ namespace UI
             _activeErrors = new Dictionary<string, List<ParametersTypes>>();
 
             _parameters.ErrorMessageEvent += IsErrorAppered;
-            _parameters.UpdateParametersEvent += ParameterUpdated;
+            _parameters.UpdateParameterErrorsEvent += ParameterUpdateErrors;
+            _parameters.UpdateParameterValueEvent += ParameterUpdateValue;
 
             _parameters.FullUpdateParameters();
         }
@@ -74,36 +76,39 @@ namespace UI
         }
 
         /// <summary>
-        /// Обработчик события обновления параметра 
+        /// Обработчик события обновления ошибок параметра 
         /// для очистки связанных ошибок
         /// </summary>
-        /// <param name="sender">Место изменения</param>
-        /// <param name="e">Список обновлённых параметров</param>
-        private void ParameterUpdated(object sender, List<ParametersTypes> e)
+        /// <param name="e">Обновлённый параметр</param>
+        private void ParameterUpdateErrors(object sender, ParametersTypes e)
         {
-            foreach (var parameter in e)
+            // Находим сообщения, связанные с этим параметром
+            var messagesToRemove = _activeErrors
+                .Where(kvp => kvp.Value.Contains(e))
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            foreach (var message in messagesToRemove)
             {
-                _textboxByParameter[parameter].Text =
-                    _parameters.GetParameter(parameter).ToString();
-
-                // Находим сообщения, связанные с этим параметром
-                var messagesToRemove = _activeErrors
-                    .Where(kvp => kvp.Value.Contains(parameter))
-                    .Select(kvp => kvp.Key)
-                    .ToList();
-
-                foreach (var message in messagesToRemove)
+                foreach (var p in _activeErrors[message])
                 {
-                    foreach (var p in _activeErrors[message])
-                    {
-                        ClearTextboxError(_textboxByParameter[p]);
-                    }
-
-                    _activeErrors.Remove(message);
+                    ClearTextboxError(_textboxByParameter[p]);
                 }
-            }
 
-            UpdateErrorBox();
+                _activeErrors.Remove(message);
+            }
+           
+           UpdateErrorBox();
+        }
+
+        /// <summary>
+        /// Обработчик события обновления значения параметра
+        /// </summary>
+        /// <param name="e">Обновлённый параметр</param>
+        private void ParameterUpdateValue(object sender, ParametersTypes e)
+        {
+            _textboxByParameter[e].Text =
+                _parameters.GetParameter(e).ToString();
         }
 
         /// <summary>

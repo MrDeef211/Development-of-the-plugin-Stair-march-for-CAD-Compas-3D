@@ -94,10 +94,12 @@ namespace Tests
 			parameters.SetParameter(ParametersTypes.StepAmount, 2);
 			parameters.SetParameter(ParametersTypes.Height, 400);
 
-			Assert.That(error, Is.Not.Null);
+
+            Assert.That(error, Is.Not.Null);
 			Assert.That(
                 error.ParametersList, 
                 Does.Contain(ParametersTypes.Height));
+            Assert.That(error.Message, Is.Not.EqualTo(""));
 		}
 
         [Test]
@@ -121,14 +123,15 @@ namespace Tests
         public void SetParameterRaisesUpdateEvent()
         {
             var parameters = Create();
-            List<ParametersTypes>? updated = null;
+            ParametersTypes? updated = null;
 
-            parameters.UpdateParametersEvent += (s, list) => updated = list;
+            parameters.UpdateParameterErrorsEvent += 
+                (s, ParametersTypes) => updated = ParametersTypes;
 
             parameters.SetParameter(ParametersTypes.Width, 900);
 
             Assert.That(updated, Is.Not.Null);
-            Assert.That(updated, Does.Contain(ParametersTypes.Width));
+            Assert.That(updated, Is.EqualTo(ParametersTypes.Width));
         }
 
         [Test]
@@ -148,6 +151,27 @@ namespace Tests
 
             Assert.That(projectionLength.Max, Is.EqualTo(100));
             Assert.That(projectionHeight.Max, Is.EqualTo(100));
+        }
+
+        [Test]
+        [Description("Исправление ошибки выступа " +
+            "при изменении высоты ступени")]
+        public void StepProjectionErrorIsFixedAfterStepHeightChange()
+        {
+            var parameters = Create();
+            var errors = new List<ErrorArgs>();
+
+            parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
+
+            parameters.SetParameter(ParametersTypes.StepProjectionLength, 100); // ошибка
+
+            Assert.That(errors, Is.Not.Empty);
+
+            errors.Clear();
+
+            parameters.SetParameter(ParametersTypes.StepHeight, 200); // Max = 100
+
+            Assert.That(errors, Is.Empty);
         }
 
         [Test]
@@ -220,7 +244,65 @@ namespace Tests
 			Assert.That(stepHeight, Is.EqualTo(200));
 		}
 
-		[Test]
+        [Test]
+        [Description("Полная проверка кросс-валидации " +
+            "после пересчёта высоты ступени")]
+        public void HeightChangeTriggersFullRevalidationChain()
+        {
+            var parameters = Create();
+            var errors = new List<ErrorArgs>();
+
+            parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
+
+            parameters.SetParameter(ParametersTypes.StepAmount, 15);
+            parameters.SetParameter(ParametersTypes.Length, 5000);
+            parameters.SetParameter(ParametersTypes.StepProjectionLength, 50);
+
+            errors.Clear();
+
+            parameters.SetParameter(ParametersTypes.Height, 6000);
+
+            // Проверка пересчёта
+            Assert.That(
+                parameters.GetParameter(ParametersTypes.StepHeight),
+                Is.EqualTo(400));
+
+            // Проверка обновления границ выступа
+            var projection =
+                parameters.GetParameters()[ParametersTypes.StepProjectionLength];
+
+            Assert.That(projection.Max, Is.EqualTo(200));
+
+            // Проверка кросс-валидации угла
+            Assert.That(errors, Has.Some.Matches<ErrorArgs>(e =>
+                e.ParametersList.Contains(ParametersTypes.Height) &&
+                e.ParametersList.Contains(ParametersTypes.Length)));
+        }
+
+        [Test]
+        [Description("Исправление ошибки высоты ступени после пересчёта")]
+        public void StepHeightErrorIsFixedAfterRecalculation()
+        {
+            var parameters = Create();
+            var errors = new List<ErrorArgs>();
+
+            parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
+
+            // Создаём ошибку
+            parameters.SetParameter(ParametersTypes.Length, 12000);
+            parameters.SetParameter(ParametersTypes.Height, 8000); // StepHeight = 400 (ошибка)
+
+            Assert.That(errors, Is.Not.Empty);
+
+            errors.Clear();
+
+            // Исправляем
+            parameters.SetParameter(ParametersTypes.StepAmount, 50); // StepHeight = 160
+
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
 		[Description("Проверка пересчета высоты марша " +
             "при изменении высоты ступени")]
 		public void ChangingStepHeightRecalculatesHeight()
@@ -234,6 +316,46 @@ namespace Tests
 
 			Assert.That(height, Is.EqualTo(1800));
 		}
+
+        [Test]
+        [Description("Кросс-валидация угла марша " +
+            "после пересчёта высоты ступени")]
+        public void StepHeightChangeTriggersStairAngleValidation()
+        {
+            var parameters = Create();
+            var errors = new List<ErrorArgs>();
+
+            parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
+
+            parameters.SetParameter(ParametersTypes.StepAmount, 10);
+            parameters.SetParameter(ParametersTypes.Length, 2000);
+            parameters.SetParameter(ParametersTypes.StepHeight, 300);
+
+            Assert.That(errors, Has.Some.Matches<ErrorArgs>(e =>
+                e.ParametersList.Contains(ParametersTypes.Height) &&
+                e.ParametersList.Contains(ParametersTypes.Length)));
+        }
+
+        [Test]
+        [Description("Исправление ошибки высоты марша " +
+            "после изменения высоты ступени")]
+        public void HeightErrorIsFixedAfterStepHeightChange()
+        {
+            var parameters = Create();
+            var errors = new List<ErrorArgs>();
+
+            parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
+
+            parameters.SetParameter(ParametersTypes.StepHeight, 500); // Height = 10000 (ошибка)
+
+            Assert.That(errors, Is.Not.Empty);
+
+            errors.Clear();
+
+            parameters.SetParameter(ParametersTypes.StepHeight, 150); // Height = 1500
+
+            Assert.That(errors, Is.Empty);
+        }
 
         [Test]
         [Description("Проверка валидации глубины проступи")]
@@ -257,6 +379,47 @@ namespace Tests
         }
 
         [Test]
+        [Description("Исправление ошибки глубины проступи после пересчёта")]
+        public void StepTreadErrorIsFixedAfterCorrection()
+        {
+            var parameters = Create();
+            var errors = new List<ErrorArgs>();
+
+            parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
+
+            parameters.SetParameter(ParametersTypes.Height, 2000);
+            parameters.SetParameter(ParametersTypes.Length, 2000);
+            parameters.SetParameter(ParametersTypes.StepAmount, 10);
+
+            Assert.That(errors, Is.Not.Empty);
+
+            errors.Clear();
+
+            parameters.SetParameter(ParametersTypes.StepAmount, 8); 
+
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        [Description("Проверка ввода допустимой глубины проступи")]
+        public void ValidStepTreadDoesNotRaiseError()
+        {
+            var parameters = Create();
+            bool errorRaised = false;
+
+            parameters.ErrorMessageEvent += (s, e) => errorRaised = true;
+
+            parameters.SetParameter(ParametersTypes.Length, 3000);
+            parameters.SetParameter(ParametersTypes.StepAmount, 10);
+
+            //Сбрасываем т.к предыдущие значения могли вызвать ошибку
+            errorRaised = false;
+            parameters.SetParameter(ParametersTypes.StepProjectionLength, 50);
+
+            Assert.That(errorRaised, Is.False);
+        }
+
+        [Test]
 		[Description("Проверка валидации угла марша")]
 		public void StairAngleOutOfRangeRaisesError()
 		{
@@ -274,7 +437,28 @@ namespace Tests
 		}
 
         [Test]
-        [Description("Проверка допустимого угла марша")]
+        [Description("Исправление ошибки угла марша после изменения длины")]
+        public void StairAngleErrorIsFixedAfterLengthChange()
+        {
+            var parameters = Create();
+            var errors = new List<ErrorArgs>();
+
+            parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
+
+            parameters.SetParameter(ParametersTypes.Height, 4000);
+            parameters.SetParameter(ParametersTypes.Length, 1000); // угол > 50
+
+            Assert.That(errors, Is.Not.Empty);
+
+            errors.Clear();
+
+            parameters.SetParameter(ParametersTypes.Length, 6000); // нормальный угол
+
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        [Description("Проверка ввода допустимого угла марша")]
         public void StairAngleInRangeDoesNotRaiseError()
         {
             var parameters = Create();
@@ -288,37 +472,32 @@ namespace Tests
             Assert.That(errorRaised, Is.False);
         }
 
-        [Test]
-        [Description("Проверка пересчётов зависимых параметров")]
-        public void StepAmountChangeRecalculatesStepHeight()
-        {
-            var parameters = Create();
-
-            parameters.SetParameter(ParametersTypes.Height, 2000);
-            parameters.SetParameter(ParametersTypes.StepAmount, 8);
-
-            double stepHeight =
-                parameters.GetParameter(ParametersTypes.StepHeight);
-
-            Assert.That(stepHeight, Is.EqualTo(250));
-        }
 
         [Test]
 		[Description("Проверка обновления всех параметров")]
 		public void FullUpdateParametersSendsAllParameters()
 		{
 			var parameters = Create();
-			List<ParametersTypes>? updated = null;
+			List<ParametersTypes>? updatedErrors = new List<ParametersTypes>();
+            List<ParametersTypes>? updatedValues = new List<ParametersTypes>();
 
-			parameters.UpdateParametersEvent += (s, list) => updated = list;
+			parameters.UpdateParameterErrorsEvent += 
+                (s, ParametersTypes) => updatedErrors.Add(ParametersTypes);
+            parameters.UpdateParameterValueEvent +=
+                (s, ParametersTypes) => updatedValues.Add(ParametersTypes);
 
 			parameters.FullUpdateParameters();
 
-			Assert.That(updated, Is.Not.Null);
+			Assert.That(updatedErrors, Is.Not.Null);
 			Assert.That(
-                updated.Count, 
+                updatedErrors.Count, 
                 Is.EqualTo(parameters.GetParameters().Count));
-		}
+
+            Assert.That(updatedValues, Is.Not.Null);
+            Assert.That(
+                updatedValues.Count,
+                Is.EqualTo(parameters.GetParameters().Count));
+        }
 
     }
 }

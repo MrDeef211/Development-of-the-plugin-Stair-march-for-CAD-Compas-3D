@@ -41,16 +41,21 @@ namespace Model
         public event EventHandler<ErrorArgs> ErrorMessageEvent;
 
         /// <summary>
-        /// Делегат события обновления параметра
+        /// Делегат события обновления ошибок параметра
         /// </summary>
-        public event EventHandler<List<ParametersTypes>> UpdateParametersEvent;
+        public event EventHandler<ParametersTypes> UpdateParameterErrorsEvent;
+
+        /// <summary>
+        /// Делегат события обновления значения параметра
+        /// </summary>
+        public event EventHandler<ParametersTypes> UpdateParameterValueEvent;
 
         /// <summary>
         /// Событие отправки ошибки в MainForm
         /// </summary>
         /// <param name="message"></param>
         /// <param name="parametersList"></param>
-        protected virtual void ErrorMessage(
+        private void ErrorMessage(
             string message, 
             List<ParametersTypes> parametersList)
         {
@@ -59,13 +64,19 @@ namespace Model
         }
 
         /// <summary>
-        /// Событие обновления параметра на ошибки и значения
+        /// Событие обновления параметра на ошибки
         /// </summary>
-        /// <param name="parametersList">Список изменённых параметров</param>
-        protected virtual void UpdateParameters(
-            List<ParametersTypes> parametersList)
+        /// <param name="parametersList">Изменённый параметр</param>
+        private void UpdateParameterErrors(
+            ParametersTypes parameter)
         {
-            UpdateParametersEvent?.Invoke(this, parametersList);
+            UpdateParameterErrorsEvent?.Invoke(this, parameter);
+        }
+
+        private void UpdateParameterValue(
+            ParametersTypes parameters)
+        {
+            UpdateParameterValueEvent?.Invoke(this, parameters);
         }
 
         /// <summary>
@@ -87,7 +98,7 @@ namespace Model
         {
             //Сначала фиксируем изменение
             _parameters[parameter].Value = value;
-			UpdateParameters(new List<ParametersTypes> { parameter });
+			UpdateParameterErrors(parameter);
             Validate(_parameters[parameter]);
 
 			//Запуск внутренних валидаций по необходимости
@@ -121,7 +132,11 @@ namespace Model
         /// </summary>
         public void FullUpdateParameters()
         {
-            UpdateParameters(_parameters.Keys.ToList());
+            foreach (var parameter in _parameters.Keys.ToList())
+            {
+                UpdateParameterErrors(parameter);
+                UpdateParameterValue(parameter);
+            }
         }
 
         /// <summary>
@@ -230,22 +245,30 @@ namespace Model
             {
                 case ParametersTypes.StepAmount:
                 case ParametersTypes.Height:
-                    newValue = _parameters[ParametersTypes.Height].Value /
+                    newValue = 
+                        _parameters[ParametersTypes.Height].Value /
                         _parameters[ParametersTypes.StepAmount].Value;
-                    //Меняем значение на экране
+
+                    // Обновляем параметр
                     _parameters[ParametersTypes.StepHeight].Value = newValue;
-                    UpdateParameters(
-                        new List<ParametersTypes> { ParametersTypes.StepHeight });
+                    UpdateParameterValue(ParametersTypes.StepHeight);
+
+                    // Валидируем отдельно, чтобы не создавать рекурсию
+                    UpdateParameterErrors(ParametersTypes.StepHeight);
 					Validate(_parameters[ParametersTypes.StepHeight]);
+                    InternalValidation(ParametersTypes.StepHeight);
 					break;
                 case ParametersTypes.StepHeight:
-                    newValue = _parameters[ParametersTypes.StepHeight].Value *
+                    newValue = 
+                        _parameters[ParametersTypes.StepHeight].Value *
                         _parameters[ParametersTypes.StepAmount].Value;
 
                     _parameters[ParametersTypes.Height].Value = newValue;
-                    UpdateParameters(
-                        new List<ParametersTypes> { ParametersTypes.Height });
+                    UpdateParameterValue(ParametersTypes.Height);
+
+                    UpdateParameterErrors(ParametersTypes.Height);
                     Validate(_parameters[ParametersTypes.Height]);
+                    InternalValidation(ParametersTypes.Height);
                     break;
             }
 
@@ -271,15 +294,14 @@ namespace Model
             // 1 Изменение границ глубины и толщины выступа
             if (entered == ParametersTypes.StepHeight)
             {
-                // Глубина не больше половины высоты ступени
+                // Новые границы для параметров выступа
+                // Глубина не больше части высоты ступени
                 _parameters[ParametersTypes.StepProjectionLength].Max = 
                     _parameters[ParametersTypes.StepHeight].Value / 
                     stepBorder;
 
-                UpdateParameters(
-                    new List<ParametersTypes> { 
-                        ParametersTypes.StepProjectionLength });
-
+                // Валидируем внутри новых границ
+                UpdateParameterErrors(ParametersTypes.StepProjectionLength);
                 Validate(_parameters[ParametersTypes.StepProjectionLength]);
 
                 // Толщина не больше половины высоты ступени
@@ -287,10 +309,8 @@ namespace Model
                     _parameters[ParametersTypes.StepHeight].Value / 
                     stepBorder;
 
-                UpdateParameters(
-                    new List<ParametersTypes> { 
-                        ParametersTypes.StepProjectionHeight });
-
+                // Валидируем внутри новых границ
+                UpdateParameterErrors(ParametersTypes.StepProjectionHeight);
                 Validate(_parameters[ParametersTypes.StepProjectionHeight]);
             }
 
