@@ -59,8 +59,9 @@ namespace Tests
 
 			Assert.That(dict, Is.Not.Null);
 			Assert.That(dict.Count, Is.GreaterThan(0));
-			Assert.That(dict.Keys, Does.Contain(ParametersTypes.Height));
-		}
+            Assert.That(dict.All(pair => pair.Key == pair.Value.Name),
+                Is.True, "Все ключи должны соответствовать значениям Name");
+        }
 
 		[TestCase(ParametersTypes.Height, 3200)]
 		[TestCase(ParametersTypes.Length, 3200)]
