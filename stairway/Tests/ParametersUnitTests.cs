@@ -58,7 +58,8 @@ namespace Tests
 			var dict = parameters.GetParameters();
 
 			Assert.That(dict, Is.Not.Null);
-			Assert.That(dict.Count, Is.GreaterThan(0));
+			Assert.That(dict.Count, 
+                Is.EqualTo(Enum.GetNames(typeof(ParametersTypes)).Length));
             Assert.That(dict.All(pair => pair.Key == pair.Value.Name),
                 Is.True, "Все ключи должны соответствовать значениям Name");
         }

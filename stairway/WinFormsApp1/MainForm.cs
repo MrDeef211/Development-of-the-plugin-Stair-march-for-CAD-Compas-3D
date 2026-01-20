@@ -1,7 +1,9 @@
+using Accessibility;
 using Builders;
 using Model;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
@@ -12,6 +14,22 @@ namespace UI
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// Минимальный размер окна
+        /// </summary>
+        private const int _minWidthForm = 380;
+        /// <summary>
+        /// Размер окна, при котором скрываются ограничения
+        /// </summary>
+        private const int _hideLimitsAt = 400;
+        /// <summary>
+        /// Размер окна при котором скрывается малый чертёж
+        /// </summary>
+        private const int _hideSmallAt = 550;
+        /// <summary>
+        /// Размер окна при котором скрывается большой чертёж
+        /// </summary>
+        private const int _hideBigAt = 1000;
         /// <summary>
         /// Строитель модели
         /// </summary>
@@ -48,11 +66,17 @@ namespace UI
             _parameters = new Parameters();
             _activeErrors = new Dictionary<string, List<ParametersTypes>>();
 
+            if (TryLoad(out var loaded))
+            {
+                _parameters = loaded;
+            }
+
             _parameters.ErrorMessageEvent += IsErrorAppered;
             _parameters.UpdateParameterErrorsEvent += ParameterUpdateErrors;
             _parameters.UpdateParameterValueEvent += ParameterUpdateValue;
 
             _parameters.FullUpdateParameters();
+            IsMultiFlightСheckBox.Checked = _parameters.IsMultiFlight;
         }
 
         /// <summary>
@@ -149,7 +173,17 @@ namespace UI
             }
         }
 
-
+        /// <summary>
+        /// Событие изменение чекбокса строительства пролёта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void IsMultiFlightСheckBox_MouseClick(
+            object sender,
+            MouseEventArgs e)
+        {
+            _parameters.IsMultiFlight = IsMultiFlightСheckBox.Checked;
+        }
 
         /// <summary>
         /// Начать построение модели
@@ -181,6 +215,54 @@ namespace UI
         }
 
         /// <summary>
+        /// Событие изменение размеров окна
+        /// </summary>
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            int w = this.ClientSize.Width;
+
+            double size = PicturesSplitContainer.Size.Width;
+
+            if (size > 100)
+                PicturesSplitContainer.SplitterDistance = (int)(size / 2.5);
+
+            MainModelPictureBox.Visible = w >= _hideBigAt;
+            PicturesSplitContainer.Panel2Collapsed = w < _hideBigAt;
+            MiniModelPictureBox.Visible = w >= _hideSmallAt;
+            PicturesSplitContainer.Panel1Collapsed = w < _hideSmallAt;
+            LimitsPanel.Visible = w >= _hideLimitsAt;
+
+            this.MinimumSize = new Size(_minWidthForm, this.MinimumSize.Height);
+        }
+
+        /// <summary>
+        /// Событие окончания изменения размеров окна
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_ResizeEnd(object sender, EventArgs e)
+        {
+
+
+            int snapThreshold = 100;
+            int newWidth;
+
+            if (Math.Abs(this.Width - _hideSmallAt) <= snapThreshold)
+            {
+                newWidth = _hideSmallAt;
+
+                this.Size = new Size(newWidth, this.Height);
+
+            }
+            if (this.Width - _hideSmallAt < -snapThreshold)
+            {
+                newWidth = _minWidthForm;
+
+                this.Size = new Size(newWidth, this.Height);
+            }
+        }
+
+        /// <summary>
         /// Закрытие формы
         /// </summary>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -189,20 +271,20 @@ namespace UI
             {
                 DialogResult result = MessageBox.Show(
                     "Вы уверены, что хотите выйти? \n" +
-                    "У вас есть ошибки, поэтому данные не сохранятся.",    
-                    "Предупреждение",                         
-                    MessageBoxButtons.OKCancel,               
-                    MessageBoxIcon.Warning                    
+                    "У вас есть ошибки, поэтому данные не сохранятся.",
+                    "Предупреждение",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Warning
                 );
 
                 if (result == DialogResult.Cancel)
                 {
                     e.Cancel = true;
                 }
-            }    
+            }
             else
             {
-                SaveParameters(_parameters.GetParameters());
+                Save(_parameters);
             }
         }
 
@@ -215,26 +297,28 @@ namespace UI
             _textboxByParameter = new Dictionary<ParametersTypes, TextBox>
             {
 
-            { ParametersTypes.Height,
+                { ParametersTypes.Height,
                     HeightTextBox},
-            { ParametersTypes.Length,
+                { ParametersTypes.Length,
                     LengthTextBox},
-            { ParametersTypes.PlatformLengthUp,
+                { ParametersTypes.PlatformLengthUp,
                     PlatformLengthUpTextBox},
-            { ParametersTypes.PlatformLengthDown,
+                { ParametersTypes.PlatformLengthDown,
                     PlatformLengthDownTextBox},
-            { ParametersTypes.PlatformHeight,
+                { ParametersTypes.PlatformHeight,
                     PlatformHeightTextBox},
-            { ParametersTypes.StepAmount,
+                { ParametersTypes.StepAmount,
                     StepAmountTextBox},
-            { ParametersTypes.StepHeight,
+                { ParametersTypes.StepHeight,
                     StepHeightTextBox},
-            { ParametersTypes.StepProjectionHeight,
+                { ParametersTypes.StepProjectionHeight,
                     StepProtjectionHeightTextBox},
-            { ParametersTypes.StepProjectionLength,
+                { ParametersTypes.StepProjectionLength,
                     StepProjectionLengthTextBox},
-            { ParametersTypes.Width,
-                    WidthTextBox}
+                { ParametersTypes.Width,
+                    WidthTextBox},
+                { ParametersTypes.FloorsCount,
+                    FloorsCountTextBox}
 
             };
         }
@@ -265,7 +349,9 @@ namespace UI
                 { ParametersTypes.StepProjectionLength,
                     "Глубина выступа" },
                 { ParametersTypes.Width,
-                    "Ширина марша" }
+                    "Ширина марша" },
+                { ParametersTypes.FloorsCount,
+                    "Количество этажей"}
             };
         }
 
@@ -308,10 +394,10 @@ namespace UI
         /// Сохранить некоторый список параметров в json
         /// </summary>
         /// <param name="parameters">Список параметров</param>
-        private void SaveParameters(List<Model.Parameter> parameters)
+        public void Save(Parameters parameters)
         {
-            var json = JsonSerializer.Serialize(parameters);
-            File.WriteAllText(_path, json);
+            var snapshot = parameters.CreateSnapshot();
+            File.WriteAllText(_path, JsonSerializer.Serialize(snapshot));
         }
 
         /// <summary>
@@ -319,16 +405,18 @@ namespace UI
         /// </summary>
         /// <param name="parameters">Список параметров</param>
         /// <returns>Успех</returns>
-        public bool TryLoad(out List<Model.Parameter> parameters)
+        public bool TryLoad(out Parameters parameters)
         {
             parameters = null;
 
             if (!File.Exists(_path))
                 return false;
 
+            parameters = new Parameters();
+
             var json = File.ReadAllText(_path);
-            parameters =
-                JsonSerializer.Deserialize<List<Model.Parameter>>(json);
+            var snapshot = JsonSerializer.Deserialize<ParametersSnapshot>(json);
+            parameters.RestoreFromSnapshot(snapshot);
             return parameters != null;
         }
 

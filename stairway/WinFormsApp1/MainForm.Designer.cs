@@ -65,10 +65,26 @@
             ErrorLabel = new Label();
             MainModelPictureBox = new PictureBox();
             MiniModelPictureBox = new PictureBox();
+            FloorsCountTextBox = new TextBox();
+            FloorsCountLabel = new Label();
+            IsMultiFlightLabel = new Label();
+            IsMultiFlightСheckBox = new CheckBox();
+            FloorsCountLimitLabel = new Label();
+            LimitsPanel = new Panel();
+            InputsPanel = new Panel();
+            MiniPicturePanel = new Panel();
+            MainPicturePanel = new Panel();
+            BorderPanel = new Panel();
+            TopPanel = new Panel();
             PicturesSplitContainer = new SplitContainer();
             ErrorPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)MainModelPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)MiniModelPictureBox).BeginInit();
+            LimitsPanel.SuspendLayout();
+            InputsPanel.SuspendLayout();
+            MiniPicturePanel.SuspendLayout();
+            MainPicturePanel.SuspendLayout();
+            TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PicturesSplitContainer).BeginInit();
             PicturesSplitContainer.Panel1.SuspendLayout();
             PicturesSplitContainer.Panel2.SuspendLayout();
@@ -79,7 +95,7 @@
             // 
             HeightLabel.AutoSize = true;
             HeightLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            HeightLabel.Location = new Point(6, 8);
+            HeightLabel.Location = new Point(3, 10);
             HeightLabel.Name = "HeightLabel";
             HeightLabel.Size = new Size(145, 18);
             HeightLabel.TabIndex = 0;
@@ -89,7 +105,7 @@
             // 
             LengthLabel.AutoSize = true;
             LengthLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            LengthLabel.Location = new Point(6, 37);
+            LengthLabel.Location = new Point(3, 39);
             LengthLabel.Name = "LengthLabel";
             LengthLabel.Size = new Size(148, 18);
             LengthLabel.TabIndex = 1;
@@ -99,7 +115,7 @@
             // 
             StepAmountLabel.AutoSize = true;
             StepAmountLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StepAmountLabel.Location = new Point(6, 66);
+            StepAmountLabel.Location = new Point(3, 68);
             StepAmountLabel.Name = "StepAmountLabel";
             StepAmountLabel.Size = new Size(157, 18);
             StepAmountLabel.TabIndex = 2;
@@ -109,7 +125,7 @@
             // 
             StepHeightLabel.AutoSize = true;
             StepHeightLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StepHeightLabel.Location = new Point(6, 95);
+            StepHeightLabel.Location = new Point(3, 97);
             StepHeightLabel.Name = "StepHeightLabel";
             StepHeightLabel.Size = new Size(164, 18);
             StepHeightLabel.TabIndex = 3;
@@ -118,7 +134,7 @@
             // HeightTextBox
             // 
             HeightTextBox.BackColor = SystemColors.Window;
-            HeightTextBox.Location = new Point(261, 8);
+            HeightTextBox.Location = new Point(257, 10);
             HeightTextBox.Name = "HeightTextBox";
             HeightTextBox.Size = new Size(100, 23);
             HeightTextBox.TabIndex = 4;
@@ -128,7 +144,7 @@
             // LengthTextBox
             // 
             LengthTextBox.BackColor = SystemColors.Window;
-            LengthTextBox.Location = new Point(261, 37);
+            LengthTextBox.Location = new Point(257, 39);
             LengthTextBox.Name = "LengthTextBox";
             LengthTextBox.Size = new Size(100, 23);
             LengthTextBox.TabIndex = 5;
@@ -138,7 +154,7 @@
             // StepAmountTextBox
             // 
             StepAmountTextBox.BackColor = SystemColors.Window;
-            StepAmountTextBox.Location = new Point(261, 66);
+            StepAmountTextBox.Location = new Point(257, 68);
             StepAmountTextBox.Name = "StepAmountTextBox";
             StepAmountTextBox.Size = new Size(100, 23);
             StepAmountTextBox.TabIndex = 6;
@@ -147,7 +163,7 @@
             // 
             // StepHeightTextBox
             // 
-            StepHeightTextBox.Location = new Point(261, 95);
+            StepHeightTextBox.Location = new Point(257, 97);
             StepHeightTextBox.Name = "StepHeightTextBox";
             StepHeightTextBox.Size = new Size(100, 23);
             StepHeightTextBox.TabIndex = 7;
@@ -157,7 +173,7 @@
             // WidthTextBox
             // 
             WidthTextBox.BackColor = SystemColors.Window;
-            WidthTextBox.Location = new Point(261, 124);
+            WidthTextBox.Location = new Point(257, 126);
             WidthTextBox.Name = "WidthTextBox";
             WidthTextBox.Size = new Size(100, 23);
             WidthTextBox.TabIndex = 8;
@@ -166,7 +182,7 @@
             // 
             // StepProjectionLengthTextBox
             // 
-            StepProjectionLengthTextBox.Location = new Point(261, 153);
+            StepProjectionLengthTextBox.Location = new Point(257, 155);
             StepProjectionLengthTextBox.Name = "StepProjectionLengthTextBox";
             StepProjectionLengthTextBox.Size = new Size(100, 23);
             StepProjectionLengthTextBox.TabIndex = 9;
@@ -175,7 +191,7 @@
             // 
             // StepProtjectionHeightTextBox
             // 
-            StepProtjectionHeightTextBox.Location = new Point(261, 182);
+            StepProtjectionHeightTextBox.Location = new Point(257, 184);
             StepProtjectionHeightTextBox.Name = "StepProtjectionHeightTextBox";
             StepProtjectionHeightTextBox.Size = new Size(100, 23);
             StepProtjectionHeightTextBox.TabIndex = 10;
@@ -184,7 +200,7 @@
             // 
             // PlatformLengthDownTextBox
             // 
-            PlatformLengthDownTextBox.Location = new Point(261, 211);
+            PlatformLengthDownTextBox.Location = new Point(257, 213);
             PlatformLengthDownTextBox.Name = "PlatformLengthDownTextBox";
             PlatformLengthDownTextBox.Size = new Size(100, 23);
             PlatformLengthDownTextBox.TabIndex = 11;
@@ -193,7 +209,7 @@
             // 
             // PlatformLengthUpTextBox
             // 
-            PlatformLengthUpTextBox.Location = new Point(261, 240);
+            PlatformLengthUpTextBox.Location = new Point(257, 242);
             PlatformLengthUpTextBox.Name = "PlatformLengthUpTextBox";
             PlatformLengthUpTextBox.Size = new Size(100, 23);
             PlatformLengthUpTextBox.TabIndex = 12;
@@ -202,7 +218,7 @@
             // 
             // PlatformHeightTextBox
             // 
-            PlatformHeightTextBox.Location = new Point(261, 269);
+            PlatformHeightTextBox.Location = new Point(257, 271);
             PlatformHeightTextBox.Name = "PlatformHeightTextBox";
             PlatformHeightTextBox.Size = new Size(100, 23);
             PlatformHeightTextBox.TabIndex = 13;
@@ -213,7 +229,7 @@
             // 
             WidthLabel.AutoSize = true;
             WidthLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            WidthLabel.Location = new Point(6, 124);
+            WidthLabel.Location = new Point(3, 126);
             WidthLabel.Name = "WidthLabel";
             WidthLabel.Size = new Size(150, 18);
             WidthLabel.TabIndex = 14;
@@ -223,7 +239,7 @@
             // 
             StepProjectionLengthLabel.AutoSize = true;
             StepProjectionLengthLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StepProjectionLengthLabel.Location = new Point(6, 153);
+            StepProjectionLengthLabel.Location = new Point(3, 155);
             StepProjectionLengthLabel.Name = "StepProjectionLengthLabel";
             StepProjectionLengthLabel.Size = new Size(162, 18);
             StepProjectionLengthLabel.TabIndex = 15;
@@ -233,7 +249,7 @@
             // 
             StepProtjectionHeightLabel.AutoSize = true;
             StepProtjectionHeightLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StepProtjectionHeightLabel.Location = new Point(6, 182);
+            StepProtjectionHeightLabel.Location = new Point(3, 184);
             StepProtjectionHeightLabel.Name = "StepProtjectionHeightLabel";
             StepProtjectionHeightLabel.Size = new Size(170, 18);
             StepProtjectionHeightLabel.TabIndex = 16;
@@ -243,7 +259,7 @@
             // 
             PlatformLengthDownLabel.AutoSize = true;
             PlatformLengthDownLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PlatformLengthDownLabel.Location = new Point(6, 211);
+            PlatformLengthDownLabel.Location = new Point(3, 213);
             PlatformLengthDownLabel.Name = "PlatformLengthDownLabel";
             PlatformLengthDownLabel.Size = new Size(249, 18);
             PlatformLengthDownLabel.TabIndex = 17;
@@ -253,7 +269,7 @@
             // 
             PlatformLengthUpLabel.AutoSize = true;
             PlatformLengthUpLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PlatformLengthUpLabel.Location = new Point(6, 240);
+            PlatformLengthUpLabel.Location = new Point(3, 242);
             PlatformLengthUpLabel.Name = "PlatformLengthUpLabel";
             PlatformLengthUpLabel.Size = new Size(255, 18);
             PlatformLengthUpLabel.TabIndex = 18;
@@ -263,7 +279,7 @@
             // 
             PlatformHeightLabel.AutoSize = true;
             PlatformHeightLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PlatformHeightLabel.Location = new Point(6, 269);
+            PlatformHeightLabel.Location = new Point(3, 271);
             PlatformHeightLabel.Name = "PlatformHeightLabel";
             PlatformHeightLabel.Size = new Size(165, 18);
             PlatformHeightLabel.TabIndex = 19;
@@ -273,7 +289,7 @@
             // 
             HeightLimitsLabel.AutoSize = true;
             HeightLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            HeightLimitsLabel.Location = new Point(367, 13);
+            HeightLimitsLabel.Location = new Point(0, 7);
             HeightLimitsLabel.Name = "HeightLimitsLabel";
             HeightLimitsLabel.Size = new Size(125, 18);
             HeightLimitsLabel.TabIndex = 20;
@@ -283,7 +299,7 @@
             // 
             LengthLimitsLabel.AutoSize = true;
             LengthLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            LengthLimitsLabel.Location = new Point(367, 42);
+            LengthLimitsLabel.Location = new Point(0, 36);
             LengthLimitsLabel.Name = "LengthLimitsLabel";
             LengthLimitsLabel.Size = new Size(135, 18);
             LengthLimitsLabel.TabIndex = 21;
@@ -293,7 +309,7 @@
             // 
             StepAmountLimitsLabel.AutoSize = true;
             StepAmountLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StepAmountLimitsLabel.Location = new Point(367, 71);
+            StepAmountLimitsLabel.Location = new Point(0, 65);
             StepAmountLimitsLabel.Name = "StepAmountLimitsLabel";
             StepAmountLimitsLabel.Size = new Size(83, 18);
             StepAmountLimitsLabel.TabIndex = 22;
@@ -303,7 +319,7 @@
             // 
             StepHeightLimitsLabel.AutoSize = true;
             StepHeightLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StepHeightLimitsLabel.Location = new Point(367, 100);
+            StepHeightLimitsLabel.Location = new Point(0, 94);
             StepHeightLimitsLabel.Name = "StepHeightLimitsLabel";
             StepHeightLimitsLabel.Size = new Size(115, 18);
             StepHeightLimitsLabel.TabIndex = 23;
@@ -313,7 +329,7 @@
             // 
             WidthLimitsLabel.AutoSize = true;
             WidthLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            WidthLimitsLabel.Location = new Point(367, 129);
+            WidthLimitsLabel.Location = new Point(0, 123);
             WidthLimitsLabel.Name = "WidthLimitsLabel";
             WidthLimitsLabel.Size = new Size(125, 18);
             WidthLimitsLabel.TabIndex = 24;
@@ -323,7 +339,7 @@
             // 
             StepProjectionLengthLimitsLabel.AutoSize = true;
             StepProjectionLengthLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StepProjectionLengthLimitsLabel.Location = new Point(367, 158);
+            StepProjectionLengthLimitsLabel.Location = new Point(0, 152);
             StepProjectionLengthLimitsLabel.Name = "StepProjectionLengthLimitsLabel";
             StepProjectionLengthLimitsLabel.Size = new Size(86, 18);
             StepProjectionLengthLimitsLabel.TabIndex = 25;
@@ -333,7 +349,7 @@
             // 
             StepProtjectionHeightLimitsLabel.AutoSize = true;
             StepProtjectionHeightLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            StepProtjectionHeightLimitsLabel.Location = new Point(367, 187);
+            StepProtjectionHeightLimitsLabel.Location = new Point(0, 181);
             StepProtjectionHeightLimitsLabel.Name = "StepProtjectionHeightLimitsLabel";
             StepProtjectionHeightLimitsLabel.Size = new Size(86, 18);
             StepProtjectionHeightLimitsLabel.TabIndex = 26;
@@ -343,7 +359,7 @@
             // 
             PlatformLengthDownLimitsLabel.AutoSize = true;
             PlatformLengthDownLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PlatformLengthDownLimitsLabel.Location = new Point(367, 216);
+            PlatformLengthDownLimitsLabel.Location = new Point(0, 210);
             PlatformLengthDownLimitsLabel.Name = "PlatformLengthDownLimitsLabel";
             PlatformLengthDownLimitsLabel.Size = new Size(135, 18);
             PlatformLengthDownLimitsLabel.TabIndex = 27;
@@ -353,7 +369,7 @@
             // 
             PlatformLengthUpLimitsLabel.AutoSize = true;
             PlatformLengthUpLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PlatformLengthUpLimitsLabel.Location = new Point(367, 245);
+            PlatformLengthUpLimitsLabel.Location = new Point(0, 239);
             PlatformLengthUpLimitsLabel.Name = "PlatformLengthUpLimitsLabel";
             PlatformLengthUpLimitsLabel.Size = new Size(135, 18);
             PlatformLengthUpLimitsLabel.TabIndex = 28;
@@ -363,7 +379,7 @@
             // 
             PlatformHeightLimitsLabel.AutoSize = true;
             PlatformHeightLimitsLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PlatformHeightLimitsLabel.Location = new Point(367, 274);
+            PlatformHeightLimitsLabel.Location = new Point(0, 268);
             PlatformHeightLimitsLabel.Name = "PlatformHeightLimitsLabel";
             PlatformHeightLimitsLabel.Size = new Size(115, 18);
             PlatformHeightLimitsLabel.TabIndex = 29;
@@ -372,7 +388,7 @@
             // BuildButton
             // 
             BuildButton.Font = new Font("Segoe UI Semibold", 10.25F, FontStyle.Bold);
-            BuildButton.Location = new Point(261, 297);
+            BuildButton.Location = new Point(257, 358);
             BuildButton.Name = "BuildButton";
             BuildButton.Size = new Size(100, 25);
             BuildButton.TabIndex = 30;
@@ -383,10 +399,11 @@
             // ErrorPanel
             // 
             ErrorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            ErrorPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ErrorPanel.Controls.Add(ErrorTextBox);
-            ErrorPanel.Location = new Point(6, 325);
+            ErrorPanel.Location = new Point(0, 389);
             ErrorPanel.Name = "ErrorPanel";
-            ErrorPanel.Size = new Size(1275, 134);
+            ErrorPanel.Size = new Size(1284, 373);
             ErrorPanel.TabIndex = 32;
             ErrorPanel.Tag = "";
             // 
@@ -399,14 +416,14 @@
             ErrorTextBox.Multiline = true;
             ErrorTextBox.Name = "ErrorTextBox";
             ErrorTextBox.ScrollBars = ScrollBars.Vertical;
-            ErrorTextBox.Size = new Size(1275, 134);
+            ErrorTextBox.Size = new Size(1284, 373);
             ErrorTextBox.TabIndex = 0;
             // 
             // ErrorLabel
             // 
             ErrorLabel.AutoSize = true;
             ErrorLabel.Font = new Font("Verdana", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            ErrorLabel.Location = new Point(6, 309);
+            ErrorLabel.Location = new Point(3, 373);
             ErrorLabel.Name = "ErrorLabel";
             ErrorLabel.Size = new Size(98, 13);
             ErrorLabel.TabIndex = 34;
@@ -418,7 +435,7 @@
             MainModelPictureBox.Image = (Image)resources.GetObject("MainModelPictureBox.Image");
             MainModelPictureBox.Location = new Point(0, 0);
             MainModelPictureBox.Name = "MainModelPictureBox";
-            MainModelPictureBox.Size = new Size(464, 314);
+            MainModelPictureBox.Size = new Size(471, 383);
             MainModelPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             MainModelPictureBox.TabIndex = 36;
             MainModelPictureBox.TabStop = false;
@@ -430,77 +447,198 @@
             MiniModelPictureBox.Image = (Image)resources.GetObject("MiniModelPictureBox.Image");
             MiniModelPictureBox.Location = new Point(0, 0);
             MiniModelPictureBox.Name = "MiniModelPictureBox";
-            MiniModelPictureBox.Size = new Size(305, 314);
+            MiniModelPictureBox.Size = new Size(302, 383);
             MiniModelPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             MiniModelPictureBox.TabIndex = 35;
             MiniModelPictureBox.TabStop = false;
             // 
+            // FloorsCountTextBox
+            // 
+            FloorsCountTextBox.Location = new Point(257, 329);
+            FloorsCountTextBox.Name = "FloorsCountTextBox";
+            FloorsCountTextBox.Size = new Size(100, 23);
+            FloorsCountTextBox.TabIndex = 40;
+            FloorsCountTextBox.Text = "200";
+            FloorsCountTextBox.KeyUp += ParameterEntered;
+            // 
+            // FloorsCountLabel
+            // 
+            FloorsCountLabel.AutoSize = true;
+            FloorsCountLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            FloorsCountLabel.Location = new Point(3, 329);
+            FloorsCountLabel.Name = "FloorsCountLabel";
+            FloorsCountLabel.Size = new Size(170, 18);
+            FloorsCountLabel.TabIndex = 42;
+            FloorsCountLabel.Text = "Количество этажей";
+            // 
+            // IsMultiFlightLabel
+            // 
+            IsMultiFlightLabel.AutoSize = true;
+            IsMultiFlightLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            IsMultiFlightLabel.Location = new Point(3, 300);
+            IsMultiFlightLabel.Name = "IsMultiFlightLabel";
+            IsMultiFlightLabel.Size = new Size(135, 18);
+            IsMultiFlightLabel.TabIndex = 43;
+            IsMultiFlightLabel.Text = "Строить пролёт";
+            // 
+            // IsMultiFlightСheckBox
+            // 
+            IsMultiFlightСheckBox.AutoSize = true;
+            IsMultiFlightСheckBox.Location = new Point(260, 304);
+            IsMultiFlightСheckBox.Name = "IsMultiFlightСheckBox";
+            IsMultiFlightСheckBox.Size = new Size(15, 14);
+            IsMultiFlightСheckBox.TabIndex = 44;
+            IsMultiFlightСheckBox.UseVisualStyleBackColor = true;
+            IsMultiFlightСheckBox.MouseClick += IsMultiFlightСheckBox_MouseClick;
+            // 
+            // FloorsCountLimitLabel
+            // 
+            FloorsCountLimitLabel.AutoSize = true;
+            FloorsCountLimitLabel.Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            FloorsCountLimitLabel.Location = new Point(0, 326);
+            FloorsCountLimitLabel.Name = "FloorsCountLimitLabel";
+            FloorsCountLimitLabel.Size = new Size(83, 18);
+            FloorsCountLimitLabel.TabIndex = 45;
+            FloorsCountLimitLabel.Text = "0 - 25 шт";
+            // 
+            // LimitsPanel
+            // 
+            LimitsPanel.Controls.Add(FloorsCountLimitLabel);
+            LimitsPanel.Controls.Add(HeightLimitsLabel);
+            LimitsPanel.Controls.Add(LengthLimitsLabel);
+            LimitsPanel.Controls.Add(StepAmountLimitsLabel);
+            LimitsPanel.Controls.Add(StepHeightLimitsLabel);
+            LimitsPanel.Controls.Add(WidthLimitsLabel);
+            LimitsPanel.Controls.Add(StepProjectionLengthLimitsLabel);
+            LimitsPanel.Controls.Add(StepProtjectionHeightLimitsLabel);
+            LimitsPanel.Controls.Add(PlatformLengthDownLimitsLabel);
+            LimitsPanel.Controls.Add(PlatformLengthUpLimitsLabel);
+            LimitsPanel.Controls.Add(PlatformHeightLimitsLabel);
+            LimitsPanel.Location = new Point(363, 3);
+            LimitsPanel.Name = "LimitsPanel";
+            LimitsPanel.Size = new Size(138, 349);
+            LimitsPanel.TabIndex = 46;
+            // 
+            // InputsPanel
+            // 
+            InputsPanel.AutoSize = true;
+            InputsPanel.Controls.Add(IsMultiFlightСheckBox);
+            InputsPanel.Controls.Add(FloorsCountLabel);
+            InputsPanel.Controls.Add(HeightTextBox);
+            InputsPanel.Controls.Add(LengthTextBox);
+            InputsPanel.Controls.Add(StepAmountTextBox);
+            InputsPanel.Controls.Add(StepHeightTextBox);
+            InputsPanel.Controls.Add(WidthTextBox);
+            InputsPanel.Controls.Add(StepProjectionLengthTextBox);
+            InputsPanel.Controls.Add(StepProtjectionHeightTextBox);
+            InputsPanel.Controls.Add(PlatformLengthDownTextBox);
+            InputsPanel.Controls.Add(PlatformLengthUpTextBox);
+            InputsPanel.Controls.Add(PlatformHeightTextBox);
+            InputsPanel.Controls.Add(FloorsCountTextBox);
+            InputsPanel.Controls.Add(IsMultiFlightLabel);
+            InputsPanel.Controls.Add(PlatformHeightLabel);
+            InputsPanel.Controls.Add(PlatformLengthUpLabel);
+            InputsPanel.Controls.Add(BuildButton);
+            InputsPanel.Controls.Add(PlatformLengthDownLabel);
+            InputsPanel.Controls.Add(StepProtjectionHeightLabel);
+            InputsPanel.Controls.Add(StepProjectionLengthLabel);
+            InputsPanel.Controls.Add(WidthLabel);
+            InputsPanel.Controls.Add(StepHeightLabel);
+            InputsPanel.Controls.Add(StepAmountLabel);
+            InputsPanel.Controls.Add(LengthLabel);
+            InputsPanel.Controls.Add(HeightLabel);
+            InputsPanel.Dock = DockStyle.Left;
+            InputsPanel.Location = new Point(0, 0);
+            InputsPanel.Name = "InputsPanel";
+            InputsPanel.Size = new Size(360, 386);
+            InputsPanel.TabIndex = 48;
+            // 
+            // MiniPicturePanel
+            // 
+            MiniPicturePanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            MiniPicturePanel.Controls.Add(MiniModelPictureBox);
+            MiniPicturePanel.Dock = DockStyle.Fill;
+            MiniPicturePanel.Location = new Point(0, 0);
+            MiniPicturePanel.Name = "MiniPicturePanel";
+            MiniPicturePanel.Size = new Size(302, 383);
+            MiniPicturePanel.TabIndex = 49;
+            // 
+            // MainPicturePanel
+            // 
+            MainPicturePanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            MainPicturePanel.Controls.Add(MainModelPictureBox);
+            MainPicturePanel.Dock = DockStyle.Fill;
+            MainPicturePanel.Location = new Point(0, 0);
+            MainPicturePanel.Name = "MainPicturePanel";
+            MainPicturePanel.Size = new Size(471, 383);
+            MainPicturePanel.TabIndex = 50;
+            // 
+            // BorderPanel
+            // 
+            BorderPanel.BackgroundImage = (Image)resources.GetObject("BorderPanel.BackgroundImage");
+            BorderPanel.Dock = DockStyle.Right;
+            BorderPanel.Location = new Point(1260, 0);
+            BorderPanel.Name = "BorderPanel";
+            BorderPanel.Size = new Size(24, 386);
+            BorderPanel.TabIndex = 1;
+            // 
+            // TopPanel
+            // 
+            TopPanel.Controls.Add(PicturesSplitContainer);
+            TopPanel.Controls.Add(InputsPanel);
+            TopPanel.Controls.Add(BorderPanel);
+            TopPanel.Controls.Add(LimitsPanel);
+            TopPanel.Dock = DockStyle.Top;
+            TopPanel.Location = new Point(0, 0);
+            TopPanel.Name = "TopPanel";
+            TopPanel.Size = new Size(1284, 386);
+            TopPanel.TabIndex = 51;
+            // 
             // PicturesSplitContainer
             // 
             PicturesSplitContainer.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            PicturesSplitContainer.Location = new Point(508, 8);
+            PicturesSplitContainer.Location = new Point(504, 0);
             PicturesSplitContainer.Name = "PicturesSplitContainer";
             // 
             // PicturesSplitContainer.Panel1
             // 
-            PicturesSplitContainer.Panel1.Controls.Add(MiniModelPictureBox);
+            PicturesSplitContainer.Panel1.Controls.Add(MiniPicturePanel);
             // 
             // PicturesSplitContainer.Panel2
             // 
-            PicturesSplitContainer.Panel2.Controls.Add(MainModelPictureBox);
-            PicturesSplitContainer.Size = new Size(773, 314);
-            PicturesSplitContainer.SplitterDistance = 305;
-            PicturesSplitContainer.TabIndex = 37;
+            PicturesSplitContainer.Panel2.Controls.Add(MainPicturePanel);
+            PicturesSplitContainer.Size = new Size(777, 383);
+            PicturesSplitContainer.SplitterDistance = 302;
+            PicturesSplitContainer.TabIndex = 49;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.Silver;
-            ClientSize = new Size(1284, 461);
-            Controls.Add(PicturesSplitContainer);
-            Controls.Add(BuildButton);
+            ClientSize = new Size(1284, 762);
             Controls.Add(ErrorLabel);
             Controls.Add(ErrorPanel);
-            Controls.Add(PlatformHeightLimitsLabel);
-            Controls.Add(PlatformLengthUpLimitsLabel);
-            Controls.Add(PlatformLengthDownLimitsLabel);
-            Controls.Add(StepProtjectionHeightLimitsLabel);
-            Controls.Add(StepProjectionLengthLimitsLabel);
-            Controls.Add(WidthLimitsLabel);
-            Controls.Add(StepHeightLimitsLabel);
-            Controls.Add(StepAmountLimitsLabel);
-            Controls.Add(LengthLimitsLabel);
-            Controls.Add(HeightLimitsLabel);
-            Controls.Add(PlatformHeightLabel);
-            Controls.Add(PlatformLengthUpLabel);
-            Controls.Add(PlatformLengthDownLabel);
-            Controls.Add(StepProtjectionHeightLabel);
-            Controls.Add(StepProjectionLengthLabel);
-            Controls.Add(WidthLabel);
-            Controls.Add(PlatformHeightTextBox);
-            Controls.Add(PlatformLengthUpTextBox);
-            Controls.Add(PlatformLengthDownTextBox);
-            Controls.Add(StepProtjectionHeightTextBox);
-            Controls.Add(StepProjectionLengthTextBox);
-            Controls.Add(WidthTextBox);
-            Controls.Add(StepHeightTextBox);
-            Controls.Add(StepAmountTextBox);
-            Controls.Add(LengthTextBox);
-            Controls.Add(HeightTextBox);
-            Controls.Add(StepHeightLabel);
-            Controls.Add(StepAmountLabel);
-            Controls.Add(LengthLabel);
-            Controls.Add(HeightLabel);
+            Controls.Add(TopPanel);
             MaximizeBox = false;
-            MinimumSize = new Size(600, 450);
+            MinimumSize = new Size(400, 450);
             Name = "MainForm";
             Text = "Лестничный марш";
             FormClosing += MainForm_FormClosing;
+            ResizeEnd += MainForm_ResizeEnd;
+            Resize += MainForm_Resize;
             ErrorPanel.ResumeLayout(false);
             ErrorPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)MainModelPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)MiniModelPictureBox).EndInit();
+            LimitsPanel.ResumeLayout(false);
+            LimitsPanel.PerformLayout();
+            InputsPanel.ResumeLayout(false);
+            InputsPanel.PerformLayout();
+            MiniPicturePanel.ResumeLayout(false);
+            MainPicturePanel.ResumeLayout(false);
+            TopPanel.ResumeLayout(false);
+            TopPanel.PerformLayout();
             PicturesSplitContainer.Panel1.ResumeLayout(false);
             PicturesSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)PicturesSplitContainer).EndInit();
@@ -547,6 +685,20 @@
         private Label ErrorLabel;
         private PictureBox MainModelPictureBox;
         private PictureBox MiniModelPictureBox;
+        private Label label1;
+        private TextBox FloorsCountTextBox;
+        private Label FloorsCountLabel;
+        private TextBox textBox1;
+        private Label IsMultiFlightLabel;
+        private CheckBox IsMultiFlightСheckBox;
+        private Label FloorsCountLimitLabel;
+        private Panel LimitsPanel;
+        private Panel TopPanel;
+        private Panel InputsPanel;
+        private Panel MainPicturePanel;
+        private Panel MainPicturePanel2;
+        private Panel MiniPicturePanel;
         private SplitContainer PicturesSplitContainer;
+        private Panel BorderPanel;
     }
 }
