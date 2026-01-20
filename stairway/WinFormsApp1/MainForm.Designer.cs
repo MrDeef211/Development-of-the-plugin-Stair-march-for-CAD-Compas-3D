@@ -496,6 +496,7 @@
             MinimumSize = new Size(600, 450);
             Name = "MainForm";
             Text = "Лестничный марш";
+            FormClosing += MainForm_FormClosing;
             ErrorPanel.ResumeLayout(false);
             ErrorPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)MainModelPictureBox).EndInit();

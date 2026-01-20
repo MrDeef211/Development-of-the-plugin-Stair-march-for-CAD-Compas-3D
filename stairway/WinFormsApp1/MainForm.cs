@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
+using System.Text.Json;
+
 
 namespace UI
 {
@@ -29,6 +32,11 @@ namespace UI
         /// Текстовый эквивалент ParametersTypes на русском
         /// </summary>
         private Dictionary<ParametersTypes, string> _localization;
+        /// <summary>
+        /// Путь для сохранения json с параметрами
+        /// </summary>
+        private readonly string _path =
+            Path.Combine(AppContext.BaseDirectory, "parameters.json");
 
         public MainForm()
         {
@@ -62,7 +70,7 @@ namespace UI
             else
                 newError = e.Message;
             if (!_activeErrors.ContainsKey(newError))
-                _activeErrors[newError] = 
+                _activeErrors[newError] =
                     new List<ParametersTypes>(e.ParametersList);
 
             foreach (var parameter in e.ParametersList)
@@ -97,8 +105,8 @@ namespace UI
 
                 _activeErrors.Remove(message);
             }
-           
-           UpdateErrorBox();
+
+            UpdateErrorBox();
         }
 
         /// <summary>
@@ -118,7 +126,7 @@ namespace UI
         {
             var textBox = (TextBox)sender;
 
-            var parameter = 
+            var parameter =
                 _textboxByParameter.First(x => x.Value == textBox).Key;
 
             if (!_textboxByParameter.ContainsValue(textBox))
@@ -147,7 +155,7 @@ namespace UI
         /// Начать построение модели
         /// </summary>
         private void BuildModel(object sender, EventArgs e)
-		{
+        {
             if (_activeErrors.Count != 0)
             {
                 MessageBox.Show("Сначала исправьте все ошибки");
@@ -155,20 +163,46 @@ namespace UI
             }
             var inputParameters = _parameters.GetParameters();
 
-            var outputParameters = 
+            var outputParameters =
                 new Dictionary<ParametersTypes, double>();
 
             foreach (var parameter in inputParameters.Keys)
                 outputParameters.Add(
-                    parameter, 
+                    parameter,
                     inputParameters[parameter].Value);
-            try 
+            try
             {
                 _builder.Build(outputParameters);
             }
             catch (BuildException ex)
             {
                 MessageBox.Show($"Ошибка при построении модели: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Закрытие формы
+        /// </summary>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_activeErrors.Count != 0)
+            {
+                DialogResult result = MessageBox.Show(
+                    "Вы уверены, что хотите выйти? \n" +
+                    "У вас есть ошибки, поэтому данные не сохранятся.",    
+                    "Предупреждение",                         
+                    MessageBoxButtons.OKCancel,               
+                    MessageBoxIcon.Warning                    
+                );
+
+                if (result == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }    
+            else
+            {
+                SaveParameters(_parameters.GetParameters());
             }
         }
 
@@ -181,25 +215,25 @@ namespace UI
             _textboxByParameter = new Dictionary<ParametersTypes, TextBox>
             {
 
-            { ParametersTypes.Height,  
+            { ParametersTypes.Height,
                     HeightTextBox},
-            { ParametersTypes.Length,  
+            { ParametersTypes.Length,
                     LengthTextBox},
-            { ParametersTypes.PlatformLengthUp,  
+            { ParametersTypes.PlatformLengthUp,
                     PlatformLengthUpTextBox},
-            { ParametersTypes.PlatformLengthDown,  
+            { ParametersTypes.PlatformLengthDown,
                     PlatformLengthDownTextBox},
-            { ParametersTypes.PlatformHeight,  
+            { ParametersTypes.PlatformHeight,
                     PlatformHeightTextBox},
-            { ParametersTypes.StepAmount,  
+            { ParametersTypes.StepAmount,
                     StepAmountTextBox},
-            { ParametersTypes.StepHeight,  
+            { ParametersTypes.StepHeight,
                     StepHeightTextBox},
-            { ParametersTypes.StepProjectionHeight,  
+            { ParametersTypes.StepProjectionHeight,
                     StepProtjectionHeightTextBox},
-            { ParametersTypes.StepProjectionLength,  
+            { ParametersTypes.StepProjectionLength,
                     StepProjectionLengthTextBox},
-            { ParametersTypes.Width,  
+            { ParametersTypes.Width,
                     WidthTextBox}
 
             };
@@ -212,25 +246,25 @@ namespace UI
         {
             _localization = new Dictionary<ParametersTypes, string>
             {
-                { ParametersTypes.Height, 
+                { ParametersTypes.Height,
                     "Высота марша" },
-                { ParametersTypes.Length, 
+                { ParametersTypes.Length,
                     "Длина пролёта" },
-                { ParametersTypes.PlatformLengthUp, 
+                { ParametersTypes.PlatformLengthUp,
                     "Длина верхней платформы" },
-                { ParametersTypes.PlatformLengthDown, 
+                { ParametersTypes.PlatformLengthDown,
                     "Длина нижней платформы" },
-                { ParametersTypes.PlatformHeight, 
+                { ParametersTypes.PlatformHeight,
                     "Толщина платформы" },
-                { ParametersTypes.StepAmount, 
+                { ParametersTypes.StepAmount,
                     "Количество ступеней" },
-                { ParametersTypes.StepHeight, 
+                { ParametersTypes.StepHeight,
                     "Высота ступени" },
-                { ParametersTypes.StepProjectionHeight, 
+                { ParametersTypes.StepProjectionHeight,
                     "Ширина выступа" },
-                { ParametersTypes.StepProjectionLength, 
+                { ParametersTypes.StepProjectionLength,
                     "Глубина выступа" },
-                { ParametersTypes.Width, 
+                { ParametersTypes.Width,
                     "Ширина марша" }
             };
         }
@@ -269,6 +303,35 @@ namespace UI
 
             ErrorTextBox.Text = string.Join(Environment.NewLine, Errors);
         }
+
+        /// <summary>
+        /// Сохранить некоторый список параметров в json
+        /// </summary>
+        /// <param name="parameters">Список параметров</param>
+        private void SaveParameters(List<Model.Parameter> parameters)
+        {
+            var json = JsonSerializer.Serialize(parameters);
+            File.WriteAllText(_path, json);
+        }
+
+        /// <summary>
+        /// Загрузить параметры из json
+        /// </summary>
+        /// <param name="parameters">Список параметров</param>
+        /// <returns>Успех</returns>
+        public bool TryLoad(out List<Model.Parameter> parameters)
+        {
+            parameters = null;
+
+            if (!File.Exists(_path))
+                return false;
+
+            var json = File.ReadAllText(_path);
+            parameters =
+                JsonSerializer.Deserialize<List<Model.Parameter>>(json);
+            return parameters != null;
+        }
+
     }
 
 
