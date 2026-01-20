@@ -238,9 +238,9 @@ namespace Builders
                     ? (short)Direction_Type.dtNormal
                     : (short)Direction_Type.dtReverse;
 
-                // ВАЖНО: side зависит от directionType
+
                 extrDef.SetSideParam(
-                    direction,   // true → side1, false → side2
+                    direction,   
                     type,
                     depth,
                     0,
