@@ -21,7 +21,7 @@ namespace UI
         /// <summary>
         /// Размер окна, при котором скрываются ограничения
         /// </summary>
-        private const int _hideLimitsAt = 400;
+        private const int _hideLimitsAt = 475;
         /// <summary>
         /// Размер окна при котором скрывается малый чертёж
         /// </summary>
@@ -247,14 +247,14 @@ namespace UI
             int snapThreshold = 100;
             int newWidth;
 
-            if (Math.Abs(this.Width - _hideSmallAt) <= snapThreshold)
+            if (this.Width < _hideSmallAt && this.Width > _hideLimitsAt)
             {
                 newWidth = _hideSmallAt;
 
                 this.Size = new Size(newWidth, this.Height);
 
             }
-            if (this.Width - _hideSmallAt < -snapThreshold)
+            if (this.Width < _hideLimitsAt)
             {
                 newWidth = _minWidthForm;
 
