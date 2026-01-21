@@ -21,11 +21,15 @@ namespace UI
         /// <summary>
         /// Размер окна, при котором скрываются ограничения
         /// </summary>
-        private const int _hideLimitsAt = 475;
+        private const int _hideLimitsAt = 450;
+        /// <summary>
+        /// Размер окна, на который магнитится окно при скрытии малой картинки
+        /// </summary>
+        private const int _firstAnchorForm = 550;
         /// <summary>
         /// Размер окна при котором скрывается малый чертёж
         /// </summary>
-        private const int _hideSmallAt = 550;
+        private const int _hideSmallAt = 650;
         /// <summary>
         /// Размер окна при котором скрывается большой чертёж
         /// </summary>
@@ -247,14 +251,14 @@ namespace UI
             int snapThreshold = 100;
             int newWidth;
 
-            if (this.Width < _hideSmallAt && this.Width > _hideLimitsAt)
+            if (this.Width <= _hideSmallAt && this.Width > _hideLimitsAt)
             {
-                newWidth = _hideSmallAt;
+                newWidth = _firstAnchorForm;
 
                 this.Size = new Size(newWidth, this.Height);
 
             }
-            if (this.Width < _hideLimitsAt)
+            if (this.Width <= _hideLimitsAt)
             {
                 newWidth = _minWidthForm;
 
