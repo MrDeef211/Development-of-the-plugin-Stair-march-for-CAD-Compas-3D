@@ -1,4 +1,4 @@
-using Model;
+п»їusing Model;
 using NUnit.Framework;
 
 namespace Tests
@@ -6,14 +6,15 @@ namespace Tests
 	[TestFixture]
 	public class ParametersUnitTests
 	{
+        //TODO: refactor to property
 		private Parameters Create()
 		{
 			return new Parameters();
 		}
 
 		[Test]
-		[Description("Проверка инициализации параметра " +
-            "вне допустимого диапазона")]
+		[Description("РџСЂРѕРІРµСЂРєР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РїР°СЂР°РјРµС‚СЂР° " +
+            "РІРЅРµ РґРѕРїСѓСЃС‚РёРјРѕРіРѕ РґРёР°РїР°Р·РѕРЅР°")]
 		public void CreateOutOfRangeParameter()
 		{
 			Assert.Throws<Exception>(() =>
@@ -24,8 +25,8 @@ namespace Tests
 		}
 
         [Test]
-        [Description("Проверка создания максимального значения параметра, " +
-            "меньше минимального")]
+        [Description("РџСЂРѕРІРµСЂРєР° СЃРѕР·РґР°РЅРёСЏ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°, " +
+            "РјРµРЅСЊС€Рµ РјРёРЅРёРјР°Р»СЊРЅРѕРіРѕ")]
         public void CreateParameterMaxLessThanMinRaisesErrorEvent()
         {
             Assert.Throws<Exception>(() =>
@@ -37,8 +38,8 @@ namespace Tests
         }
 
         [Test]
-        [Description("Проверка передачи максимального значения параметра, " +
-            "меньше минимального")]
+        [Description("РџСЂРѕРІРµСЂРєР° РїРµСЂРµРґР°С‡Рё РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°, " +
+            "РјРµРЅСЊС€Рµ РјРёРЅРёРјР°Р»СЊРЅРѕРіРѕ")]
         public void SetParameterMaxLessThanMinRaisesErrorEvent()
         {
             var parameter = new Parameter(
@@ -51,7 +52,7 @@ namespace Tests
         }
 
         [Test]
-		[Description("Проверка инициализации словаря параметров")]
+		[Description("РџСЂРѕРІРµСЂРєР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃР»РѕРІР°СЂСЏ РїР°СЂР°РјРµС‚СЂРѕРІ")]
 		public void ConstructorInitializesAllParameters()
 		{
 			var parameters = Create();
@@ -60,7 +61,7 @@ namespace Tests
 			Assert.That(dict, Is.Not.Null);
 			Assert.That(dict.Count, Is.GreaterThan(0));
             Assert.That(dict.All(pair => pair.Key == pair.Value.Name),
-                Is.True, "Все ключи должны соответствовать значениям Name");
+                Is.True, "Р’СЃРµ РєР»СЋС‡Рё РґРѕР»Р¶РЅС‹ СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ Р·РЅР°С‡РµРЅРёСЏРј Name");
         }
 
 		[TestCase(ParametersTypes.Height, 3200)]
@@ -69,7 +70,7 @@ namespace Tests
 		[TestCase(ParametersTypes.StepAmount, 20)]
 		[TestCase(ParametersTypes.StepHeight, 160)]
 		[TestCase(ParametersTypes.Width, 1000)]
-		[Description("Проверка передачи параметра")]
+		[Description("РџСЂРѕРІРµСЂРєР° РїРµСЂРµРґР°С‡Рё РїР°СЂР°РјРµС‚СЂР°")]
 		public void SetParameterChangesValue(
             ParametersTypes parameter, 
             double value)
@@ -83,7 +84,7 @@ namespace Tests
 		}
 
 		[Test]
-		[Description("Проверка передачи параметра вне диапазона")]
+		[Description("РџСЂРѕРІРµСЂРєР° РїРµСЂРµРґР°С‡Рё РїР°СЂР°РјРµС‚СЂР° РІРЅРµ РґРёР°РїР°Р·РѕРЅР°")]
 		public void SetParameterOutOfRangeRaisesErrorEvent()
 		{
 			var parameters = Create();
@@ -104,7 +105,7 @@ namespace Tests
 		}
 
         [Test]
-        [Description("Проверка генерации нескольких ошибок подряд")]
+        [Description("РџСЂРѕРІРµСЂРєР° РіРµРЅРµСЂР°С†РёРё РЅРµСЃРєРѕР»СЊРєРёС… РѕС€РёР±РѕРє РїРѕРґСЂСЏРґ")]
         public void MultipleInvalidParametersRaiseMultipleErrors()
         {
             var parameters = Create();
@@ -119,8 +120,8 @@ namespace Tests
         }
 
         [Test]
-        [Description("Проверка отправки события обновления " +
-            "при изменении параметра")]
+        [Description("РџСЂРѕРІРµСЂРєР° РѕС‚РїСЂР°РІРєРё СЃРѕР±С‹С‚РёСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ " +
+            "РїСЂРё РёР·РјРµРЅРµРЅРёРё РїР°СЂР°РјРµС‚СЂР°")]
         public void SetParameterRaisesUpdateEvent()
         {
             var parameters = Create();
@@ -136,8 +137,8 @@ namespace Tests
         }
 
         [Test]
-        [Description("Проверка изменения максимального выступа " +
-            "при изменении высоты ступени")]
+        [Description("РџСЂРѕРІРµСЂРєР° РёР·РјРµРЅРµРЅРёСЏ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ РІС‹СЃС‚СѓРїР° " +
+            "РїСЂРё РёР·РјРµРЅРµРЅРёРё РІС‹СЃРѕС‚С‹ СЃС‚СѓРїРµРЅРё")]
         public void ChangingStepHeightUpdatesProjectionLimits()
         {
             var parameters = Create();
@@ -155,8 +156,8 @@ namespace Tests
         }
 
         [Test]
-        [Description("Исправление ошибки выступа " +
-            "при изменении высоты ступени")]
+        [Description("РСЃРїСЂР°РІР»РµРЅРёРµ РѕС€РёР±РєРё РІС‹СЃС‚СѓРїР° " +
+            "РїСЂРё РёР·РјРµРЅРµРЅРёРё РІС‹СЃРѕС‚С‹ СЃС‚СѓРїРµРЅРё")]
         public void StepProjectionErrorIsFixedAfterStepHeightChange()
         {
             var parameters = Create();
@@ -164,7 +165,8 @@ namespace Tests
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
 
-            parameters.SetParameter(ParametersTypes.StepProjectionLength, 100); // ошибка
+            //TODO: С‚СѓС‚ Рё РЅРёР¶Рµ РєРѕРјРјРµРЅС‚С‹ РќРђР” СЃС‚СЂРѕРєРѕР№
+            parameters.SetParameter(ParametersTypes.StepProjectionLength, 100); // РѕС€РёР±РєР°
 
             Assert.That(errors, Is.Not.Empty);
 
@@ -176,7 +178,7 @@ namespace Tests
         }
 
         [Test]
-		[Description("Проверка передачи неправильного количества ступеней")]
+		[Description("РџСЂРѕРІРµСЂРєР° РїРµСЂРµРґР°С‡Рё РЅРµРїСЂР°РІРёР»СЊРЅРѕРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СѓРїРµРЅРµР№")]
 		public void SetStepAmountOutOfRangeRaisesErrorEvent()
 		{
 			var parameters = Create();
@@ -193,7 +195,7 @@ namespace Tests
 		}
 
 		[Test]
-		[Description("Проверка передачи неправильного выступа ступени")]
+		[Description("РџСЂРѕРІРµСЂРєР° РїРµСЂРµРґР°С‡Рё РЅРµРїСЂР°РІРёР»СЊРЅРѕРіРѕ РІС‹СЃС‚СѓРїР° СЃС‚СѓРїРµРЅРё")]
 		public void SetStepProjectionOutOfRangeRaisesErrorEvent()
 		{
 			var parameters = Create();
@@ -212,8 +214,8 @@ namespace Tests
 		}
 
 		[Test]
-		[Description("Проверка передачи " +
-            "не целочисленного количества ступеней")]
+		[Description("РџСЂРѕРІРµСЂРєР° РїРµСЂРµРґР°С‡Рё " +
+            "РЅРµ С†РµР»РѕС‡РёСЃР»РµРЅРЅРѕРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СѓРїРµРЅРµР№")]
 		public void StepAmountNotIntegerRaisesError()
 		{
 			var parameters = Create();
@@ -230,8 +232,8 @@ namespace Tests
 		}
 
 		[Test]
-		[Description("Проверка пересчета высоты ступени " +
-            "при изменении высоты")]
+		[Description("РџСЂРѕРІРµСЂРєР° РїРµСЂРµСЃС‡РµС‚Р° РІС‹СЃРѕС‚С‹ СЃС‚СѓРїРµРЅРё " +
+            "РїСЂРё РёР·РјРµРЅРµРЅРёРё РІС‹СЃРѕС‚С‹")]
 		public void ChangingHeightRecalculatesStepHeight()
 		{
 			var parameters = Create();
@@ -246,8 +248,8 @@ namespace Tests
 		}
 
         [Test]
-        [Description("Полная проверка кросс-валидации " +
-            "после пересчёта высоты ступени")]
+        [Description("РџРѕР»РЅР°СЏ РїСЂРѕРІРµСЂРєР° РєСЂРѕСЃСЃ-РІР°Р»РёРґР°С†РёРё " +
+            "РїРѕСЃР»Рµ РїРµСЂРµСЃС‡С‘С‚Р° РІС‹СЃРѕС‚С‹ СЃС‚СѓРїРµРЅРё")]
         public void HeightChangeTriggersFullRevalidationChain()
         {
             var parameters = Create();
@@ -263,25 +265,25 @@ namespace Tests
 
             parameters.SetParameter(ParametersTypes.Height, 6000);
 
-            // Проверка пересчёта
+            // РџСЂРѕРІРµСЂРєР° РїРµСЂРµСЃС‡С‘С‚Р°
             Assert.That(
                 parameters.GetParameter(ParametersTypes.StepHeight),
                 Is.EqualTo(400));
 
-            // Проверка обновления границ выступа
+            // РџСЂРѕРІРµСЂРєР° РѕР±РЅРѕРІР»РµРЅРёСЏ РіСЂР°РЅРёС† РІС‹СЃС‚СѓРїР°
             var projection =
                 parameters.GetParameters()[ParametersTypes.StepProjectionLength];
 
             Assert.That(projection.Max, Is.EqualTo(200));
 
-            // Проверка кросс-валидации угла
+            // РџСЂРѕРІРµСЂРєР° РєСЂРѕСЃСЃ-РІР°Р»РёРґР°С†РёРё СѓРіР»Р°
             Assert.That(errors, Has.Some.Matches<ErrorArgs>(e =>
                 e.ParametersList.Contains(ParametersTypes.Height) &&
                 e.ParametersList.Contains(ParametersTypes.Length)));
         }
 
         [Test]
-        [Description("Исправление ошибки высоты ступени после пересчёта")]
+        [Description("РСЃРїСЂР°РІР»РµРЅРёРµ РѕС€РёР±РєРё РІС‹СЃРѕС‚С‹ СЃС‚СѓРїРµРЅРё РїРѕСЃР»Рµ РїРµСЂРµСЃС‡С‘С‚Р°")]
         public void StepHeightErrorIsFixedAfterRecalculation()
         {
             var parameters = Create();
@@ -289,23 +291,23 @@ namespace Tests
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
 
-            // Создаём ошибку
+            // РЎРѕР·РґР°С‘Рј РѕС€РёР±РєСѓ
             parameters.SetParameter(ParametersTypes.Length, 12000);
-            parameters.SetParameter(ParametersTypes.Height, 8000); // StepHeight = 400 (ошибка)
+            parameters.SetParameter(ParametersTypes.Height, 8000); // StepHeight = 400 (РѕС€РёР±РєР°)
 
             Assert.That(errors, Is.Not.Empty);
 
             errors.Clear();
 
-            // Исправляем
+            // РСЃРїСЂР°РІР»СЏРµРј
             parameters.SetParameter(ParametersTypes.StepAmount, 50); // StepHeight = 160
 
             Assert.That(errors, Is.Empty);
         }
 
         [Test]
-		[Description("Проверка пересчета высоты марша " +
-            "при изменении высоты ступени")]
+		[Description("РџСЂРѕРІРµСЂРєР° РїРµСЂРµСЃС‡РµС‚Р° РІС‹СЃРѕС‚С‹ РјР°СЂС€Р° " +
+            "РїСЂРё РёР·РјРµРЅРµРЅРёРё РІС‹СЃРѕС‚С‹ СЃС‚СѓРїРµРЅРё")]
 		public void ChangingStepHeightRecalculatesHeight()
 		{
 			var parameters = Create();
@@ -319,8 +321,8 @@ namespace Tests
 		}
 
         [Test]
-        [Description("Кросс-валидация угла марша " +
-            "после пересчёта высоты ступени")]
+        [Description("РљСЂРѕСЃСЃ-РІР°Р»РёРґР°С†РёСЏ СѓРіР»Р° РјР°СЂС€Р° " +
+            "РїРѕСЃР»Рµ РїРµСЂРµСЃС‡С‘С‚Р° РІС‹СЃРѕС‚С‹ СЃС‚СѓРїРµРЅРё")]
         public void StepHeightChangeTriggersStairAngleValidation()
         {
             var parameters = Create();
@@ -338,8 +340,8 @@ namespace Tests
         }
 
         [Test]
-        [Description("Исправление ошибки высоты марша " +
-            "после изменения высоты ступени")]
+        [Description("РСЃРїСЂР°РІР»РµРЅРёРµ РѕС€РёР±РєРё РІС‹СЃРѕС‚С‹ РјР°СЂС€Р° " +
+            "РїРѕСЃР»Рµ РёР·РјРµРЅРµРЅРёСЏ РІС‹СЃРѕС‚С‹ СЃС‚СѓРїРµРЅРё")]
         public void HeightErrorIsFixedAfterStepHeightChange()
         {
             var parameters = Create();
@@ -347,7 +349,7 @@ namespace Tests
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
 
-            parameters.SetParameter(ParametersTypes.StepHeight, 500); // Height = 10000 (ошибка)
+            parameters.SetParameter(ParametersTypes.StepHeight, 500); // Height = 10000 (РѕС€РёР±РєР°)
 
             Assert.That(errors, Is.Not.Empty);
 
@@ -359,7 +361,7 @@ namespace Tests
         }
 
         [Test]
-        [Description("Проверка валидации глубины проступи")]
+        [Description("РџСЂРѕРІРµСЂРєР° РІР°Р»РёРґР°С†РёРё РіР»СѓР±РёРЅС‹ РїСЂРѕСЃС‚СѓРїРё")]
         public void StepTreadOutOfRangeRaisesError()
         {
             var parameters = Create();
@@ -380,7 +382,7 @@ namespace Tests
         }
 
         [Test]
-        [Description("Исправление ошибки глубины проступи после пересчёта")]
+        [Description("РСЃРїСЂР°РІР»РµРЅРёРµ РѕС€РёР±РєРё РіР»СѓР±РёРЅС‹ РїСЂРѕСЃС‚СѓРїРё РїРѕСЃР»Рµ РїРµСЂРµСЃС‡С‘С‚Р°")]
         public void StepTreadErrorIsFixedAfterCorrection()
         {
             var parameters = Create();
@@ -402,7 +404,7 @@ namespace Tests
         }
 
         [Test]
-        [Description("Проверка ввода допустимой глубины проступи")]
+        [Description("РџСЂРѕРІРµСЂРєР° РІРІРѕРґР° РґРѕРїСѓСЃС‚РёРјРѕР№ РіР»СѓР±РёРЅС‹ РїСЂРѕСЃС‚СѓРїРё")]
         public void ValidStepTreadDoesNotRaiseError()
         {
             var parameters = Create();
@@ -413,7 +415,7 @@ namespace Tests
             parameters.SetParameter(ParametersTypes.Length, 3000);
             parameters.SetParameter(ParametersTypes.StepAmount, 10);
 
-            //Сбрасываем т.к предыдущие значения могли вызвать ошибку
+            //РЎР±СЂР°СЃС‹РІР°РµРј С‚.Рє РїСЂРµРґС‹РґСѓС‰РёРµ Р·РЅР°С‡РµРЅРёСЏ РјРѕРіР»Рё РІС‹Р·РІР°С‚СЊ РѕС€РёР±РєСѓ
             errorRaised = false;
             parameters.SetParameter(ParametersTypes.StepProjectionLength, 50);
 
@@ -421,7 +423,7 @@ namespace Tests
         }
 
         [Test]
-		[Description("Проверка валидации угла марша")]
+		[Description("РџСЂРѕРІРµСЂРєР° РІР°Р»РёРґР°С†РёРё СѓРіР»Р° РјР°СЂС€Р°")]
 		public void StairAngleOutOfRangeRaisesError()
 		{
 			var parameters = new Parameters();
@@ -438,7 +440,7 @@ namespace Tests
 		}
 
         [Test]
-        [Description("Исправление ошибки угла марша после изменения длины")]
+        [Description("РСЃРїСЂР°РІР»РµРЅРёРµ РѕС€РёР±РєРё СѓРіР»Р° РјР°СЂС€Р° РїРѕСЃР»Рµ РёР·РјРµРЅРµРЅРёСЏ РґР»РёРЅС‹")]
         public void StairAngleErrorIsFixedAfterLengthChange()
         {
             var parameters = Create();
@@ -447,19 +449,19 @@ namespace Tests
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
 
             parameters.SetParameter(ParametersTypes.Height, 4000);
-            parameters.SetParameter(ParametersTypes.Length, 1000); // угол > 50
+            parameters.SetParameter(ParametersTypes.Length, 1000); // СѓРіРѕР» > 50
 
             Assert.That(errors, Is.Not.Empty);
 
             errors.Clear();
 
-            parameters.SetParameter(ParametersTypes.Length, 6000); // нормальный угол
+            parameters.SetParameter(ParametersTypes.Length, 6000); // РЅРѕСЂРјР°Р»СЊРЅС‹Р№ СѓРіРѕР»
 
             Assert.That(errors, Is.Empty);
         }
 
         [Test]
-        [Description("Проверка ввода допустимого угла марша")]
+        [Description("РџСЂРѕРІРµСЂРєР° РІРІРѕРґР° РґРѕРїСѓСЃС‚РёРјРѕРіРѕ СѓРіР»Р° РјР°СЂС€Р°")]
         public void StairAngleInRangeDoesNotRaiseError()
         {
             var parameters = Create();
@@ -475,7 +477,7 @@ namespace Tests
 
 
         [Test]
-		[Description("Проверка обновления всех параметров")]
+		[Description("РџСЂРѕРІРµСЂРєР° РѕР±РЅРѕРІР»РµРЅРёСЏ РІСЃРµС… РїР°СЂР°РјРµС‚СЂРѕРІ")]
 		public void FullUpdateParametersSendsAllParameters()
 		{
 			var parameters = Create();

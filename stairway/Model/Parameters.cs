@@ -18,10 +18,12 @@ namespace Model
         /// Список вводимых параметров
         /// </summary>
         private Dictionary<ParametersTypes, Parameter> _parameters;
+
         /// <summary>
         /// Угол лестницы в градусах
         /// </summary>
         private double _stairCorner;
+
         /// <summary>
         /// Длина проступи ступени
         /// </summary>
@@ -73,6 +75,7 @@ namespace Model
             UpdateParameterErrorsEvent?.Invoke(this, parameter);
         }
 
+        //TODO: XML
         private void UpdateParameterValue(
             ParametersTypes parameters)
         {
@@ -104,6 +107,7 @@ namespace Model
 			//Запуск внутренних валидаций по необходимости
 			switch (parameter)
             {
+                //TODO: {}
                 case ParametersTypes.Length:
                 case ParametersTypes.StepProjectionLength:
                     InternalValidation(parameter);
@@ -147,7 +151,7 @@ namespace Model
             _parameters = new Dictionary<ParametersTypes, Parameter>
 
             {
-
+                //TODO: отступы
             {ParametersTypes.Height,
                     new Parameter(ParametersTypes.Height, 
                     8000, 500, 3200) },

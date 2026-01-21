@@ -1,4 +1,4 @@
-using Builders;
+п»їusing Builders;
 using Model;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -7,26 +7,31 @@ using System.Reflection.Metadata;
 
 namespace UI
 {
+    //TODO: RSDN
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Строитель модели
+        /// РЎС‚СЂРѕРёС‚РµР»СЊ РјРѕРґРµР»Рё
         /// </summary>
         private Builder _builder;
+
         /// <summary>
-        /// Обработчик параметров модели
+        /// РћР±СЂР°Р±РѕС‚С‡РёРє РїР°СЂР°РјРµС‚СЂРѕРІ РјРѕРґРµР»Рё
         /// </summary>
         private Parameters _parameters;
+
         /// <summary>
-        /// Привязанные параметры для TextBox
+        /// РџСЂРёРІСЏР·Р°РЅРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ TextBox
         /// </summary>
         private Dictionary<ParametersTypes, TextBox> _textboxByParameter;
+
         /// <summary>
-        /// Список активных ошибок
+        /// РЎРїРёСЃРѕРє Р°РєС‚РёРІРЅС‹С… РѕС€РёР±РѕРє
         /// </summary>
         private Dictionary<string, List<ParametersTypes>> _activeErrors;
+
         /// <summary>
-        /// Текстовый эквивалент ParametersTypes на русском
+        /// РўРµРєСЃС‚РѕРІС‹Р№ СЌРєРІРёРІР°Р»РµРЅС‚ ParametersTypes РЅР° СЂСѓСЃСЃРєРѕРј
         /// </summary>
         private Dictionary<ParametersTypes, string> _localization;
 
@@ -48,11 +53,11 @@ namespace UI
         }
 
         /// <summary>
-        /// Обработчик события появления ошибки
+        /// РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕР±С‹С‚РёСЏ РїРѕСЏРІР»РµРЅРёСЏ РѕС€РёР±РєРё
         /// </summary>
-        /// <param name="sender">Источник ошибки</param>
+        /// <param name="sender">РСЃС‚РѕС‡РЅРёРє РѕС€РёР±РєРё</param>
         /// <param name="e">
-        /// Сообщение ошибки со списком переменных с ошибкой
+        /// РЎРѕРѕР±С‰РµРЅРёРµ РѕС€РёР±РєРё СЃРѕ СЃРїРёСЃРєРѕРј РїРµСЂРµРјРµРЅРЅС‹С… СЃ РѕС€РёР±РєРѕР№
         /// </param>
         private void IsErrorAppered(object sender, ErrorArgs e)
         {
@@ -76,13 +81,13 @@ namespace UI
         }
 
         /// <summary>
-        /// Обработчик события обновления ошибок параметра 
-        /// для очистки связанных ошибок
+        /// РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕР±С‹С‚РёСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РѕС€РёР±РѕРє РїР°СЂР°РјРµС‚СЂР° 
+        /// РґР»СЏ РѕС‡РёСЃС‚РєРё СЃРІСЏР·Р°РЅРЅС‹С… РѕС€РёР±РѕРє
         /// </summary>
-        /// <param name="e">Обновлённый параметр</param>
+        /// <param name="e">РћР±РЅРѕРІР»С‘РЅРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ</param>
         private void ParameterUpdateErrors(object sender, ParametersTypes e)
         {
-            // Находим сообщения, связанные с этим параметром
+            // РќР°С…РѕРґРёРј СЃРѕРѕР±С‰РµРЅРёСЏ, СЃРІСЏР·Р°РЅРЅС‹Рµ СЃ СЌС‚РёРј РїР°СЂР°РјРµС‚СЂРѕРј
             var messagesToRemove = _activeErrors
                 .Where(kvp => kvp.Value.Contains(e))
                 .Select(kvp => kvp.Key)
@@ -102,9 +107,9 @@ namespace UI
         }
 
         /// <summary>
-        /// Обработчик события обновления значения параметра
+        /// РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕР±С‹С‚РёСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ Р·РЅР°С‡РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°
         /// </summary>
-        /// <param name="e">Обновлённый параметр</param>
+        /// <param name="e">РћР±РЅРѕРІР»С‘РЅРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ</param>
         private void ParameterUpdateValue(object sender, ParametersTypes e)
         {
             _textboxByParameter[e].Text =
@@ -112,7 +117,7 @@ namespace UI
         }
 
         /// <summary>
-        /// Событие введения параметра в поле
+        /// РЎРѕР±С‹С‚РёРµ РІРІРµРґРµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР° РІ РїРѕР»Рµ
         /// </summary>
         private void ParameterEntered(object sender, KeyEventArgs e)
         {
@@ -124,7 +129,7 @@ namespace UI
             if (!_textboxByParameter.ContainsValue(textBox))
             {
                 IsErrorAppered(this, new ErrorArgs(
-                    "Параметр не должен быть пустым",
+                    "РџР°СЂР°РјРµС‚СЂ РЅРµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј",
                     new List<ParametersTypes> { parameter }));
                 return;
             }
@@ -136,7 +141,7 @@ namespace UI
             else
             {
                 IsErrorAppered(this, new ErrorArgs(
-                    "Некорректный формат числа",
+                    "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ С„РѕСЂРјР°С‚ С‡РёСЃР»Р°",
                     new List<ParametersTypes> { parameter }));
             }
         }
@@ -144,13 +149,13 @@ namespace UI
 
 
         /// <summary>
-        /// Начать построение модели
+        /// РќР°С‡Р°С‚СЊ РїРѕСЃС‚СЂРѕРµРЅРёРµ РјРѕРґРµР»Рё
         /// </summary>
         private void BuildModel(object sender, EventArgs e)
 		{
             if (_activeErrors.Count != 0)
             {
-                MessageBox.Show("Сначала исправьте все ошибки");
+                MessageBox.Show("РЎРЅР°С‡Р°Р»Р° РёСЃРїСЂР°РІСЊС‚Рµ РІСЃРµ РѕС€РёР±РєРё");
                 return;
             }
             var inputParameters = _parameters.GetParameters();
@@ -168,19 +173,19 @@ namespace UI
             }
             catch (BuildException ex)
             {
-                MessageBox.Show($"Ошибка при построении модели: {ex.Message}");
+                MessageBox.Show($"РћС€РёР±РєР° РїСЂРё РїРѕСЃС‚СЂРѕРµРЅРёРё РјРѕРґРµР»Рё: {ex.Message}");
             }
         }
 
         /// <summary>
-        /// Инициализирует привязку TextBox и 
-        /// соответствующие им ParametersTypes
+        /// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РїСЂРёРІСЏР·РєСѓ TextBox Рё 
+        /// СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ РёРј ParametersTypes
         /// </summary>
         private void InitializeUIBindings()
         {
             _textboxByParameter = new Dictionary<ParametersTypes, TextBox>
             {
-
+            //TODO: refactor
             { ParametersTypes.Height,  
                     HeightTextBox},
             { ParametersTypes.Length,  
@@ -206,55 +211,55 @@ namespace UI
         }
 
         /// <summary>
-        /// Инициализирует заполнение _localization
+        /// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ Р·Р°РїРѕР»РЅРµРЅРёРµ _localization
         /// </summary>
         private void InitializeLocalization()
         {
             _localization = new Dictionary<ParametersTypes, string>
             {
                 { ParametersTypes.Height, 
-                    "Высота марша" },
+                    "Р’С‹СЃРѕС‚Р° РјР°СЂС€Р°" },
                 { ParametersTypes.Length, 
-                    "Длина пролёта" },
+                    "Р”Р»РёРЅР° РїСЂРѕР»С‘С‚Р°" },
                 { ParametersTypes.PlatformLengthUp, 
-                    "Длина верхней платформы" },
+                    "Р”Р»РёРЅР° РІРµСЂС…РЅРµР№ РїР»Р°С‚С„РѕСЂРјС‹" },
                 { ParametersTypes.PlatformLengthDown, 
-                    "Длина нижней платформы" },
+                    "Р”Р»РёРЅР° РЅРёР¶РЅРµР№ РїР»Р°С‚С„РѕСЂРјС‹" },
                 { ParametersTypes.PlatformHeight, 
-                    "Толщина платформы" },
+                    "РўРѕР»С‰РёРЅР° РїР»Р°С‚С„РѕСЂРјС‹" },
                 { ParametersTypes.StepAmount, 
-                    "Количество ступеней" },
+                    "РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СѓРїРµРЅРµР№" },
                 { ParametersTypes.StepHeight, 
-                    "Высота ступени" },
+                    "Р’С‹СЃРѕС‚Р° СЃС‚СѓРїРµРЅРё" },
                 { ParametersTypes.StepProjectionHeight, 
-                    "Ширина выступа" },
+                    "РЁРёСЂРёРЅР° РІС‹СЃС‚СѓРїР°" },
                 { ParametersTypes.StepProjectionLength, 
-                    "Глубина выступа" },
+                    "Р“Р»СѓР±РёРЅР° РІС‹СЃС‚СѓРїР°" },
                 { ParametersTypes.Width, 
-                    "Ширина марша" }
+                    "РЁРёСЂРёРЅР° РјР°СЂС€Р°" }
             };
         }
 
         /// <summary>
-        /// Подсветить textBox
+        /// РџРѕРґСЃРІРµС‚РёС‚СЊ textBox
         /// </summary>
-        /// <param name="textBox">Целевой textBox</param>
+        /// <param name="textBox">Р¦РµР»РµРІРѕР№ textBox</param>
         private void MarkTextboxAsError(TextBox textBox)
         {
             textBox.BackColor = Color.LightCoral;
         }
 
         /// <summary>
-        /// Убрать подсветку для textBox
+        /// РЈР±СЂР°С‚СЊ РїРѕРґСЃРІРµС‚РєСѓ РґР»СЏ textBox
         /// </summary>
-        /// <param name="textBox">Целевой textBox</param>
+        /// <param name="textBox">Р¦РµР»РµРІРѕР№ textBox</param>
         private void ClearTextboxError(TextBox textBox)
         {
             textBox.BackColor = SystemColors.Window;
         }
 
         /// <summary>
-        /// Обновить список ошибок
+        /// РћР±РЅРѕРІРёС‚СЊ СЃРїРёСЃРѕРє РѕС€РёР±РѕРє
         /// </summary>
         private void UpdateErrorBox()
         {
@@ -264,7 +269,7 @@ namespace UI
                 return;
             }
 
-            // Берём ВСЕ строки ошибок из всех параметров
+            // Р‘РµСЂС‘Рј Р’РЎР• СЃС‚СЂРѕРєРё РѕС€РёР±РѕРє РёР· РІСЃРµС… РїР°СЂР°РјРµС‚СЂРѕРІ
             var Errors = _activeErrors.Keys;
 
             ErrorTextBox.Text = string.Join(Environment.NewLine, Errors);
