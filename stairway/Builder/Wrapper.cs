@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Builders
 {
+    //TODO: RSDN
     internal class Wrapper
     {
         /// <summary>
@@ -48,6 +49,7 @@ namespace Builders
         /// <exception cref="BuildException">Компас не запущен</exception>
         public void OpenCAD(KompasObject kompas)
         {
+            //TODO: {}
             if (kompas == null)
                 throw new BuildException("Компас не запущен. " +
                     "Вызови CreateCADWindow().");
@@ -104,6 +106,7 @@ namespace Builders
         /// </exception>
         public void OpenFile(string path, bool readOnly, bool visible)
         {
+            //TODO: {}
             if (_kompas == null)
                 throw new BuildException(
                     "Компас не запущен. Вызови OpenCAD().");
@@ -111,8 +114,10 @@ namespace Builders
             _kompas.Visible = visible;
 
             ksDocument3D doc = (ksDocument3D)_kompas.Document3D();
+            //TODO: rename
             bool ok = doc.Open(path, readOnly);
 
+            //TODO: {}
             if (!ok)
                 throw new BuildException(
                     $"Не удалось открыть файл: {path}");
@@ -129,6 +134,7 @@ namespace Builders
         /// </exception>
         public void CreateFile()
         {
+            //TODO: {}
             if (_kompas == null)
                 throw new BuildException(
                     "Компас не запущен. Вызови OpenCAD().");
@@ -140,6 +146,7 @@ namespace Builders
             // получаем Part верхнего уровня
             _part = (ksPart)_doc3D.GetPart((short)Part_Type.pTop_Part);
 
+            //TODO: {}
             if (_part == null)
                 throw new BuildException("Не удалось получить " +
                     "ksPart для нового документа.");
@@ -178,6 +185,7 @@ namespace Builders
         public long Createline( double x1, double y1,
             double x2, double y2)
         {
+            //TODO: {}
             if (_sketchEdit == null)
                 throw new BuildException("Активный эскиз не установлен");
 
@@ -198,6 +206,7 @@ namespace Builders
         public void Extrusion(bool direction, short type,
             double depth, bool bothDirections)
         {
+            //TODO: {}
             if (_activeSketch == null)
                 throw new BuildException("Эскиз еще не создан.");
 
@@ -209,6 +218,7 @@ namespace Builders
                 (ksEntity)_part.NewEntity(
                     (short)Obj3dType.o3d_bossExtrusion);
 
+            //TODO: {}
             if (extr == null)
                 throw new BuildException("Не удалось создать " +
                     "сущность выдавливания.");
@@ -217,6 +227,7 @@ namespace Builders
             ksBossExtrusionDefinition extrDef =
                 (ksBossExtrusionDefinition)extr.GetDefinition();
 
+            //TODO: {}
             if (extrDef == null)
                 throw new BuildException("Не удалось получить " +
                     "ksBossExtrusionDefinition.");

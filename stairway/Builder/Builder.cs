@@ -12,6 +12,7 @@ namespace Builders
     /// </summary>
     public class Builder
     {
+        //TODO: RSDN
         private Wrapper _wrapper;
         /// <summary>
         /// Текущий этаж
@@ -32,6 +33,7 @@ namespace Builders
         /// <param name="parameters">Параметры модели</param>
         public void Build(Dictionary<ParametersTypes, double> parameters, bool IsMultiFlight)
         {
+            //TODO: {}
             if (!_wrapper.KompasIsDefined())
                 _wrapper.CreateCADWindow();
 

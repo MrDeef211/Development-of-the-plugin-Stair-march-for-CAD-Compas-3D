@@ -19,6 +19,7 @@ namespace Model
         /// Список вводимых параметров
         /// </summary>
         private Dictionary<ParametersTypes, Parameter> _parameters;
+
         /// <summary>
         /// Строить дополнительные секции
         /// </summary>
@@ -27,6 +28,7 @@ namespace Model
         /// Угол лестницы в градусах
         /// </summary>
         private double _stairCorner;
+
         /// <summary>
         /// Длина проступи ступени
         /// </summary>
@@ -81,7 +83,7 @@ namespace Model
         /// <summary>
         /// Событие обновления значения параметра на форме
         /// </summary>
-        /// <param name="parameters"></param>
+        /// <param name="parameters">Изменённый параметр</param>
         private void UpdateParameterValue(
             ParametersTypes parameters)
         {
@@ -113,6 +115,7 @@ namespace Model
 			//Запуск внутренних валидаций по необходимости
 			switch (parameter)
             {
+                //TODO: {}
                 case ParametersTypes.Length:
                 case ParametersTypes.StepProjectionLength:
                     InternalValidation(parameter);
@@ -185,45 +188,75 @@ namespace Model
         private void InitializeNewParameters()
         {
             _parameters = new Dictionary<ParametersTypes, Parameter>
-
             {
-
-                {ParametersTypes.Height,
-                    new Parameter(ParametersTypes.Height, 
-                    8000, 500, 3200) },
+                //TODO: отступы
+			    {ParametersTypes.Height,
+                    new Parameter(
+					    ParametersTypes.Height, 
+                        8000, 
+					    500, 
+					    3200) },
                 {ParametersTypes.Length, 
-                    new Parameter(ParametersTypes.Length, 
-                    12000, 500, 5000) },
+                    new Parameter(
+					    ParametersTypes.Length, 
+                        12000, 
+						500, 
+						5000) },
                 {ParametersTypes.PlatformLengthUp, 
-                    new Parameter(ParametersTypes.PlatformLengthUp, 
-                    5000, 1000, 1500) },
+                    new Parameter(
+					    ParametersTypes.PlatformLengthUp, 
+                        5000, 
+						1000, 
+						1500) },
                 {ParametersTypes.PlatformLengthDown, 
-                    new Parameter(ParametersTypes.PlatformLengthDown, 
-                    5000, 1000, 1500) },
+                    new Parameter(
+					    ParametersTypes.PlatformLengthDown, 
+                        5000, 
+						1000, 
+						1500) },
                 {ParametersTypes.PlatformHeight, 
-                    new Parameter(ParametersTypes.PlatformHeight, 
-                    500, 100, 200) },
+                    new Parameter(
+					    ParametersTypes.PlatformHeight, 
+                        500, 
+						100, 
+						200) },
                 {ParametersTypes.StepAmount, 
-                    new Parameter(ParametersTypes.StepAmount, 
-                    60, 1, 20) },
+                    new Parameter(
+					    ParametersTypes.StepAmount, 
+                        60, 
+						1, 
+						20) },
                 {ParametersTypes.StepHeight, 
-                    new Parameter(ParametersTypes.StepHeight, 
-                    250, 120, 160) },
+                    new Parameter(
+					    ParametersTypes.StepHeight, 
+                        250, 
+						120, 
+						160) },
                 {ParametersTypes.StepProjectionHeight, 
-                    new Parameter(ParametersTypes.StepProjectionHeight, 
-                    80, 0, 25) },
+                    new Parameter(
+					    ParametersTypes.StepProjectionHeight, 
+						80, 
+						0, 
+						25) },
                 {ParametersTypes.StepProjectionLength, 
-                    new Parameter(ParametersTypes.StepProjectionLength, 
-                    80, 0, 20) },
+                    new Parameter(
+						ParametersTypes.StepProjectionLength, 
+						80, 
+						0, 
+						20) },
                 {ParametersTypes.Width, 
-                    new Parameter(ParametersTypes.Width, 
-                    2500, 800, 1000)},
+                    new Parameter(
+						ParametersTypes.Width, 
+						2500, 
+						800, 
+						1000)},
                 {ParametersTypes.FloorsCount,
-                    new Parameter(ParametersTypes.FloorsCount,
-                    25, 0, 1)}
-
+                    new Parameter(
+						ParametersTypes.FloorsCount,
+						25, 
+						0, 
+						1)}
             };
-
         }
 
         /// <summary>
@@ -400,9 +433,5 @@ namespace Model
                             ParametersTypes.StepProjectionLength });
             }
         }
-
-
-
-
     }
 }

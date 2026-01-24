@@ -15,18 +15,23 @@ namespace Model
         /// Имя параметра
         /// </summary>
         private readonly ParametersTypes _name;
+
         /// <summary>
         /// Максимальное значение параметра
         /// </summary>
         private double _max;
+
         /// <summary>
         /// Минимальное значение параметра
         /// </summary>
         private double _min;
+
         /// <summary>
         /// Значение параметра
         /// </summary>
         private double _value;
+
+        //TODO: remove
         ///// <summary>
         ///// Параметр успешно прошёл валидацию
         ///// </summary>
@@ -49,6 +54,7 @@ namespace Model
             _max = max;
             _min = min;
 
+            //TODO: {}
             if (min >= max)
                 throw new Exception(name +
                     " Минимальное значение параметра " +
@@ -75,6 +81,7 @@ namespace Model
         { 
             get { return _max; } 
             set {
+                //TODO: {}
                 if (value < _min)
                     _max = _min;
                 else
@@ -97,6 +104,7 @@ namespace Model
             get { return _value; }
             set { _value = value; }
         }
+        //TODO: remove
         ///// <summary>
         ///// Параметр успешно прошёл валидацию
         ///// </summary>
