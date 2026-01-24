@@ -37,7 +37,7 @@ namespace Builders
         /// <param name="parameters">Параметры модели</param>
         public void Build(Dictionary<ParametersTypes, double> parameters, bool IsMultiFlight)
         {
-            //TODO: {}
+            //TODO: {} (исправил)
             if (!_wrapper.KompasIsDefined())
             { 
             _wrapper.CreateCADWindow();
@@ -249,11 +249,11 @@ namespace Builders
             int stepAmount, 
             double stepHeight, 
             double stepProjectionLength, 
-            double stepProjectionHenght,
+            double stepProjectionHeight,
             double height,
             double length)
         {
-            // 2 - коофициент чётности
+            // 2 - коэффициент чётности
             double h = 2 * height * _currentFloor;
             double stepLength = length / stepAmount;
 
@@ -263,17 +263,17 @@ namespace Builders
                     length / 2 - i * stepLength,
                     h + height / 2 - i * stepHeight,
                     length / 2 - i * stepLength,
-                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHenght);
+                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHeight);
 
                 _wrapper.Createline(
                     length / 2 - i * stepLength,
-                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHenght,
+                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHeight,
                     length / 2 - i * stepLength + stepProjectionLength,
-                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHenght);
+                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHeight);
 
                 _wrapper.Createline(
                     length / 2 - i * stepLength + stepProjectionLength,
-                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHenght,
+                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHeight,
                     length / 2 - i * stepLength + stepProjectionLength,
                     h + height / 2 - (i + 1) * stepHeight);
 
@@ -290,17 +290,17 @@ namespace Builders
                 length / 2 - (stepAmount - 1) * stepLength,
                 h + height / 2 - (stepAmount - 1) * stepHeight,
                 length / 2 - (stepAmount - 1) * stepLength,
-                h + 0 - height / 2 + stepProjectionHenght);
+                h + 0 - height / 2 + stepProjectionHeight);
 
             _wrapper.Createline(
                 length / 2 - (stepAmount - 1) * stepLength,
-                h + 0 - height / 2 + stepProjectionHenght,
+                h + 0 - height / 2 + stepProjectionHeight,
                 0 - length / 2 + stepProjectionLength + stepLength,
-                h + 0 - height / 2 + stepProjectionHenght);
+                h + 0 - height / 2 + stepProjectionHeight);
 
             _wrapper.Createline(
                 0 - length / 2 + stepProjectionLength + stepLength,
-                h + 0 - height / 2 + stepProjectionHenght,
+                h + 0 - height / 2 + stepProjectionHeight,
                 0 - length / 2 + stepProjectionLength + stepLength,
                 h + 0 - height / 2);
 
@@ -324,7 +324,7 @@ namespace Builders
             int stepAmount,
             double stepHeight,
             double stepProjectionLength,
-            double stepProjectionHenght,
+            double stepProjectionHeight,
             double height,
             double length)
         {
@@ -338,17 +338,17 @@ namespace Builders
                     0 - length / 2 + i * stepLength,  
                     h + height / 2 - i * stepHeight,
                     0 - length / 2 + i * stepLength, 
-                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHenght);
+                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHeight);
 
                 _wrapper.Createline(
                     0 - length / 2 + i * stepLength,  
-                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHenght,
+                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHeight,
                     0 - length / 2 + i * stepLength - stepProjectionLength, 
-                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHenght);
+                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHeight);
 
                 _wrapper.Createline(
                     0 - length / 2 + i * stepLength - stepProjectionLength, 
-                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHenght,
+                    h + height / 2 - (i + 1) * stepHeight + stepProjectionHeight,
                     0 - length / 2 + i * stepLength - stepProjectionLength, 
                     h + height / 2 - (i + 1) * stepHeight);
 
@@ -364,17 +364,17 @@ namespace Builders
                 0 - length / 2 + (stepAmount - 1) * stepLength,
                 h + height / 2 - (stepAmount - 1) * stepHeight,
                 0 - length / 2 + (stepAmount - 1) * stepLength,
-                h + 0 - height / 2 + stepProjectionHenght);
+                h + 0 - height / 2 + stepProjectionHeight);
 
             _wrapper.Createline(
                 0 - length / 2 + (stepAmount - 1) * stepLength,  
-                h + 0 - height / 2 + stepProjectionHenght,
+                h + 0 - height / 2 + stepProjectionHeight,
                 length / 2 - stepProjectionLength - stepLength, 
-                h + 0 - height / 2 + stepProjectionHenght);
+                h + 0 - height / 2 + stepProjectionHeight);
 
             _wrapper.Createline(
                 length / 2 - stepProjectionLength - stepLength,
-                h + 0 - height / 2 + stepProjectionHenght,
+                h + 0 - height / 2 + stepProjectionHeight,
                 length / 2 - stepProjectionLength - stepLength, 
                 h + 0 - height / 2);
 

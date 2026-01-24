@@ -282,7 +282,7 @@ namespace Model
                 Math.Truncate(value) != value)
             {
                 ErrorMessage(" параметр должен быть целочисленным",
-                    new List<ParametersTypes> { ParametersTypes.StepAmount });
+                    new List<ParametersTypes> { parameter.Name });
 
             }
             else 

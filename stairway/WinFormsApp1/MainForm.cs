@@ -445,9 +445,19 @@ namespace UI
                 return false;
 
             parameters = new Parameters();
+            var snapshot = new ParametersSnapshot();
 
-            var json = File.ReadAllText(_path);
-            var snapshot = JsonSerializer.Deserialize<ParametersSnapshot>(json);
+            try
+            {
+                var json = File.ReadAllText(_path);
+                snapshot = JsonSerializer.Deserialize<ParametersSnapshot>(json);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Ошибка при чтении файла: {ex.Message}");
+                return false;
+            }
+
             parameters.RestoreFromSnapshot(snapshot);
             return parameters != null;
         }

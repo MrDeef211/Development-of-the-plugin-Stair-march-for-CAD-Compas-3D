@@ -51,13 +51,13 @@ namespace Model
             //TODO: {} (Сделал)
             if (min >= max)
             {
-                throw new Exception(name +
+                throw new ArgumentException(name +
                     " Минимальное значение параметра " +
                     "должно быть меньше максимального");
             }
-            if (value <= min || value >= max)
+            if (value < min || value > max)
             {
-                throw new Exception(name +
+                throw new ArgumentException(name +
                     " Значение параметра не совпадает " +
                     "с выбранными границами");
             }
@@ -72,6 +72,7 @@ namespace Model
         { 
             get { return _name; } 
         }
+
         /// <summary>
         /// Максимальное значение параметра
         /// </summary>
@@ -98,6 +99,7 @@ namespace Model
         {
             get { return _min; }
         }
+
         /// <summary>
         /// Значение параметра
         /// </summary>

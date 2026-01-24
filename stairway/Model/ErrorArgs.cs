@@ -15,6 +15,7 @@ namespace Model
         /// Переменные связанные с ошибкой
         /// </summary>
         private readonly List<ParametersTypes> _parametersList;
+
         /// <summary>
         /// Сообщение ошибки
         /// </summary>
@@ -40,6 +41,7 @@ namespace Model
         {
             get { return _message; }
         }
+
         /// <summary>
         /// Переменные связанные с ошибкой
         /// </summary>
