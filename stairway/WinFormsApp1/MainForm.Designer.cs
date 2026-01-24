@@ -39,7 +39,7 @@
             StepHeightTextBox = new TextBox();
             WidthTextBox = new TextBox();
             StepProjectionLengthTextBox = new TextBox();
-            StepProtjectionHeightTextBox = new TextBox();
+            StepProjectionHeightTextBox = new TextBox();
             PlatformLengthDownTextBox = new TextBox();
             PlatformLengthUpTextBox = new TextBox();
             PlatformHeightTextBox = new TextBox();
@@ -189,14 +189,14 @@
             StepProjectionLengthTextBox.Text = "10";
             StepProjectionLengthTextBox.KeyUp += ParameterEntered;
             // 
-            // StepProtjectionHeightTextBox
+            // StepProjectionHeightTextBox
             // 
-            StepProtjectionHeightTextBox.Location = new Point(257, 184);
-            StepProtjectionHeightTextBox.Name = "StepProtjectionHeightTextBox";
-            StepProtjectionHeightTextBox.Size = new Size(100, 23);
-            StepProtjectionHeightTextBox.TabIndex = 10;
-            StepProtjectionHeightTextBox.Text = "5";
-            StepProtjectionHeightTextBox.KeyUp += ParameterEntered;
+            StepProjectionHeightTextBox.Location = new Point(257, 184);
+            StepProjectionHeightTextBox.Name = "StepProjectionHeightTextBox";
+            StepProjectionHeightTextBox.Size = new Size(100, 23);
+            StepProjectionHeightTextBox.TabIndex = 10;
+            StepProjectionHeightTextBox.Text = "5";
+            StepProjectionHeightTextBox.KeyUp += ParameterEntered;
             // 
             // PlatformLengthDownTextBox
             // 
@@ -530,7 +530,7 @@
             InputsPanel.Controls.Add(StepHeightTextBox);
             InputsPanel.Controls.Add(WidthTextBox);
             InputsPanel.Controls.Add(StepProjectionLengthTextBox);
-            InputsPanel.Controls.Add(StepProtjectionHeightTextBox);
+            InputsPanel.Controls.Add(StepProjectionHeightTextBox);
             InputsPanel.Controls.Add(PlatformLengthDownTextBox);
             InputsPanel.Controls.Add(PlatformLengthUpTextBox);
             InputsPanel.Controls.Add(PlatformHeightTextBox);
@@ -659,7 +659,7 @@
         private TextBox StepHeightTextBox;
         private TextBox WidthTextBox;
         private TextBox StepProjectionLengthTextBox;
-        private TextBox StepProtjectionHeightTextBox;
+        private TextBox StepProjectionHeightTextBox;
         private TextBox PlatformLengthDownTextBox;
         private TextBox PlatformLengthUpTextBox;
         private TextBox PlatformHeightTextBox;

@@ -116,6 +116,7 @@ namespace Model
 			switch (parameter)
             {
                 //TODO: {}
+                // Я не понял зачем здесь нужны фигурные скобки в RSDN их нет
                 case ParametersTypes.Length:
                 case ParametersTypes.StepProjectionLength:
                     InternalValidation(parameter);
@@ -125,6 +126,8 @@ namespace Model
                 case ParametersTypes.StepHeight:
                     CalculateDependent(parameter);
                     InternalValidation(parameter);
+                    break;
+                default:
                     break;
             }
 
@@ -160,6 +163,10 @@ namespace Model
             };
         }
 
+        /// <summary>
+        /// Загрузить все данные класса из снимка
+        /// </summary>
+        /// <param name="snapshot"></param>
         public void RestoreFromSnapshot(ParametersSnapshot snapshot)
         {
             IsMultiFlight = snapshot.IsMultiFlight;

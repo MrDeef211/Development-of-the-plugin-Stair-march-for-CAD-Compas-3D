@@ -31,12 +31,6 @@ namespace Model
         /// </summary>
         private double _value;
 
-        //TODO: remove
-        ///// <summary>
-        ///// Параметр успешно прошёл валидацию
-        ///// </summary>
-        //private bool _isValid;
-
         /// <summary>
         /// Параметр модели
         /// </summary>
@@ -54,15 +48,19 @@ namespace Model
             _max = max;
             _min = min;
 
-            //TODO: {}
+            //TODO: {} (Сделал)
             if (min >= max)
+            {
                 throw new Exception(name +
                     " Минимальное значение параметра " +
                     "должно быть меньше максимального");
+            }
             if (value <= min || value >= max)
-                throw new Exception(name + 
+            {
+                throw new Exception(name +
                     " Значение параметра не совпадает " +
                     "с выбранными границами");
+            }
 
             _value = value;
         }
@@ -81,14 +79,18 @@ namespace Model
         { 
             get { return _max; } 
             set {
-                //TODO: {}
+                //TODO: {} (Сделал)
                 if (value < _min)
+                {
                     _max = _min;
+                }
                 else
-                    _max = value; 
+                {
+                    _max = value;
+                }
             }
-
         }
+
         /// <summary>
         /// Значение параметра
         /// </summary>
@@ -104,15 +106,6 @@ namespace Model
             get { return _value; }
             set { _value = value; }
         }
-        //TODO: remove
-        ///// <summary>
-        ///// Параметр успешно прошёл валидацию
-        ///// </summary>
-        //public bool IsValid
-        //{
-        //    get { return _isValid; }
-        //    set { _isValid = value; }
-        //}
 
     }
 }

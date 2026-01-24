@@ -12,6 +12,7 @@ namespace Model
         /// Список параметров
         /// </summary>
         public Dictionary<ParametersTypes, double> Values { get; set; }
+
         /// <summary>
         /// Многоэтажность
         /// </summary>

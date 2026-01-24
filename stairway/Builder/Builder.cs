@@ -12,8 +12,12 @@ namespace Builders
     /// </summary>
     public class Builder
     {
-        //TODO: RSDN
+        //TODO: RSDN (вроде сделал)
+        /// <summary>
+        /// Класс-обёртка для работы с САПР
+        /// </summary>
         private Wrapper _wrapper;
+
         /// <summary>
         /// Текущий этаж
         /// </summary>
@@ -35,7 +39,9 @@ namespace Builders
         {
             //TODO: {}
             if (!_wrapper.KompasIsDefined())
-                _wrapper.CreateCADWindow();
+            { 
+            _wrapper.CreateCADWindow();
+            }
 
             _wrapper.CreateFile();
 
@@ -109,7 +115,6 @@ namespace Builders
                     parameters[ParametersTypes.StepProjectionHeight],
                     parameters[ParametersTypes.Height],
                     parameters[ParametersTypes.Length]);
-
 
                 _wrapper.Extrusion(
                     true,

@@ -17,32 +17,32 @@ namespace UI
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Минимальный размер окна
+        /// РњРёРЅРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ С€РёСЂРёРЅС‹ С„РѕСЂРјС‹
         /// </summary>
-        private const int _minWidthForm = 380;
-		
+        private const int MinWidthForm = 380;
+
         /// <summary>
-        /// Размер окна, при котором скрываются ограничения
+        /// Р Р°Р·РјРµСЂ С„РѕСЂРјС‹, РїСЂРё РєРѕС‚РѕСЂРѕРј СЃРєСЂС‹РІР°СЋС‚СЃСЏ Р»РёРјРёС‚С‹
         /// </summary>
-        private const int _hideLimitsAt = 450;
-		
+        private const int HideLimitsAt = 450;
+
         /// <summary>
-        /// Размер окна, на который магнитится окно при скрытии малой картинки
+        /// Р Р°Р·РјРµСЂ С„РѕСЂРјС‹, РїСЂРё РєРѕС‚РѕСЂРѕРј РїСЂРѕРёСЃС…РѕРґРёС‚ РїРµСЂРІР°СЏ РїСЂРёРІСЏР·РєР°
         /// </summary>
-        private const int _firstAnchorForm = 550;
-		
+        private const int FirstAnchorForm = 550;
+
         /// <summary>
-        /// Размер окна при котором скрывается малый чертёж
+        /// Р Р°Р·РјРµСЂ С„РѕСЂРјС‹, РїСЂРё РєРѕС‚РѕСЂРѕРј СЃРєСЂС‹РІР°РµС‚СЃСЏ РјРёРЅРё-РјРѕРґРµР»СЊ
         /// </summary>
-        private const int _hideSmallAt = 650;
-		
+        private const int HideSmallAt = 650;
+
         /// <summary>
-        /// Размер окна при котором скрывается большой чертёж
+        /// Р Р°Р·РјРµСЂ С„РѕСЂРјС‹, РїСЂРё РєРѕС‚РѕСЂРѕРј СЃРєСЂС‹РІР°РµС‚СЃСЏ Р±РѕР»СЊС€Р°СЏ РјРѕРґРµР»СЊ
         /// </summary>
-        private const int _hideBigAt = 1000;
-		
+        private const int HideBigAt = 1000;
+
         /// <summary>
-        /// Строитель модели
+        /// РћР±СЉРµРєС‚ РїРѕСЃС‚СЂРѕРёС‚РµР»СЏ РјРѕРґРµР»Рё
         /// </summary>
         private Builder _builder;
 
@@ -65,8 +65,9 @@ namespace UI
         /// РўРµРєСЃС‚РѕРІС‹Р№ СЌРєРІРёРІР°Р»РµРЅС‚ ParametersTypes РЅР° СЂСѓСЃСЃРєРѕРј
         /// </summary>
         private Dictionary<ParametersTypes, string> _localization;
+
         /// <summary>
-        /// Путь для сохранения json с параметрами
+        /// РџРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РїСѓС‚Рё Рє С„Р°Р№Р»Сѓ РїР°СЂР°РјРµС‚СЂРѕРІ
         /// </summary>
         private readonly string _path =
             Path.Combine(AppContext.BaseDirectory, "parameters.json");
@@ -91,7 +92,7 @@ namespace UI
             _parameters.UpdateParameterValueEvent += ParameterUpdateValue;
 
             _parameters.FullUpdateParameters();
-            IsMultiFlightСheckBox.Checked = _parameters.IsMultiFlight;
+            IsMultiFlightРЎheckBox.Checked = _parameters.IsMultiFlight;
         }
 
         /// <summary>
@@ -189,15 +190,15 @@ namespace UI
         }
 
         /// <summary>
-        /// Событие изменение чекбокса строительства пролёта
+        /// РЎРѕР±С‹С‚РёРµ РєР»РёРєР° РїРѕ С‡РµРєР±РѕРєСЃСѓ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅРѕРіРѕ РјР°СЂС€Р°
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void IsMultiFlightСheckBox_MouseClick(
+        private void IsMultiFlightРЎheckBox_MouseClick(
             object sender,
             MouseEventArgs e)
         {
-            _parameters.IsMultiFlight = IsMultiFlightСheckBox.Checked;
+            _parameters.IsMultiFlight = IsMultiFlightРЎheckBox.Checked;
         }
 
         /// <summary>
@@ -230,7 +231,7 @@ namespace UI
         }
 
         /// <summary>
-        /// Событие изменение размеров окна
+        /// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ СЂР°Р·РјРµСЂР° С„РѕСЂРјС‹
         /// </summary>
         private void MainForm_Resize(object sender, EventArgs e)
         {
@@ -241,53 +242,50 @@ namespace UI
             if (size > 100)
                 PicturesSplitContainer.SplitterDistance = (int)(size / 2.5);
 
-            MainModelPictureBox.Visible = w >= _hideBigAt;
-            PicturesSplitContainer.Panel2Collapsed = w < _hideBigAt;
-            MiniModelPictureBox.Visible = w >= _hideSmallAt;
-            PicturesSplitContainer.Panel1Collapsed = w < _hideSmallAt;
-            LimitsPanel.Visible = w >= _hideLimitsAt;
+            MainModelPictureBox.Visible = w >= HideBigAt;
+            PicturesSplitContainer.Panel2Collapsed = w < HideBigAt;
+            MiniModelPictureBox.Visible = w >= HideSmallAt;
+            PicturesSplitContainer.Panel1Collapsed = w < HideSmallAt;
+            LimitsPanel.Visible = w >= HideLimitsAt;
 
-            this.MinimumSize = new Size(_minWidthForm, this.MinimumSize.Height);
+            this.MinimumSize = new Size(MinWidthForm, this.MinimumSize.Height);
         }
 
         /// <summary>
-        /// Событие окончания изменения размеров окна
+        /// РЎРѕР±С‹С‚РёРµ РѕРєРѕРЅС‡Р°РЅРёСЏ РёР·РјРµРЅРµРЅРёСЏ СЂР°Р·РјРµСЂР° С„РѕСЂРјС‹
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void MainForm_ResizeEnd(object sender, EventArgs e)
         {
-
-
-            int snapThreshold = 100;
             int newWidth;
 
-            if (this.Width <= _hideSmallAt && this.Width > _hideLimitsAt)
+            if (this.Width <= HideSmallAt && this.Width > HideLimitsAt)
             {
-                newWidth = _firstAnchorForm;
+                newWidth = FirstAnchorForm;
 
                 this.Size = new Size(newWidth, this.Height);
 
             }
-            if (this.Width <= _hideLimitsAt)
+            if (this.Width <= HideLimitsAt)
             {
-                newWidth = _minWidthForm;
+                newWidth = MinWidthForm;
 
                 this.Size = new Size(newWidth, this.Height);
             }
         }
 
         /// <summary>
-        /// Закрытие формы
+        /// РЎРѕР±С‹С‚РёРµ Р·Р°РєСЂС‹С‚РёСЏ С„РѕСЂРјС‹
         /// </summary>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_activeErrors.Count != 0)
             {
                 DialogResult result = MessageBox.Show(
-                    "Вы уверены, что хотите выйти? \n" +
-                    "У вас есть ошибки, поэтому данные не сохранятся.",
-                    "Предупреждение",
+                    "Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ РІС‹Р№С‚Рё? \n" +
+                    "Р’ Р·Р°РґР°РЅРЅС‹С… РїР°СЂР°РјРµС‚СЂР°С… СЃРѕРґРµСЂР¶Р°С‚СЃСЏ РѕС€РёР±РєРё, ",
+                    "РїР°СЂР°РјРµС‚СЂС‹ РЅРµ СЃРѕС…СЂР°РЅСЏС‚СЃСЏ",
                     MessageBoxButtons.OKCancel,
                     MessageBoxIcon.Warning
                 );
@@ -304,37 +302,59 @@ namespace UI
         }
 
         /// <summary>
-        /// Инициализирует привязку TextBox и 
-        /// соответствующие им ParametersTypes
+        /// РњРµС‚РѕРґ СЂРµРіРёСЃС‚СЂР°С†РёРё TextBox РґР»СЏ РїР°СЂР°РјРµС‚СЂР°
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="textBox"></param>
+        private void Register(ParametersTypes type, TextBox textBox)
+        {
+            _textboxByParameter[type] = textBox;
+        }
+
+        /// <summary>
+        /// РЎР»РѕРІР°СЂСЊ РїСЂРёРІСЏР·РѕРє TextBox
         /// </summary>
         private void InitializeUIBindings()
         {
-            _textboxByParameter = new Dictionary<ParametersTypes, TextBox>
-            {
             //TODO: refactor
-				{ ParametersTypes.Height,  
-                    HeightTextBox},
-                { ParametersTypes.Length,
-                    LengthTextBox},
-                { ParametersTypes.PlatformLengthUp,
-                    PlatformLengthUpTextBox},
-                { ParametersTypes.PlatformLengthDown,
-                    PlatformLengthDownTextBox},
-                { ParametersTypes.PlatformHeight,
-                    PlatformHeightTextBox},
-                { ParametersTypes.StepAmount,
-                    StepAmountTextBox},
-                { ParametersTypes.StepHeight,
-                    StepHeightTextBox},
-                { ParametersTypes.StepProjectionHeight,
-                    StepProtjectionHeightTextBox},
-                { ParametersTypes.StepProjectionLength,
-                    StepProjectionLengthTextBox},
-                { ParametersTypes.Width,
-                    WidthTextBox},
-                { ParametersTypes.FloorsCount,
-                    FloorsCountTextBox}
-            };
+            // РџРµСЂРµРґРµР»Р°Р»
+            _textboxByParameter = new Dictionary<ParametersTypes, TextBox>();
+
+            Register(
+                ParametersTypes.Height, 
+                HeightTextBox);
+            Register(
+                ParametersTypes.Length, 
+                LengthTextBox);
+            Register(
+                ParametersTypes.PlatformLengthUp, 
+                PlatformLengthUpTextBox);
+            Register(
+                ParametersTypes.PlatformLengthDown, 
+                PlatformLengthDownTextBox);
+            Register(
+                ParametersTypes.PlatformHeight, 
+                PlatformHeightTextBox);
+            Register(
+                ParametersTypes.StepAmount, 
+                StepAmountTextBox);
+            Register(
+                ParametersTypes.StepHeight, 
+                StepHeightTextBox);
+            Register(
+                ParametersTypes.StepProjectionHeight, 
+                StepProjectionHeightTextBox);
+            Register(
+                ParametersTypes.StepProjectionLength, 
+                StepProjectionLengthTextBox);
+            Register(
+                ParametersTypes.Width, 
+                WidthTextBox);
+            Register(
+                ParametersTypes.FloorsCount, 
+                FloorsCountTextBox);
+
+
         }
 
         /// <summary>
@@ -403,9 +423,9 @@ namespace UI
         }
 
         /// <summary>
-        /// Сохранить некоторый список параметров в json
+        /// РњРµС‚РѕРґ СЃРѕС…СЂР°РЅРµРЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ РІ json
         /// </summary>
-        /// <param name="parameters">Список параметров</param>
+        /// <param name="parameters">РћР±СЊРµРєС‚ РґР»СЏ Р·Р°РїРёСЃРё</param>
         public void Save(Parameters parameters)
         {
             var snapshot = parameters.CreateSnapshot();
@@ -413,10 +433,10 @@ namespace UI
         }
 
         /// <summary>
-        /// Загрузить параметры из json
+        /// РњРµС‚РѕРґ Р·Р°РіСЂСѓР·РєРё РїР°СЂР°РјРµС‚СЂРѕРІ РёР· json
         /// </summary>
-        /// <param name="parameters">Список параметров</param>
-        /// <returns>Успех</returns>
+        /// <param name="parameters">РџРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ Р·Р°РїРёСЃРё</param>
+        /// <returns>РЈСЃРїРµС…</returns>
         public bool TryLoad(out Parameters parameters)
         {
             parameters = null;
