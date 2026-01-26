@@ -96,6 +96,7 @@ namespace UI
 
             _parameters.FullUpdateParameters();
             IsMultiFlightСheckBox.Checked = _parameters.IsMultiFlight;
+            FloorsCountTextBox.Enabled = IsMultiFlightСheckBox.Checked;
         }
 
         /// <summary>
@@ -202,6 +203,7 @@ namespace UI
             MouseEventArgs e)
         {
             _parameters.IsMultiFlight = IsMultiFlightСheckBox.Checked;
+            FloorsCountTextBox.Enabled = IsMultiFlightСheckBox.Checked;
         }
 
         /// <summary>
@@ -263,14 +265,14 @@ namespace UI
         {
             int newWidth;
 
-            if (this.Width <= HideSmallAt && this.Width > HideLimitsAt)
+            if (this.ClientSize.Width <= HideSmallAt && this.ClientSize.Width > HideLimitsAt)
             {
                 newWidth = FirstAnchorForm;
 
                 this.Size = new Size(newWidth, this.Height);
 
             }
-            if (this.Width <= HideLimitsAt)
+            if (this.ClientSize.Width <= HideLimitsAt)
             {
                 newWidth = MinWidthForm;
 
