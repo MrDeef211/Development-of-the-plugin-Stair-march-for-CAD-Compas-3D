@@ -14,6 +14,9 @@ using System.Text.Json;
 namespace UI
 {
     //TODO: RSDN
+    /// <summary>
+    /// Класс главной формы приложения
+    /// </summary>
     public partial class MainForm : Form
     {
         /// <summary>

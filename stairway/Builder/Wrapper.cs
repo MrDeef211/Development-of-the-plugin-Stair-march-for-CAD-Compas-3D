@@ -1,7 +1,6 @@
 ﻿using Kompas6API5;
 using Kompas6Constants;
 using Kompas6Constants3D;
-using KompasAPI7;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

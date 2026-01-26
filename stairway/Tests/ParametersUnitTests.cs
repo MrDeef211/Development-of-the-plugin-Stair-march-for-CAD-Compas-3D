@@ -14,10 +14,10 @@ namespace Tests
             "вне допустимого диапазона")]
 		public void CreateOutOfRangeParameter()
 		{
-			Assert.Throws<Exception>(() =>
+			Assert.Throws<ArgumentException>(() =>
 				new Parameter(ParametersTypes.Height, 8000, 500, 32000));
 
-			Assert.Throws<Exception>(() =>
+			Assert.Throws<ArgumentException>(() =>
 				new Parameter(ParametersTypes.Height, 8000, 500, 0));
 		}
 
@@ -26,7 +26,7 @@ namespace Tests
             "меньше минимального")]
         public void CreateParameterMaxLessThanMinRaisesErrorEvent()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<ArgumentException>(() =>
                 new Parameter(
                     ParametersTypes.Width,
                     500,
@@ -56,10 +56,12 @@ namespace Tests
 			var dict = parameters.GetParameters();
 
 			Assert.That(dict, Is.Not.Null);
-			Assert.That(dict.Count, 
+			Assert.That(
+                dict.Count, 
                 Is.EqualTo(Enum.GetNames(typeof(ParametersTypes)).Length));
-            Assert.That(dict.All(pair => pair.Key == pair.Value.Name),
-                Is.True, "��� ����� ������ ��������������� ��������� Name");
+            Assert.That(dict.All(
+                pair => pair.Key == pair.Value.Name),
+                Is.True);
         }
 
 		[TestCase(ParametersTypes.Height, 3200)]
