@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StressTesting", "StressTesting\StressTesting.csproj", "{18A52751-4B2B-43DF-8F53-8B58108AA98F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{855B3210-C7A3-8BF2-FDC7-788D456F3D52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{855B3210-C7A3-8BF2-FDC7-788D456F3D52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{855B3210-C7A3-8BF2-FDC7-788D456F3D52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18A52751-4B2B-43DF-8F53-8B58108AA98F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18A52751-4B2B-43DF-8F53-8B58108AA98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18A52751-4B2B-43DF-8F53-8B58108AA98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18A52751-4B2B-43DF-8F53-8B58108AA98F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
