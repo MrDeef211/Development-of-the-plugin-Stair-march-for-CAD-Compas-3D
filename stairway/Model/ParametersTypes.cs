@@ -20,6 +20,7 @@ namespace Model
         StepHeight,
         StepProjectionHeight,
         StepProjectionLength,
-        Width
+        Width,
+        FloorsCount
     }
 }

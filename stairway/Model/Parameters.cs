@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Model
@@ -20,6 +21,10 @@ namespace Model
         private Dictionary<ParametersTypes, Parameter> _parameters;
 
         /// <summary>
+        /// Строить дополнительные секции
+        /// </summary>
+        private bool _isMultiFlight;
+        /// <summary>
         /// Угол лестницы в градусах
         /// </summary>
         private double _stairCorner;
@@ -33,8 +38,8 @@ namespace Model
         /// Обработчик параметров
         /// </summary>
         public Parameters()
-        {
-            InitializeParameters();
+        {         
+            InitializeNewParameters();
         }
 
         /// <summary>
@@ -75,7 +80,10 @@ namespace Model
             UpdateParameterErrorsEvent?.Invoke(this, parameter);
         }
 
-        //TODO: XML
+        /// <summary>
+        /// Событие обновления значения параметра на форме
+        /// </summary>
+        /// <param name="parameters">Изменённый параметр</param>
         private void UpdateParameterValue(
             ParametersTypes parameters)
         {
@@ -108,6 +116,7 @@ namespace Model
 			switch (parameter)
             {
                 //TODO: {}
+                // Я не понял зачем здесь нужны фигурные скобки в RSDN их нет
                 case ParametersTypes.Length:
                 case ParametersTypes.StepProjectionLength:
                     InternalValidation(parameter);
@@ -118,9 +127,16 @@ namespace Model
                     CalculateDependent(parameter);
                     InternalValidation(parameter);
                     break;
+                default:
+                    break;
             }
 
         }
+
+        /// <summary>
+        /// Строить дополнительные секции
+        /// </summary>
+        public bool IsMultiFlight { get; set; }
 
         /// <summary>
         /// Вернуть список параметров
@@ -129,6 +145,36 @@ namespace Model
         public Dictionary<ParametersTypes, Parameter> GetParameters()
         {
             return _parameters;
+        }
+
+        /// <summary>
+        /// Вернуть все данные класса
+        /// </summary>
+        /// <returns></returns>
+        public ParametersSnapshot CreateSnapshot()
+        {
+            return new ParametersSnapshot
+            {
+                IsMultiFlight = IsMultiFlight,
+                Values = _parameters.ToDictionary(
+                    p => p.Key,
+                    p => p.Value.Value
+                )
+            };
+        }
+
+        /// <summary>
+        /// Загрузить все данные класса из снимка
+        /// </summary>
+        /// <param name="snapshot"></param>
+        public void RestoreFromSnapshot(ParametersSnapshot snapshot)
+        {
+            IsMultiFlight = snapshot.IsMultiFlight;
+
+            foreach (var (type, value) in snapshot.Values)
+            {
+                SetParameter(type, value);
+            }
         }
 
         /// <summary>
@@ -146,45 +192,78 @@ namespace Model
         /// <summary>
         /// Инициализирует параметры модели
         /// </summary>
-        private void InitializeParameters()
+        private void InitializeNewParameters()
         {
             _parameters = new Dictionary<ParametersTypes, Parameter>
-
             {
                 //TODO: отступы
-            {ParametersTypes.Height,
-                    new Parameter(ParametersTypes.Height, 
-                    8000, 500, 3200) },
-            {ParametersTypes.Length, 
-                    new Parameter(ParametersTypes.Length, 
-                    12000, 500, 5000) },
-            {ParametersTypes.PlatformLengthUp, 
-                    new Parameter(ParametersTypes.PlatformLengthUp, 
-                    5000, 1000, 1500) },
-            {ParametersTypes.PlatformLengthDown, 
-                    new Parameter(ParametersTypes.PlatformLengthDown, 
-                    5000, 1000, 1500) },
-            {ParametersTypes.PlatformHeight, 
-                    new Parameter(ParametersTypes.PlatformHeight, 
-                    500, 100, 200) },
-            {ParametersTypes.StepAmount, 
-                    new Parameter(ParametersTypes.StepAmount, 
-                    60, 1, 20) },
-            {ParametersTypes.StepHeight, 
-                    new Parameter(ParametersTypes.StepHeight, 
-                    250, 120, 160) },
-            {ParametersTypes.StepProjectionHeight, 
-                    new Parameter(ParametersTypes.StepProjectionHeight, 
-                    80, 0, 25) },
-            {ParametersTypes.StepProjectionLength, 
-                    new Parameter(ParametersTypes.StepProjectionLength, 
-                    80, 0, 20) },
-            {ParametersTypes.Width, 
-                    new Parameter(ParametersTypes.Width, 
-                    2500, 800, 1000)}
-
+			    {ParametersTypes.Height,
+                    new Parameter(
+					    ParametersTypes.Height, 
+                        8000, 
+					    500, 
+					    3200) },
+                {ParametersTypes.Length, 
+                    new Parameter(
+					    ParametersTypes.Length, 
+                        12000, 
+						500, 
+						5000) },
+                {ParametersTypes.PlatformLengthUp, 
+                    new Parameter(
+					    ParametersTypes.PlatformLengthUp, 
+                        5000, 
+						1000, 
+						1500) },
+                {ParametersTypes.PlatformLengthDown, 
+                    new Parameter(
+					    ParametersTypes.PlatformLengthDown, 
+                        5000, 
+						1000, 
+						1500) },
+                {ParametersTypes.PlatformHeight, 
+                    new Parameter(
+					    ParametersTypes.PlatformHeight, 
+                        500, 
+						100, 
+						200) },
+                {ParametersTypes.StepAmount, 
+                    new Parameter(
+					    ParametersTypes.StepAmount, 
+                        60, 
+						1, 
+						20) },
+                {ParametersTypes.StepHeight, 
+                    new Parameter(
+					    ParametersTypes.StepHeight, 
+                        250, 
+						120, 
+						160) },
+                {ParametersTypes.StepProjectionHeight, 
+                    new Parameter(
+					    ParametersTypes.StepProjectionHeight, 
+						80, 
+						0, 
+						25) },
+                {ParametersTypes.StepProjectionLength, 
+                    new Parameter(
+						ParametersTypes.StepProjectionLength, 
+						80, 
+						0, 
+						20) },
+                {ParametersTypes.Width, 
+                    new Parameter(
+						ParametersTypes.Width, 
+						2500, 
+						800, 
+						1000)},
+                {ParametersTypes.FloorsCount,
+                    new Parameter(
+						ParametersTypes.FloorsCount,
+						25, 
+						0, 
+						1)}
             };
-
         }
 
         /// <summary>
@@ -198,11 +277,12 @@ namespace Model
             double value = parameter.Value;
 
             //Проверка целочисленного параметра
-            if (parameter.Name == ParametersTypes.StepAmount && 
+            if ((parameter.Name == ParametersTypes.StepAmount ||
+                parameter.Name == ParametersTypes.FloorsCount) && 
                 Math.Truncate(value) != value)
             {
                 ErrorMessage(" параметр должен быть целочисленным",
-                    new List<ParametersTypes> { ParametersTypes.StepAmount });
+                    new List<ParametersTypes> { parameter.Name });
 
             }
             else 
@@ -360,9 +440,5 @@ namespace Model
                             ParametersTypes.StepProjectionLength });
             }
         }
-
-
-
-
     }
 }

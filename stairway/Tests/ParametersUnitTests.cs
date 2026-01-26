@@ -6,21 +6,18 @@ namespace Tests
 	[TestFixture]
 	public class ParametersUnitTests
 	{
-        //TODO: refactor to property
-		private Parameters Create()
-		{
-			return new Parameters();
-		}
+        //TODO: refactor to property (сделал)
+        private Parameters CreateParameters => new Parameters();
 
-		[Test]
+        [Test]
 		[Description("Проверка инициализации параметра " +
             "вне допустимого диапазона")]
 		public void CreateOutOfRangeParameter()
 		{
-			Assert.Throws<Exception>(() =>
+			Assert.Throws<ArgumentException>(() =>
 				new Parameter(ParametersTypes.Height, 8000, 500, 32000));
 
-			Assert.Throws<Exception>(() =>
+			Assert.Throws<ArgumentException>(() =>
 				new Parameter(ParametersTypes.Height, 8000, 500, 0));
 		}
 
@@ -29,7 +26,7 @@ namespace Tests
             "меньше минимального")]
         public void CreateParameterMaxLessThanMinRaisesErrorEvent()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<ArgumentException>(() =>
                 new Parameter(
                     ParametersTypes.Width,
                     500,
@@ -55,13 +52,16 @@ namespace Tests
 		[Description("Проверка инициализации словаря параметров")]
 		public void ConstructorInitializesAllParameters()
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 			var dict = parameters.GetParameters();
 
 			Assert.That(dict, Is.Not.Null);
-			Assert.That(dict.Count, Is.GreaterThan(0));
-            Assert.That(dict.All(pair => pair.Key == pair.Value.Name),
-                Is.True, "Все ключи должны соответствовать значениям Name");
+			Assert.That(
+                dict.Count, 
+                Is.EqualTo(Enum.GetNames(typeof(ParametersTypes)).Length));
+            Assert.That(dict.All(
+                pair => pair.Key == pair.Value.Name),
+                Is.True);
         }
 
 		[TestCase(ParametersTypes.Height, 3200)]
@@ -75,7 +75,7 @@ namespace Tests
             ParametersTypes parameter, 
             double value)
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 
 			parameters.SetParameter(parameter, value);
 			double currentValue = parameters.GetParameter(parameter);
@@ -87,7 +87,7 @@ namespace Tests
 		[Description("Проверка передачи параметра вне диапазона")]
 		public void SetParameterOutOfRangeRaisesErrorEvent()
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 			ErrorArgs? error = null;
 
 			parameters.ErrorMessageEvent += (s, e) => error = e;
@@ -108,7 +108,7 @@ namespace Tests
         [Description("Проверка генерации нескольких ошибок подряд")]
         public void MultipleInvalidParametersRaiseMultipleErrors()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             var errors = new List<ErrorArgs>();
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
@@ -124,7 +124,7 @@ namespace Tests
             "при изменении параметра")]
         public void SetParameterRaisesUpdateEvent()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             ParametersTypes? updated = null;
 
             parameters.UpdateParameterErrorsEvent += 
@@ -141,7 +141,7 @@ namespace Tests
             "при изменении высоты ступени")]
         public void ChangingStepHeightUpdatesProjectionLimits()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
 
             parameters.SetParameter(ParametersTypes.StepHeight, 200);
 
@@ -160,19 +160,20 @@ namespace Tests
             "при изменении высоты ступени")]
         public void StepProjectionErrorIsFixedAfterStepHeightChange()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             var errors = new List<ErrorArgs>();
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
 
-            //TODO: тут и ниже комменты НАД строкой
-            parameters.SetParameter(ParametersTypes.StepProjectionLength, 100); // ошибка
+            //TODO: тут и ниже комменты НАД строкой (исправлено)
+			// ошибка
+            parameters.SetParameter(ParametersTypes.StepProjectionLength, 100); 
 
             Assert.That(errors, Is.Not.Empty);
 
             errors.Clear();
-
-            parameters.SetParameter(ParametersTypes.StepHeight, 200); // Max = 100
+			// Max = 100
+            parameters.SetParameter(ParametersTypes.StepHeight, 200); 
 
             Assert.That(errors, Is.Empty);
         }
@@ -181,7 +182,7 @@ namespace Tests
 		[Description("Проверка передачи неправильного количества ступеней")]
 		public void SetStepAmountOutOfRangeRaisesErrorEvent()
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 			ErrorArgs? error = null;
 
 			parameters.ErrorMessageEvent += (s, e) => error = e;
@@ -198,7 +199,7 @@ namespace Tests
 		[Description("Проверка передачи неправильного выступа ступени")]
 		public void SetStepProjectionOutOfRangeRaisesErrorEvent()
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 			ErrorArgs? error = null;
 
 			parameters.ErrorMessageEvent += (s, e) => error = e;
@@ -218,7 +219,7 @@ namespace Tests
             "не целочисленного количества ступеней")]
 		public void StepAmountNotIntegerRaisesError()
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 			ErrorArgs? error = null;
 
 			parameters.ErrorMessageEvent += (s, e) => error = e;
@@ -236,7 +237,7 @@ namespace Tests
             "при изменении высоты")]
 		public void ChangingHeightRecalculatesStepHeight()
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 
 			parameters.SetParameter(ParametersTypes.StepAmount, 10);
 			parameters.SetParameter(ParametersTypes.Height, 2000);
@@ -252,7 +253,7 @@ namespace Tests
             "после пересчёта высоты ступени")]
         public void HeightChangeTriggersFullRevalidationChain()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             var errors = new List<ErrorArgs>();
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
@@ -286,21 +287,23 @@ namespace Tests
         [Description("Исправление ошибки высоты ступени после пересчёта")]
         public void StepHeightErrorIsFixedAfterRecalculation()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             var errors = new List<ErrorArgs>();
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
 
             // Создаём ошибку
             parameters.SetParameter(ParametersTypes.Length, 12000);
-            parameters.SetParameter(ParametersTypes.Height, 8000); // StepHeight = 400 (ошибка)
+			// StepHeight = 400 (ошибка)
+            parameters.SetParameter(ParametersTypes.Height, 8000); 
 
             Assert.That(errors, Is.Not.Empty);
 
             errors.Clear();
 
             // Исправляем
-            parameters.SetParameter(ParametersTypes.StepAmount, 50); // StepHeight = 160
+			// StepHeight = 160
+            parameters.SetParameter(ParametersTypes.StepAmount, 50); 
 
             Assert.That(errors, Is.Empty);
         }
@@ -310,7 +313,7 @@ namespace Tests
             "при изменении высоты ступени")]
 		public void ChangingStepHeightRecalculatesHeight()
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 
 			parameters.SetParameter(ParametersTypes.StepAmount, 10);
 			parameters.SetParameter(ParametersTypes.StepHeight, 180);
@@ -325,7 +328,7 @@ namespace Tests
             "после пересчёта высоты ступени")]
         public void StepHeightChangeTriggersStairAngleValidation()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             var errors = new List<ErrorArgs>();
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
@@ -344,18 +347,18 @@ namespace Tests
             "после изменения высоты ступени")]
         public void HeightErrorIsFixedAfterStepHeightChange()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             var errors = new List<ErrorArgs>();
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
-
-            parameters.SetParameter(ParametersTypes.StepHeight, 500); // Height = 10000 (ошибка)
+			// Height = 10000 (ошибка)
+            parameters.SetParameter(ParametersTypes.StepHeight, 500); 
 
             Assert.That(errors, Is.Not.Empty);
 
             errors.Clear();
-
-            parameters.SetParameter(ParametersTypes.StepHeight, 150); // Height = 1500
+			// Height = 1500
+            parameters.SetParameter(ParametersTypes.StepHeight, 150); 
 
             Assert.That(errors, Is.Empty);
         }
@@ -364,7 +367,7 @@ namespace Tests
         [Description("Проверка валидации глубины проступи")]
         public void StepTreadOutOfRangeRaisesError()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             ErrorArgs? error = null;
 
             parameters.ErrorMessageEvent += (s, e) => error = e;
@@ -385,7 +388,7 @@ namespace Tests
         [Description("Исправление ошибки глубины проступи после пересчёта")]
         public void StepTreadErrorIsFixedAfterCorrection()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             var errors = new List<ErrorArgs>();
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
@@ -407,7 +410,7 @@ namespace Tests
         [Description("Проверка ввода допустимой глубины проступи")]
         public void ValidStepTreadDoesNotRaiseError()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             bool errorRaised = false;
 
             parameters.ErrorMessageEvent += (s, e) => errorRaised = true;
@@ -443,19 +446,20 @@ namespace Tests
         [Description("Исправление ошибки угла марша после изменения длины")]
         public void StairAngleErrorIsFixedAfterLengthChange()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             var errors = new List<ErrorArgs>();
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
 
             parameters.SetParameter(ParametersTypes.Height, 4000);
-            parameters.SetParameter(ParametersTypes.Length, 1000); // угол > 50
+			// угол > 50
+            parameters.SetParameter(ParametersTypes.Length, 1000); 
 
             Assert.That(errors, Is.Not.Empty);
 
             errors.Clear();
-
-            parameters.SetParameter(ParametersTypes.Length, 6000); // нормальный угол
+			// нормальный угол
+            parameters.SetParameter(ParametersTypes.Length, 6000); 
 
             Assert.That(errors, Is.Empty);
         }
@@ -464,7 +468,7 @@ namespace Tests
         [Description("Проверка ввода допустимого угла марша")]
         public void StairAngleInRangeDoesNotRaiseError()
         {
-            var parameters = Create();
+            var parameters = CreateParameters;
             bool errorRaised = false;
 
             parameters.ErrorMessageEvent += (s, e) => errorRaised = true;
@@ -480,7 +484,7 @@ namespace Tests
 		[Description("Проверка обновления всех параметров")]
 		public void FullUpdateParametersSendsAllParameters()
 		{
-			var parameters = Create();
+			var parameters = CreateParameters;
 			List<ParametersTypes>? updatedErrors = new List<ParametersTypes>();
             List<ParametersTypes>? updatedValues = new List<ParametersTypes>();
 
@@ -502,5 +506,78 @@ namespace Tests
                 Is.EqualTo(parameters.GetParameters().Count));
         }
 
+        [Test]
+        [Description("Проверка сохранения параметров в снимок")]
+        public void CreateSnapshotStoresAllParameterValues()
+        {
+            var parameters = CreateParameters;
+
+            parameters.SetParameter(ParametersTypes.Height, 2500);
+            parameters.SetParameter(ParametersTypes.Width, 900);
+
+            var snapshot = parameters.CreateSnapshot();
+
+            Assert.That(snapshot, Is.Not.Null);
+            Assert.That(snapshot.Values, Is.Not.Null);
+            Assert.That(snapshot.Values.Count,
+                Is.EqualTo(parameters.GetParameters().Count));
+
+            Assert.That(snapshot.Values[ParametersTypes.Height], Is.EqualTo(2500));
+            Assert.That(snapshot.Values[ParametersTypes.Width], Is.EqualTo(900));
+        }
+
+        [Test]
+        [Description("Проверка сохранения двоичного параметра в снимок")]
+        public void CreateSnapshotStoresIsMultiFlight()
+        {
+            var parameters = CreateParameters;
+
+            parameters.IsMultiFlight = true;
+
+            var snapshot = parameters.CreateSnapshot();
+
+            Assert.That(snapshot.IsMultiFlight, Is.True);
+        }
+
+        [Test]
+        [Description("Проверка загрузки параметров из снимка")]
+        public void RestoreFromSnapshotRestoresParameterValues()
+        {
+            var parameters = CreateParameters;
+
+            parameters.SetParameter(ParametersTypes.Height, 2800);
+            parameters.SetParameter(ParametersTypes.StepAmount, 14);
+
+            var snapshot = parameters.CreateSnapshot();
+
+            parameters.SetParameter(ParametersTypes.Height, 1500);
+            parameters.SetParameter(ParametersTypes.StepAmount, 5);
+
+            parameters.RestoreFromSnapshot(snapshot);
+
+            Assert.That(
+                parameters.GetParameter(ParametersTypes.Height),
+                Is.EqualTo(2800));
+
+            Assert.That(
+                parameters.GetParameter(ParametersTypes.StepAmount),
+                Is.EqualTo(14));
+        }
+
+        [Test]
+        [Description("Проверка загрузки двоичного параметра из снимка")]
+        public void RestoreFromSnapshotRestoresIsMultiFlight()
+        {
+            var parameters = CreateParameters;
+
+            parameters.IsMultiFlight = true;
+            var snapshot = parameters.CreateSnapshot();
+
+            parameters.IsMultiFlight = false;
+
+            parameters.RestoreFromSnapshot(snapshot);
+
+            Assert.That(parameters.IsMultiFlight, Is.True);
+        }
     }
 }

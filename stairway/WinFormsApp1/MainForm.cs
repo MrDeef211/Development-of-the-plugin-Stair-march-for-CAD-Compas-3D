@@ -1,17 +1,51 @@
-﻿using Builders;
+
+using Accessibility;
+using Builders;
 using Model;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
+using System.Text.Json;
+
 
 namespace UI
 {
     //TODO: RSDN
+    /// <summary>
+    /// Класс главной формы приложения
+    /// </summary>
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Строитель модели
+        /// Минимальный размер ширины формы
+        /// </summary>
+        private const int MinWidthForm = 380;
+
+        /// <summary>
+        /// Размер формы, при котором скрываются лимиты
+        /// </summary>
+        private const int HideLimitsAt = 450;
+
+        /// <summary>
+        /// Размер формы, при котором происходит первая привязка
+        /// </summary>
+        private const int FirstAnchorForm = 550;
+
+        /// <summary>
+        /// Размер формы, при котором скрывается мини-модель
+        /// </summary>
+        private const int HideSmallAt = 650;
+
+        /// <summary>
+        /// Размер формы, при котором скрывается большая модель
+        /// </summary>
+        private const int HideBigAt = 1000;
+
+        /// <summary>
+        /// Объект построителя модели
         /// </summary>
         private Builder _builder;
 
@@ -35,6 +69,12 @@ namespace UI
         /// </summary>
         private Dictionary<ParametersTypes, string> _localization;
 
+        /// <summary>
+        /// Переменная для хранения пути к файлу параметров
+        /// </summary>
+        private readonly string _path =
+            Path.Combine(AppContext.BaseDirectory, "parameters.json");
+
         public MainForm()
         {
             InitializeComponent();
@@ -45,11 +85,17 @@ namespace UI
             _parameters = new Parameters();
             _activeErrors = new Dictionary<string, List<ParametersTypes>>();
 
+            if (TryLoad(out var loaded))
+            {
+                _parameters = loaded;
+            }
+
             _parameters.ErrorMessageEvent += IsErrorAppered;
             _parameters.UpdateParameterErrorsEvent += ParameterUpdateErrors;
             _parameters.UpdateParameterValueEvent += ParameterUpdateValue;
 
             _parameters.FullUpdateParameters();
+            IsMultiFlightСheckBox.Checked = _parameters.IsMultiFlight;
         }
 
         /// <summary>
@@ -67,7 +113,7 @@ namespace UI
             else
                 newError = e.Message;
             if (!_activeErrors.ContainsKey(newError))
-                _activeErrors[newError] = 
+                _activeErrors[newError] =
                     new List<ParametersTypes>(e.ParametersList);
 
             foreach (var parameter in e.ParametersList)
@@ -102,8 +148,8 @@ namespace UI
 
                 _activeErrors.Remove(message);
             }
-           
-           UpdateErrorBox();
+
+            UpdateErrorBox();
         }
 
         /// <summary>
@@ -123,7 +169,7 @@ namespace UI
         {
             var textBox = (TextBox)sender;
 
-            var parameter = 
+            var parameter =
                 _textboxByParameter.First(x => x.Value == textBox).Key;
 
             if (!_textboxByParameter.ContainsValue(textBox))
@@ -146,13 +192,23 @@ namespace UI
             }
         }
 
-
+        /// <summary>
+        /// Событие клика по чекбоксу множественного марша
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void IsMultiFlightСheckBox_MouseClick(
+            object sender,
+            MouseEventArgs e)
+        {
+            _parameters.IsMultiFlight = IsMultiFlightСheckBox.Checked;
+        }
 
         /// <summary>
         /// Начать построение модели
         /// </summary>
         private void BuildModel(object sender, EventArgs e)
-		{
+        {
             if (_activeErrors.Count != 0)
             {
                 MessageBox.Show("Сначала исправьте все ошибки");
@@ -160,16 +216,16 @@ namespace UI
             }
             var inputParameters = _parameters.GetParameters();
 
-            var outputParameters = 
+            var outputParameters =
                 new Dictionary<ParametersTypes, double>();
 
             foreach (var parameter in inputParameters.Keys)
                 outputParameters.Add(
-                    parameter, 
+                    parameter,
                     inputParameters[parameter].Value);
-            try 
+            try
             {
-                _builder.Build(outputParameters);
+                _builder.Build(outputParameters, _parameters.IsMultiFlight);
             }
             catch (BuildException ex)
             {
@@ -178,36 +234,130 @@ namespace UI
         }
 
         /// <summary>
-        /// Инициализирует привязку TextBox и 
-        /// соответствующие им ParametersTypes
+        /// Событие изменения размера формы
+        /// </summary>
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            int w = this.ClientSize.Width;
+
+            double size = PicturesSplitContainer.Size.Width;
+
+            if (size > 100)
+                PicturesSplitContainer.SplitterDistance = (int)(size / 2.5);
+
+            MainModelPictureBox.Visible = w >= HideBigAt;
+            PicturesSplitContainer.Panel2Collapsed = w < HideBigAt;
+            MiniModelPictureBox.Visible = w >= HideSmallAt;
+            PicturesSplitContainer.Panel1Collapsed = w < HideSmallAt;
+            LimitsPanel.Visible = w >= HideLimitsAt;
+
+            this.MinimumSize = new Size(MinWidthForm, this.MinimumSize.Height);
+        }
+
+        /// <summary>
+        /// Событие окончания изменения размера формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_ResizeEnd(object sender, EventArgs e)
+        {
+            int newWidth;
+
+            if (this.Width <= HideSmallAt && this.Width > HideLimitsAt)
+            {
+                newWidth = FirstAnchorForm;
+
+                this.Size = new Size(newWidth, this.Height);
+
+            }
+            if (this.Width <= HideLimitsAt)
+            {
+                newWidth = MinWidthForm;
+
+                this.Size = new Size(newWidth, this.Height);
+            }
+        }
+
+        /// <summary>
+        /// Событие закрытия формы
+        /// </summary>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_activeErrors.Count != 0)
+            {
+                DialogResult result = MessageBox.Show(
+                    "Вы действительно хотите выйти? \n" +
+                    "В заданных параметрах содержатся ошибки, ",
+                    "параметры не сохранятся",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Warning
+                );
+
+                if (result == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+                Save(_parameters);
+            }
+        }
+
+        /// <summary>
+        /// Метод регистрации TextBox для параметра
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="textBox"></param>
+        private void Register(ParametersTypes type, TextBox textBox)
+        {
+            _textboxByParameter[type] = textBox;
+        }
+
+        /// <summary>
+        /// Словарь привязок TextBox
         /// </summary>
         private void InitializeUIBindings()
         {
-            _textboxByParameter = new Dictionary<ParametersTypes, TextBox>
-            {
             //TODO: refactor
-            { ParametersTypes.Height,  
-                    HeightTextBox},
-            { ParametersTypes.Length,  
-                    LengthTextBox},
-            { ParametersTypes.PlatformLengthUp,  
-                    PlatformLengthUpTextBox},
-            { ParametersTypes.PlatformLengthDown,  
-                    PlatformLengthDownTextBox},
-            { ParametersTypes.PlatformHeight,  
-                    PlatformHeightTextBox},
-            { ParametersTypes.StepAmount,  
-                    StepAmountTextBox},
-            { ParametersTypes.StepHeight,  
-                    StepHeightTextBox},
-            { ParametersTypes.StepProjectionHeight,  
-                    StepProtjectionHeightTextBox},
-            { ParametersTypes.StepProjectionLength,  
-                    StepProjectionLengthTextBox},
-            { ParametersTypes.Width,  
-                    WidthTextBox}
+            // Переделал
+            _textboxByParameter = new Dictionary<ParametersTypes, TextBox>();
 
-            };
+            Register(
+                ParametersTypes.Height, 
+                HeightTextBox);
+            Register(
+                ParametersTypes.Length, 
+                LengthTextBox);
+            Register(
+                ParametersTypes.PlatformLengthUp, 
+                PlatformLengthUpTextBox);
+            Register(
+                ParametersTypes.PlatformLengthDown, 
+                PlatformLengthDownTextBox);
+            Register(
+                ParametersTypes.PlatformHeight, 
+                PlatformHeightTextBox);
+            Register(
+                ParametersTypes.StepAmount, 
+                StepAmountTextBox);
+            Register(
+                ParametersTypes.StepHeight, 
+                StepHeightTextBox);
+            Register(
+                ParametersTypes.StepProjectionHeight, 
+                StepProjectionHeightTextBox);
+            Register(
+                ParametersTypes.StepProjectionLength, 
+                StepProjectionLengthTextBox);
+            Register(
+                ParametersTypes.Width, 
+                WidthTextBox);
+            Register(
+                ParametersTypes.FloorsCount, 
+                FloorsCountTextBox);
+
+
         }
 
         /// <summary>
@@ -274,6 +424,47 @@ namespace UI
 
             ErrorTextBox.Text = string.Join(Environment.NewLine, Errors);
         }
+
+        /// <summary>
+        /// Метод сохранения параметров в json
+        /// </summary>
+        /// <param name="parameters">Обьект для записи</param>
+        public void Save(Parameters parameters)
+        {
+            var snapshot = parameters.CreateSnapshot();
+            File.WriteAllText(_path, JsonSerializer.Serialize(snapshot));
+        }
+
+        /// <summary>
+        /// Метод загрузки параметров из json
+        /// </summary>
+        /// <param name="parameters">Переменная для записи</param>
+        /// <returns>Успех</returns>
+        public bool TryLoad(out Parameters parameters)
+        {
+            parameters = null;
+
+            if (!File.Exists(_path))
+                return false;
+
+            parameters = new Parameters();
+            var snapshot = new ParametersSnapshot();
+
+            try
+            {
+                var json = File.ReadAllText(_path);
+                snapshot = JsonSerializer.Deserialize<ParametersSnapshot>(json);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Ошибка при чтении файла: {ex.Message}");
+                return false;
+            }
+
+            parameters.RestoreFromSnapshot(snapshot);
+            return parameters != null;
+        }
+
     }
 
 

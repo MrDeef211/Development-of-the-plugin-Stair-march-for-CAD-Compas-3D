@@ -1,7 +1,6 @@
 ﻿using Kompas6API5;
 using Kompas6Constants;
 using Kompas6Constants3D;
-using KompasAPI7;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,29 +13,37 @@ using System.Threading.Tasks;
 
 namespace Builders
 {
-    //TODO: RSDN
+    //TODO: RSDN (вроде исправил)
+    /// <summary>
+    /// Класс-обёртка для работы с API5 Компас-3D
+    /// </summary>
     internal class Wrapper
     {
         /// <summary>
         /// Текущий объект компаса API5
         /// </summary>
         private KompasObject _kompas;
+
         /// <summary>
         /// Текущий документ
         /// </summary>
         private ksDocument3D _doc3D;
+
         /// <summary>
         /// Текущая деталь
         /// </summary>
         private ksPart _part;   
+
         /// <summary>
         /// Основной эскиз
         /// </summary>
         private ksEntity _activeSketch;
+
         /// <summary>
         /// Редактор эскиза
         /// </summary>
         private ksSketchDefinition _sketchDefinition;
+
         /// <summary>
         /// Редактируемый эскиз
         /// </summary>
@@ -49,10 +56,12 @@ namespace Builders
         /// <exception cref="BuildException">Компас не запущен</exception>
         public void OpenCAD(KompasObject kompas)
         {
-            //TODO: {}
+            //TODO: {} (исправил)
             if (kompas == null)
+            {
                 throw new BuildException("Компас не запущен. " +
                     "Вызови CreateCADWindow().");
+            }
 
             _kompas = kompas;
 
@@ -65,6 +74,9 @@ namespace Builders
             _doc3D.SetActive();
         }
 
+        /// <summary>
+        /// Инициализирован ли компас
+        /// </summary>
         public bool KompasIsDefined()
         {
             if (_kompas == null)
@@ -106,21 +118,25 @@ namespace Builders
         /// </exception>
         public void OpenFile(string path, bool readOnly, bool visible)
         {
-            //TODO: {}
+            //TODO: {} (исправил)
             if (_kompas == null)
+            {
                 throw new BuildException(
                     "Компас не запущен. Вызови OpenCAD().");
+            }
 
             _kompas.Visible = visible;
 
             ksDocument3D doc = (ksDocument3D)_kompas.Document3D();
             //TODO: rename
-            bool ok = doc.Open(path, readOnly);
+            bool openSucess = doc.Open(path, readOnly);
 
-            //TODO: {}
-            if (!ok)
+            //TODO: {} (исправил)
+            if (!openSucess)
+            {
                 throw new BuildException(
                     $"Не удалось открыть файл: {path}");
+            }
 
             _doc3D = doc;
             _doc3D.SetActive();
@@ -134,10 +150,12 @@ namespace Builders
         /// </exception>
         public void CreateFile()
         {
-            //TODO: {}
+            //TODO: {} (исправил)
             if (_kompas == null)
+            {
                 throw new BuildException(
                     "Компас не запущен. Вызови OpenCAD().");
+            }
 
             _doc3D = (ksDocument3D)_kompas.Document3D();
             _doc3D.Create();
@@ -146,10 +164,12 @@ namespace Builders
             // получаем Part верхнего уровня
             _part = (ksPart)_doc3D.GetPart((short)Part_Type.pTop_Part);
 
-            //TODO: {}
+            //TODO: {} (исправил)
             if (_part == null)
+            {
                 throw new BuildException("Не удалось получить " +
                     "ksPart для нового документа.");
+            }
         }
 
         /// <summary>
@@ -185,9 +205,11 @@ namespace Builders
         public long Createline( double x1, double y1,
             double x2, double y2)
         {
-            //TODO: {}
+            //TODO: {} (исправил)
             if (_sketchEdit == null)
+            {
                 throw new BuildException("Активный эскиз не установлен");
+            }
 
             return _sketchEdit.ksLineSeg(x1, y1, x2, y2, 1);
         }
@@ -195,7 +217,7 @@ namespace Builders
         /// <summary>
         /// Выдавливание эскиза
         /// </summary>
-        /// <param name="directionNormal">Направление</param>
+        /// <param name="direction">Направление</param>
         /// <param name="type">Тип</param>
         /// <param name="depth">Глубина</param>
         /// <param name="bothDirections">Симметрично</param>
@@ -203,12 +225,14 @@ namespace Builders
         /// Эскиз еще не создан, не удалось создать сущность выдавливания
         /// или не удалось получить ksBossExtrusionDefinition
         /// </exception>
-        public void Extrusion(bool directionNormal, short type,
+        public void Extrusion(bool direction, short type,
             double depth, bool bothDirections)
         {
-            //TODO: {}
+            //TODO: {} (исправил)
             if (_activeSketch == null)
+            {
                 throw new BuildException("Эскиз еще не создан.");
+            }
 
             // Завершаем редактирование эскиза
             _sketchDefinition.EndEdit();
@@ -218,37 +242,51 @@ namespace Builders
                 (ksEntity)_part.NewEntity(
                     (short)Obj3dType.o3d_bossExtrusion);
 
-            //TODO: {}
+            //TODO: {} (исправил)
             if (extr == null)
+            {
                 throw new BuildException("Не удалось создать " +
                     "сущность выдавливания.");
+            }
 
             // Получаем определение
             ksBossExtrusionDefinition extrDef =
                 (ksBossExtrusionDefinition)extr.GetDefinition();
 
-            //TODO: {}
+            //TODO: {} (исправил)
             if (extrDef == null)
+            {
                 throw new BuildException("Не удалось получить " +
                     "ksBossExtrusionDefinition.");
+            }
 
             // Привязываем эскиз
             extrDef.SetSketch(_activeSketch);
 
-            // Выставляем параметры стороны выдавливания
-            // directionNormal = true  → по нормали
-            // type = тип выдавливания (0..4)
-            // depth = глубина
 
-            extrDef.SetSideParam(
-                side1: directionNormal,
-                type: type,
-                depth: depth,
-                draftValue: 0,
-                draftOutward: false
-            );
+            if (bothDirections)
+            {
+                extrDef.directionType = (short)Direction_Type.dtBoth;
 
-            // Создаём операцию
+                extrDef.SetSideParam(true, type, depth / 2, 0, false);
+                extrDef.SetSideParam(false, type, depth / 2, 0, false);
+            }
+            else
+            {
+                extrDef.directionType = direction
+                    ? (short)Direction_Type.dtNormal
+                    : (short)Direction_Type.dtReverse;
+
+
+                extrDef.SetSideParam(
+                    direction,   
+                    type,
+                    depth,
+                    0,
+                    false
+                );
+            }
+
             extr.Create();
 
             extr.Update();
