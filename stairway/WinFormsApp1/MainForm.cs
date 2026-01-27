@@ -30,11 +30,6 @@ namespace UI
         private const int HideLimitsAt = 450;
 
         /// <summary>
-        /// Размер формы, при котором происходит первая привязка
-        /// </summary>
-        private const int FirstAnchorForm = 550;
-
-        /// <summary>
         /// Размер формы, при котором скрывается мини-модель
         /// </summary>
         private const int HideSmallAt = 650;
@@ -176,7 +171,7 @@ namespace UI
             if (!_textboxByParameter.ContainsValue(textBox))
             {
                 IsErrorAppered(this, new ErrorArgs(
-                    "Параметр не должен быть пустым",
+                    ": Параметр не должен быть пустым",
                     new List<ParametersTypes> { parameter }));
                 return;
             }
@@ -188,7 +183,7 @@ namespace UI
             else
             {
                 IsErrorAppered(this, new ErrorArgs(
-                    "Некорректный формат числа",
+                    ": Некорректный формат числа",
                     new List<ParametersTypes> { parameter }));
             }
         }
@@ -263,7 +258,11 @@ namespace UI
         /// <param name="e"></param>
         private void MainForm_ResizeEnd(object sender, EventArgs e)
         {
-            int newWidth;
+
+        // Размер формы, при котором происходит первая привязка
+        int FirstAnchorForm = 550;
+
+        int newWidth;
 
             if (this.ClientSize.Width <= HideSmallAt && this.ClientSize.Width > HideLimitsAt)
             {
@@ -388,7 +387,9 @@ namespace UI
                 { ParametersTypes.StepProjectionLength, 
                     "Глубина выступа" },
                 { ParametersTypes.Width, 
-                    "Ширина марша" }
+                    "Ширина марша" },
+                { ParametersTypes.FloorsCount,
+                    "Количество этажей"}
             };
         }
 
@@ -431,7 +432,7 @@ namespace UI
         /// Метод сохранения параметров в json
         /// </summary>
         /// <param name="parameters">Обьект для записи</param>
-        public void Save(Parameters parameters)
+        private void Save(Parameters parameters)
         {
             var snapshot = parameters.CreateSnapshot();
             File.WriteAllText(_path, JsonSerializer.Serialize(snapshot));
@@ -442,7 +443,7 @@ namespace UI
         /// </summary>
         /// <param name="parameters">Переменная для записи</param>
         /// <returns>Успех</returns>
-        public bool TryLoad(out Parameters parameters)
+        private bool TryLoad(out Parameters parameters)
         {
             parameters = null;
 

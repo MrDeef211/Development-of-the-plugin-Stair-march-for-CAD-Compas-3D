@@ -24,6 +24,7 @@ namespace Model
         /// Строить дополнительные секции
         /// </summary>
         private bool _isMultiFlight;
+
         /// <summary>
         /// Угол лестницы в градусах
         /// </summary>
@@ -56,39 +57,6 @@ namespace Model
         /// Делегат события обновления значения параметра
         /// </summary>
         public event EventHandler<ParametersTypes> UpdateParameterValueEvent;
-
-        /// <summary>
-        /// Событие отправки ошибки в MainForm
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="parametersList"></param>
-        private void ErrorMessage(
-            string message, 
-            List<ParametersTypes> parametersList)
-        {
-            ErrorMessageEvent?.Invoke(
-                this, new ErrorArgs(message, parametersList));
-        }
-
-        /// <summary>
-        /// Событие обновления параметра на ошибки
-        /// </summary>
-        /// <param name="parametersList">Изменённый параметр</param>
-        private void UpdateParameterErrors(
-            ParametersTypes parameter)
-        {
-            UpdateParameterErrorsEvent?.Invoke(this, parameter);
-        }
-
-        /// <summary>
-        /// Событие обновления значения параметра на форме
-        /// </summary>
-        /// <param name="parameters">Изменённый параметр</param>
-        private void UpdateParameterValue(
-            ParametersTypes parameters)
-        {
-            UpdateParameterValueEvent?.Invoke(this, parameters);
-        }
 
         /// <summary>
         /// Вернуть значение параметра
@@ -136,7 +104,17 @@ namespace Model
         /// <summary>
         /// Строить дополнительные секции
         /// </summary>
-        public bool IsMultiFlight { get; set; }
+        public bool IsMultiFlight 
+        {
+            get 
+            {
+                return _isMultiFlight;
+            } 
+            set
+            {
+                _isMultiFlight = value; 
+            }
+        }
 
         /// <summary>
         /// Вернуть список параметров
@@ -190,13 +168,46 @@ namespace Model
         }
 
         /// <summary>
+        /// Событие отправки ошибки в MainForm
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="parametersList"></param>
+        private void ErrorMessage(
+            string message,
+            List<ParametersTypes> parametersList)
+        {
+            ErrorMessageEvent?.Invoke(
+                this, new ErrorArgs(message, parametersList));
+        }
+
+        /// <summary>
+        /// Событие обновления параметра на ошибки
+        /// </summary>
+        /// <param name="parametersList">Изменённый параметр</param>
+        private void UpdateParameterErrors(
+            ParametersTypes parameter)
+        {
+            UpdateParameterErrorsEvent?.Invoke(this, parameter);
+        }
+
+        /// <summary>
+        /// Событие обновления значения параметра на форме
+        /// </summary>
+        /// <param name="parameters">Изменённый параметр</param>
+        private void UpdateParameterValue(
+            ParametersTypes parameters)
+        {
+            UpdateParameterValueEvent?.Invoke(this, parameters);
+        }
+
+        /// <summary>
         /// Инициализирует параметры модели
         /// </summary>
         private void InitializeNewParameters()
         {
             _parameters = new Dictionary<ParametersTypes, Parameter>
             {
-                //TODO: отступы
+                //TODO: отступы (сделал)
 			    {ParametersTypes.Height,
                     new Parameter(
 					    ParametersTypes.Height, 
