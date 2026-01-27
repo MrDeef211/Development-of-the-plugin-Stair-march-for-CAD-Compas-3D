@@ -17,7 +17,17 @@ class Program
     {
         var builder = new Builder();
         var parameters = new Parameters();
-        
+
+        var inputParameters = parameters.GetParameters();
+
+        var outputParameters =
+            new Dictionary<ParametersTypes, double>();
+
+        foreach (var parameter in inputParameters.Keys)
+            outputParameters.Add(
+                parameter,
+                inputParameters[parameter].Value);
+
         var stopWatch = new Stopwatch();
         var currentProcess = Process.GetCurrentProcess();
         var computerInfo = new ComputerInfo();
@@ -33,15 +43,6 @@ class Program
 
         while (true)
         {
-            var inputParameters = parameters.GetParameters();
-
-            var outputParameters =
-                new Dictionary<ParametersTypes, double>();
-
-            foreach (var parameter in inputParameters.Keys)
-                outputParameters.Add(
-                    parameter,
-                    inputParameters[parameter].Value);
 
             stopWatch.Start();
             builder.Build(outputParameters, parameters.IsMultiFlight);
@@ -63,7 +64,7 @@ class Program
 
             streamWriter.WriteLine(
                 $"{++count}\t" +
-                $"{stopWatch.Elapsed:hh\\:mm\\:ss\\.fff}\t" +
+                $"{stopWatch.Elapsed:mm\\:ss\\.fff}\t" +
                 $"{usedMemory:F3}"
             );
 
