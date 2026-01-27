@@ -173,6 +173,18 @@ namespace Builders
         }
 
         /// <summary>
+        /// Закрыть текущий файл
+        /// </summary>
+        public void CloseCurrentFile()
+        {
+            if (_doc3D != null)
+            {
+                _doc3D.close();
+                _doc3D = null;
+            }
+        }
+
+        /// <summary>
         /// Создать эскиз
         /// </summary>
         public void CreateSketch()

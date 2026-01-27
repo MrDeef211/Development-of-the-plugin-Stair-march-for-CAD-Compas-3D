@@ -32,6 +32,14 @@ namespace Builders
         }
 
         /// <summary>
+        /// Закрыть текущий документ
+        /// </summary>
+        public void CloseDocument()
+        {
+            _wrapper.CloseCurrentFile();
+        }
+
+        /// <summary>
         /// Построить модель
         /// </summary>
         /// <param name="parameters">Параметры модели</param>

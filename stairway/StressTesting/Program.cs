@@ -48,6 +48,8 @@ class Program
             builder.Build(outputParameters, parameters.IsMultiFlight);
             stopWatch.Stop();
 
+            builder.CloseDocument();
+
             // ОЗУ
             double usedMemory =
                 (computerInfo.TotalPhysicalMemory - 
