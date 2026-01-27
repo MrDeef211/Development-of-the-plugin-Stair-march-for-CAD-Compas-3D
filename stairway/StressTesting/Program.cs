@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.VisualBasic.Devices;
 using Builders;
 using Model;
+using System.Globalization;
 
 /// <summary>
 /// Программа для стресс-тестирования построителя модели
@@ -15,6 +16,9 @@ class Program
     /// </summary>
     static void Main()
     {
+        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+        CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
+
         var builder = new Builder();
         var parameters = new Parameters();
 
