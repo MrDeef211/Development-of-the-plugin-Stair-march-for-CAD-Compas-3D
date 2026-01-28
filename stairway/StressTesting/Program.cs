@@ -41,6 +41,7 @@ class Program
         int count = 0;
         const double gigabyteInByte = 1.0 / 1073741824.0;
 
+
         // Для расчёта времени 
         TimeSpan lastTotalProcessorTime = currentProcess.TotalProcessorTime;
         DateTime lastTime = DateTime.Now;
