@@ -87,8 +87,10 @@ namespace Model
                 // Я не понял зачем здесь нужны фигурные скобки в RSDN их нет
                 case ParametersTypes.Length:
                 case ParametersTypes.StepProjectionLength:
+                {
                     InternalValidation(parameter);
                     break;
+                }
                 case ParametersTypes.StepAmount:
                 case ParametersTypes.Height:
                 case ParametersTypes.StepHeight:
@@ -207,68 +209,67 @@ namespace Model
         {
             _parameters = new Dictionary<ParametersTypes, Parameter>
             {
-                //TODO: отступы (сделал)
-			    {ParametersTypes.Height,
+			    { ParametersTypes.Height,
                     new Parameter(
 					    ParametersTypes.Height, 
                         8000, 
 					    500, 
 					    3200) },
-                {ParametersTypes.Length, 
+                { ParametersTypes.Length, 
                     new Parameter(
 					    ParametersTypes.Length, 
                         12000, 
 						500, 
 						5000) },
-                {ParametersTypes.PlatformLengthUp, 
+                { ParametersTypes.PlatformLengthUp, 
                     new Parameter(
 					    ParametersTypes.PlatformLengthUp, 
                         5000, 
 						1000, 
 						1500) },
-                {ParametersTypes.PlatformLengthDown, 
+                { ParametersTypes.PlatformLengthDown, 
                     new Parameter(
 					    ParametersTypes.PlatformLengthDown, 
                         5000, 
 						1000, 
 						1500) },
-                {ParametersTypes.PlatformHeight, 
+                { ParametersTypes.PlatformHeight, 
                     new Parameter(
 					    ParametersTypes.PlatformHeight, 
                         500, 
 						100, 
 						200) },
-                {ParametersTypes.StepAmount, 
+                { ParametersTypes.StepAmount, 
                     new Parameter(
 					    ParametersTypes.StepAmount, 
                         60, 
 						1, 
 						20) },
-                {ParametersTypes.StepHeight, 
+                { ParametersTypes.StepHeight, 
                     new Parameter(
 					    ParametersTypes.StepHeight, 
                         250, 
 						120, 
 						160) },
-                {ParametersTypes.StepProjectionHeight, 
+                { ParametersTypes.StepProjectionHeight, 
                     new Parameter(
 					    ParametersTypes.StepProjectionHeight, 
 						80, 
 						0, 
 						25) },
-                {ParametersTypes.StepProjectionLength, 
+                { ParametersTypes.StepProjectionLength, 
                     new Parameter(
 						ParametersTypes.StepProjectionLength, 
 						80, 
 						0, 
 						20) },
-                {ParametersTypes.Width, 
+                { ParametersTypes.Width, 
                     new Parameter(
 						ParametersTypes.Width, 
 						2500, 
 						800, 
 						1000)},
-                {ParametersTypes.FloorsCount,
+                { ParametersTypes.FloorsCount,
                     new Parameter(
 						ParametersTypes.FloorsCount,
 						25, 
@@ -300,6 +301,7 @@ namespace Model
             //Проверка границ
             if (value < parameter.Min || value > parameter.Max)
             {
+                //TODO: {}
                 //Для случаев параметров с плавающей границей и целочисленного
                 switch (parameter.Name)
                 {
@@ -338,6 +340,7 @@ namespace Model
             double newValue;
             switch (entered)
             {
+                //TODO: {}
                 case ParametersTypes.StepAmount:
                 case ParametersTypes.Height:
                     newValue = 

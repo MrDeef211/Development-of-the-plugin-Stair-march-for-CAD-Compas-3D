@@ -13,7 +13,6 @@ using System.Text.Json;
 
 namespace UI
 {
-    //TODO: RSDN
     /// <summary>
     /// Класс главной формы приложения
     /// </summary>
@@ -70,6 +69,7 @@ namespace UI
         private readonly string _path =
             Path.Combine(AppContext.BaseDirectory, "parameters.json");
 
+        //TODO: XML
         public MainForm()
         {
             InitializeComponent();
@@ -103,11 +103,14 @@ namespace UI
         /// </param>
         private void IsErrorAppered(object sender, ErrorArgs e)
         {
-            string newError;
-            if (e.ParametersList.Count == 1)
-                newError = _localization[e.ParametersList[0]] + e.Message;
-            else
-                newError = e.Message;
+            
+            string newError = e.ParametersList.Count == 1
+                ? _localization[e.ParametersList[0]]
+                : string.Empty;
+
+            newError += e.Message;
+
+            //TODO: {}
             if (!_activeErrors.ContainsKey(newError))
                 _activeErrors[newError] =
                     new List<ParametersTypes>(e.ParametersList);
@@ -216,6 +219,7 @@ namespace UI
             var outputParameters =
                 new Dictionary<ParametersTypes, double>();
 
+            //TODO: {}
             foreach (var parameter in inputParameters.Keys)
                 outputParameters.Add(
                     parameter,
@@ -235,10 +239,12 @@ namespace UI
         /// </summary>
         private void MainForm_Resize(object sender, EventArgs e)
         {
+            //TODO: rename
             int w = this.ClientSize.Width;
 
             double size = PicturesSplitContainer.Size.Width;
 
+            //TODO: {}
             if (size > 100)
                 PicturesSplitContainer.SplitterDistance = (int)(size / 2.5);
 
@@ -258,13 +264,14 @@ namespace UI
         /// <param name="e"></param>
         private void MainForm_ResizeEnd(object sender, EventArgs e)
         {
-
+            //TODO: RSDN
         // Размер формы, при котором происходит первая привязка
         int FirstAnchorForm = 550;
 
         int newWidth;
 
-            if (this.ClientSize.Width <= HideSmallAt && this.ClientSize.Width > HideLimitsAt)
+            if (this.ClientSize.Width <= HideSmallAt 
+                && this.ClientSize.Width > HideLimitsAt)
             {
                 newWidth = FirstAnchorForm;
 
@@ -320,7 +327,6 @@ namespace UI
         /// </summary>
         private void InitializeUIBindings()
         {
-            //TODO: refactor
             // Переделал
             _textboxByParameter = new Dictionary<ParametersTypes, TextBox>();
 
@@ -447,6 +453,7 @@ namespace UI
         {
             parameters = null;
 
+            //TODO: {}
             if (!File.Exists(_path))
                 return false;
 

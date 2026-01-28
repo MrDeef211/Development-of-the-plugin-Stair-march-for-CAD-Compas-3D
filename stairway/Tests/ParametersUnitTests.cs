@@ -6,7 +6,7 @@ namespace Tests
 	[TestFixture]
 	public class ParametersUnitTests
 	{
-        //TODO: refactor to property (сделал)
+        //TODO: XML
         private Parameters CreateParameters => new Parameters();
 
         [Test]
@@ -165,14 +165,11 @@ namespace Tests
 
             parameters.ErrorMessageEvent += (s, e) => errors.Add(e);
 
-            //TODO: тут и ниже комменты НАД строкой (исправлено)
-			// ошибка
             parameters.SetParameter(ParametersTypes.StepProjectionLength, 100); 
 
             Assert.That(errors, Is.Not.Empty);
 
             errors.Clear();
-			// Max = 100
             parameters.SetParameter(ParametersTypes.StepHeight, 200); 
 
             Assert.That(errors, Is.Empty);

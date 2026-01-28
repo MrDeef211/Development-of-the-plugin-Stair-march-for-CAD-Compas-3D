@@ -12,7 +12,6 @@ namespace Builders
     /// </summary>
     public class Builder
     {
-        //TODO: RSDN (вроде сделал)
         /// <summary>
         /// Класс-обёртка для работы с САПР
         /// </summary>
@@ -43,9 +42,8 @@ namespace Builders
         /// Построить модель
         /// </summary>
         /// <param name="parameters">Параметры модели</param>
-        public void Build(Dictionary<ParametersTypes, double> parameters, bool IsMultiFlight)
+        public void Build(Dictionary<ParametersTypes, double> parameters, bool isMultiFlight)
         {
-            //TODO: {} (исправил)
             if (!_wrapper.KompasIsDefined())
             { 
             _wrapper.CreateCADWindow();
@@ -57,7 +55,7 @@ namespace Builders
 
             int floorCount = (int)parameters[ParametersTypes.FloorsCount];
 
-            if (IsMultiFlight)
+            if (isMultiFlight)
             {
                 for (_currentFloor = 0; _currentFloor < floorCount; _currentFloor++)
                 {

@@ -48,7 +48,6 @@ namespace Model
             _max = max;
             _min = min;
 
-            //TODO: {} (Сделал)
             if (min >= max)
             {
                 throw new ArgumentException(name +
