@@ -83,8 +83,7 @@ namespace Model
 			//Запуск внутренних валидаций по необходимости
 			switch (parameter)
             {
-                //TODO: {}
-                // Я не понял зачем здесь нужны фигурные скобки в RSDN их нет
+                //TODO: {} (исправил)
                 case ParametersTypes.Length:
                 case ParametersTypes.StepProjectionLength:
                 {
@@ -94,9 +93,11 @@ namespace Model
                 case ParametersTypes.StepAmount:
                 case ParametersTypes.Height:
                 case ParametersTypes.StepHeight:
+                {
                     CalculateDependent(parameter);
                     InternalValidation(parameter);
                     break;
+                }
                 default:
                     break;
             }
@@ -301,31 +302,37 @@ namespace Model
             //Проверка границ
             if (value < parameter.Min || value > parameter.Max)
             {
-                //TODO: {}
+                //TODO: {} (исправил)
                 //Для случаев параметров с плавающей границей и целочисленного
                 switch (parameter.Name)
                 {
                     case ParametersTypes.StepProjectionHeight:
                     case ParametersTypes.StepProjectionLength:
-                        ErrorMessage(
-                            ": параметр не должен быть " +
-                            "больше половины высоты ступени",
-                            new List<ParametersTypes> { parameter.Name });
-                        break;
+                        {
+                            ErrorMessage(
+                                ": параметр не должен быть " +
+                                "больше половины высоты ступени",
+                                new List<ParametersTypes> { parameter.Name });
+                            break;
+                        }
                     case ParametersTypes.StepAmount:
-                        ErrorMessage(
-                            ": параметр не должен выходить за диапазон от " +
-                            parameter.Min.ToString() + " до " + 
-                            parameter.Max.ToString(),
-                            new List<ParametersTypes> { parameter.Name });
-                        break;
+                        {
+                            ErrorMessage(
+                                ": параметр не должен выходить за диапазон от " +
+                                parameter.Min.ToString() + " до " +
+                                parameter.Max.ToString(),
+                                new List<ParametersTypes> { parameter.Name });
+                            break;
+                        }
                     default:
-                        ErrorMessage(
-                            ": параметр не должен выходить за диапазон от " +
-                            parameter.Min.ToString() + " до " + 
-                            parameter.Max.ToString() + " мм",
-                            new List<ParametersTypes> { parameter.Name });
-                        break;
+                        {
+                            ErrorMessage(
+                                ": параметр не должен выходить за диапазон от " +
+                                parameter.Min.ToString() + " до " +
+                                parameter.Max.ToString() + " мм",
+                                new List<ParametersTypes> { parameter.Name });
+                            break;
+                        }
                 }
             }
 
@@ -340,34 +347,39 @@ namespace Model
             double newValue;
             switch (entered)
             {
-                //TODO: {}
+                //TODO: {} (исправил)
                 case ParametersTypes.StepAmount:
                 case ParametersTypes.Height:
-                    newValue = 
-                        _parameters[ParametersTypes.Height].Value /
-                        _parameters[ParametersTypes.StepAmount].Value;
+                    {
+                        newValue =
+                            _parameters[ParametersTypes.Height].Value /
+                            _parameters[ParametersTypes.StepAmount].Value;
 
-                    // Обновляем параметр
-                    _parameters[ParametersTypes.StepHeight].Value = newValue;
-                    UpdateParameterValue(ParametersTypes.StepHeight);
 
-                    // Валидируем отдельно, чтобы не создавать рекурсию
-                    UpdateParameterErrors(ParametersTypes.StepHeight);
-					Validate(_parameters[ParametersTypes.StepHeight]);
-                    InternalValidation(ParametersTypes.StepHeight);
-					break;
+                        // Обновляем параметр
+                        _parameters[ParametersTypes.StepHeight].Value = newValue;
+                        UpdateParameterValue(ParametersTypes.StepHeight);
+
+                        // Валидируем отдельно, чтобы не создавать рекурсию
+                        UpdateParameterErrors(ParametersTypes.StepHeight);
+                        Validate(_parameters[ParametersTypes.StepHeight]);
+                        InternalValidation(ParametersTypes.StepHeight);
+                        break;
+                    }
                 case ParametersTypes.StepHeight:
-                    newValue = 
-                        _parameters[ParametersTypes.StepHeight].Value *
-                        _parameters[ParametersTypes.StepAmount].Value;
+                    {
+                        newValue =
+                            _parameters[ParametersTypes.StepHeight].Value *
+                            _parameters[ParametersTypes.StepAmount].Value;
 
-                    _parameters[ParametersTypes.Height].Value = newValue;
-                    UpdateParameterValue(ParametersTypes.Height);
+                        _parameters[ParametersTypes.Height].Value = newValue;
+                        UpdateParameterValue(ParametersTypes.Height);
 
-                    UpdateParameterErrors(ParametersTypes.Height);
-                    Validate(_parameters[ParametersTypes.Height]);
-                    InternalValidation(ParametersTypes.Height);
-                    break;
+                        UpdateParameterErrors(ParametersTypes.Height);
+                        Validate(_parameters[ParametersTypes.Height]);
+                        InternalValidation(ParametersTypes.Height);
+                        break;
+                    }
             }
 
         }
@@ -420,16 +432,18 @@ namespace Model
                     Math.Atan(_parameters[ParametersTypes.Height].Value / 
                     _parameters[ParametersTypes.Length].Value) * 180 / Math.PI;
 
-                if (_stairCorner < minStairCorner || 
+                if (_stairCorner < minStairCorner ||
                     _stairCorner > maxStairCorner)
+                {
                     ErrorMessage(
                         "Угол лестницы: arctan(H / L) " +
                         "не должен выходить за диапазон от " +
-                        minStairCorner + " до " + maxStairCorner +  
+                        minStairCorner + " до " + maxStairCorner +
                         " градусов (сейчас " + _stairCorner + ")",
-                        new List<ParametersTypes> { 
-                            ParametersTypes.Height, 
+                        new List<ParametersTypes> {
+                            ParametersTypes.Height,
                             ParametersTypes.Length});
+                }
             }
 
             // 3 Проверка глубины проступи
@@ -441,17 +455,19 @@ namespace Model
                     _parameters[ParametersTypes.StepAmount].Value + 
                     _parameters[ParametersTypes.StepProjectionLength].Value;
 
-                if (_stepsTread < minStepsTread || 
+                if (_stepsTread < minStepsTread ||
                     _stepsTread > maxStepsTread)
+                {
                     ErrorMessage(
                         "Глубина проступи: L / N + t  " +
                         "не должен выходить за диапазон от " +
-                        minStepsTread + " до " + maxStepsTread + 
+                        minStepsTread + " до " + maxStepsTread +
                         " мм (сейчас " + _stepsTread + ")",
-                        new List<ParametersTypes> { 
-                            ParametersTypes.StepAmount, 
-                            ParametersTypes.Length, 
+                        new List<ParametersTypes> {
+                            ParametersTypes.StepAmount,
+                            ParametersTypes.Length,
                             ParametersTypes.StepProjectionLength });
+                }
             }
         }
     }

@@ -69,7 +69,10 @@ namespace UI
         private readonly string _path =
             Path.Combine(AppContext.BaseDirectory, "parameters.json");
 
-        //TODO: XML
+        //TODO: XML (исправил)
+        /// <summary>
+        /// Конструктор главной формы приложения
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -110,10 +113,12 @@ namespace UI
 
             newError += e.Message;
 
-            //TODO: {}
+            //TODO: {} (исправил)
             if (!_activeErrors.ContainsKey(newError))
+            {
                 _activeErrors[newError] =
                     new List<ParametersTypes>(e.ParametersList);
+            }
 
             foreach (var parameter in e.ParametersList)
             {
@@ -219,11 +224,14 @@ namespace UI
             var outputParameters =
                 new Dictionary<ParametersTypes, double>();
 
-            //TODO: {}
+            //TODO: {} (исправил)
             foreach (var parameter in inputParameters.Keys)
+            {
                 outputParameters.Add(
                     parameter,
                     inputParameters[parameter].Value);
+            }
+
             try
             {
                 _builder.Build(outputParameters, _parameters.IsMultiFlight);
@@ -239,20 +247,22 @@ namespace UI
         /// </summary>
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            //TODO: rename
-            int w = this.ClientSize.Width;
+            //TODO: rename (исправил)
+            int currentWidth = this.ClientSize.Width;
 
             double size = PicturesSplitContainer.Size.Width;
 
-            //TODO: {}
+            //TODO: {} (исправил)
             if (size > 100)
+            {
                 PicturesSplitContainer.SplitterDistance = (int)(size / 2.5);
+            }
 
-            MainModelPictureBox.Visible = w >= HideBigAt;
-            PicturesSplitContainer.Panel2Collapsed = w < HideBigAt;
-            MiniModelPictureBox.Visible = w >= HideSmallAt;
-            PicturesSplitContainer.Panel1Collapsed = w < HideSmallAt;
-            LimitsPanel.Visible = w >= HideLimitsAt;
+            MainModelPictureBox.Visible = currentWidth >= HideBigAt;
+            PicturesSplitContainer.Panel2Collapsed = currentWidth < HideBigAt;
+            MiniModelPictureBox.Visible = currentWidth >= HideSmallAt;
+            PicturesSplitContainer.Panel1Collapsed = currentWidth < HideSmallAt;
+            LimitsPanel.Visible = currentWidth >= HideLimitsAt;
 
             this.MinimumSize = new Size(MinWidthForm, this.MinimumSize.Height);
         }
@@ -264,16 +274,16 @@ namespace UI
         /// <param name="e"></param>
         private void MainForm_ResizeEnd(object sender, EventArgs e)
         {
-            //TODO: RSDN
+            //TODO: RSDN (исправил)
         // Размер формы, при котором происходит первая привязка
-        int FirstAnchorForm = 550;
+        int firstAnchorForm = 550;
 
         int newWidth;
 
             if (this.ClientSize.Width <= HideSmallAt 
                 && this.ClientSize.Width > HideLimitsAt)
             {
-                newWidth = FirstAnchorForm;
+                newWidth = firstAnchorForm;
 
                 this.Size = new Size(newWidth, this.Height);
 
@@ -327,7 +337,6 @@ namespace UI
         /// </summary>
         private void InitializeUIBindings()
         {
-            // Переделал
             _textboxByParameter = new Dictionary<ParametersTypes, TextBox>();
 
             Register(
@@ -428,7 +437,6 @@ namespace UI
                 return;
             }
 
-            // Берём ВСЕ строки ошибок из всех параметров
             var Errors = _activeErrors.Keys;
 
             ErrorTextBox.Text = string.Join(Environment.NewLine, Errors);
@@ -453,9 +461,11 @@ namespace UI
         {
             parameters = null;
 
-            //TODO: {}
+            //TODO: {} (исправил)
             if (!File.Exists(_path))
+            {
                 return false;
+            }
 
             parameters = new Parameters();
             var snapshot = new ParametersSnapshot();
