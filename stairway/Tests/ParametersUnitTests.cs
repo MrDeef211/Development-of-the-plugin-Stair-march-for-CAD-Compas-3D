@@ -6,7 +6,6 @@ namespace Tests
 	[TestFixture]
 	public class ParametersUnitTests
 	{
-        //TODO: XML (исправил)
         /// <summary>
         /// Новый экземпляр Parameters
         /// </summary>

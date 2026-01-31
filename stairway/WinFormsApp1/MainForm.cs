@@ -69,7 +69,6 @@ namespace UI
         private readonly string _path =
             Path.Combine(AppContext.BaseDirectory, "parameters.json");
 
-        //TODO: XML (исправил)
         /// <summary>
         /// Конструктор главной формы приложения
         /// </summary>
@@ -113,7 +112,6 @@ namespace UI
 
             newError += e.Message;
 
-            //TODO: {} (исправил)
             if (!_activeErrors.ContainsKey(newError))
             {
                 _activeErrors[newError] =
@@ -224,7 +222,6 @@ namespace UI
             var outputParameters =
                 new Dictionary<ParametersTypes, double>();
 
-            //TODO: {} (исправил)
             foreach (var parameter in inputParameters.Keys)
             {
                 outputParameters.Add(
@@ -247,12 +244,10 @@ namespace UI
         /// </summary>
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            //TODO: rename (исправил)
             int currentWidth = this.ClientSize.Width;
 
             double size = PicturesSplitContainer.Size.Width;
 
-            //TODO: {} (исправил)
             if (size > 100)
             {
                 PicturesSplitContainer.SplitterDistance = (int)(size / 2.5);
@@ -274,11 +269,10 @@ namespace UI
         /// <param name="e"></param>
         private void MainForm_ResizeEnd(object sender, EventArgs e)
         {
-            //TODO: RSDN (исправил)
-        // Размер формы, при котором происходит первая привязка
-        int firstAnchorForm = 550;
+            // Размер формы, при котором происходит первая привязка
+            int firstAnchorForm = 550;
 
-        int newWidth;
+            int newWidth;
 
             if (this.ClientSize.Width <= HideSmallAt 
                 && this.ClientSize.Width > HideLimitsAt)
@@ -461,7 +455,6 @@ namespace UI
         {
             parameters = null;
 
-            //TODO: {} (исправил)
             if (!File.Exists(_path))
             {
                 return false;

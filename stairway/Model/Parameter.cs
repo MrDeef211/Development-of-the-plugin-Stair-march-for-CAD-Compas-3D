@@ -78,8 +78,8 @@ namespace Model
         public double Max
         { 
             get { return _max; } 
-            set {
-                //TODO: {} (Сделал)
+            set 
+            {
                 if (value < _min)
                 {
                     _max = _min;

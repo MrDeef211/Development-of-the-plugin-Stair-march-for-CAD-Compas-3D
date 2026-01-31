@@ -83,7 +83,6 @@ namespace Model
 			//Запуск внутренних валидаций по необходимости
 			switch (parameter)
             {
-                //TODO: {} (исправил)
                 case ParametersTypes.Length:
                 case ParametersTypes.StepProjectionLength:
                 {
@@ -302,7 +301,6 @@ namespace Model
             //Проверка границ
             if (value < parameter.Min || value > parameter.Max)
             {
-                //TODO: {} (исправил)
                 //Для случаев параметров с плавающей границей и целочисленного
                 switch (parameter.Name)
                 {
@@ -347,7 +345,6 @@ namespace Model
             double newValue;
             switch (entered)
             {
-                //TODO: {} (исправил)
                 case ParametersTypes.StepAmount:
                 case ParametersTypes.Height:
                     {
